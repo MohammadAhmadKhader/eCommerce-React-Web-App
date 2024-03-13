@@ -1,0 +1,12 @@
+.aboutUs-bg{
+    background-image: url("./AboutUs/AboutUsBg.png");
+}
+.aboutUs-linear{
+    background: linear-gradient(to left,rgba(222, 222, 222, 0.75),rgba(180, 180, 180, 0));
+}
+
+@media screen and (max-width:768px){
+    .aboutUs-linear{
+        background: linear-gradient(to left,rgba(155, 155, 155, 0.75),rgba(120, 120, 120, 0));
+    }
+}

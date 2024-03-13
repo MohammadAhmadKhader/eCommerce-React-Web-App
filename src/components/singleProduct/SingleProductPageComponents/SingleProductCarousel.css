@@ -1,0 +1,8 @@
+.single-product-image .slick-slide{
+    display: inline-block; 
+    margin: auto;
+    /* Not sure */
+}
+.single-product-image .slick-track{
+    display: flex;
+}

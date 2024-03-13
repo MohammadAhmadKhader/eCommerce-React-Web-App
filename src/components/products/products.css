@@ -1,0 +1,32 @@
+.black-friday-img-section{
+    background-position:40% 70%;
+}
+.black-friday-img-section .text-black-friday-img-section{
+    right: 8%;
+}
+
+.products input::-webkit-outer-spin-button,
+.products input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.products input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.products .MuiPaginationItem-root{
+  color:white !important;
+}
+
+.products .MuiPagination-ul{
+  background-color: rgb(29,155,240);
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 640px){
+    .black-friday-img-section .text-black-friday-img-section{
+        right: 0%;
+    }
+}

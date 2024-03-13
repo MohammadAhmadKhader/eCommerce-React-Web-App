@@ -1,0 +1,21 @@
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: transparent;
+  background: none;
+  z-index: 1;
+}
+.profile a.active{
+  position: relative;
+  color: var(--accent-color);
+}
+.profile a.active::before{
+  content: "";
+  position: absolute;
+  z-index: 12;
+  left:0px;
+  top:5px;
+  width: 5px;
+  height: 35px;
+  border-radius: 20px;
+  background-color: var(--accent-color);
+}

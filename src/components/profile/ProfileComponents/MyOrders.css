@@ -1,0 +1,22 @@
+.MyOrders.Tabs .MuiTab-root{
+    background-color: transparent !important;
+    color:inherit !important;
+}
+.MyOrders.Tabs .MuiTab-root:hover{
+    color:inherit !important;
+}
+.MyOrders.Tabs .MuiTab-root[aria-selected="true"]{
+    background-color:var(--accent-color) !important;
+    color: white !important;
+}
+.MyOrders.Tabs .MuiTabPanel-root{
+    color: inherit;
+}
+.MyOrdersContainer::-webkit-scrollbar-track{
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+.MyOrdersContainer::-webkit-scrollbar{
+    height: 9px;
+    width: 9px;
+}
