@@ -19,12 +19,21 @@ import useAxios from '../customHooks/useAxios';
 function Home() {
   const { theme, toggleTheme } = useContext(ThemeContext)
   const { GET : getRequestNewArrivals, isLoading : isNewArrivalsLoading ,setIsLoading : setIsNewArrivalsLoading } = useAxios()
+  const { GET : getRequestTopRatedProducts, isLoading : isTopRatedProducts ,setIsLoading : setIsTopRatedProductsLoading} = useAxios()
   const [newArrivals,setNewArrivals] = useState([]);
+  const [topRatedProducts,setTopRatedProducts] = useState([]);
  
   const getNewArrivals = async()=>{
     const {data} = await getRequestNewArrivals("/products?page=1&limit=7&sort=newArrivals_desc")
-    setIsNewArrivalsLoading(false)
     setNewArrivals(data.products)
+    setIsNewArrivalsLoading(false)
+    console.log(data.products)
+  }
+
+  const getTopRatedProducts = async()=>{
+    const {data} = await getRequestTopRatedProducts("/products?page=1&limit=7&sort=ratings_desc")
+    setTopRatedProducts(data.products)
+    setIsTopRatedProductsLoading(false)
     console.log(data.products)
   }
 

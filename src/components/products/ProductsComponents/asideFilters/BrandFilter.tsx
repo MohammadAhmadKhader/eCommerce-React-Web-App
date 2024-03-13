@@ -50,7 +50,7 @@ const BrandForm = () => {
                     <OneLineSkeleton />
                     <OneLineSkeleton />
                     <OneLineSkeleton />
-                </div> : brands.map((brand) => {
+                </div> : brands?.map((brand) => {
                     return (
                         <div className='flex items-center' key={brand.id}>
                             <CheckboxInput text={brand.name} id={brand.name}
