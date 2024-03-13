@@ -25,7 +25,7 @@ function SingleProductCarousel({ product }: { product: IProduct }) {
                 
 
             >
-                {product.images.map((image, index) => {
+                {product?.images?.map((image, index) => {
                     return (
                         <div className="max-w-[400px] max-h-[600px]" key={image._id + "image"}>
                             <img src={image.imageUrl} alt={`${product.name} image number ${index + 1}`} className="rounded-lg m-auto max-h-[500px]" />
@@ -97,7 +97,7 @@ function SingleProductCarousel({ product }: { product: IProduct }) {
 
             >
 
-                {product.images.map((image, index) => {
+                {product?.images?.map((image, index) => {
                     return (
                         <div className="m-auto " key={image._id + "thumb"}>
                             <img src={image.thumbnailUrl} alt={`${product.name} thumbnail number ${index + 1}`}

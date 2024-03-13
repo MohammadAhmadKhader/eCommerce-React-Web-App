@@ -41,7 +41,7 @@ function SingleOrderInvoices({ name, price, quantity }: ISingleOrderInvoices) {
           </tr>
         </thead>
         <tbody>
-          {Invoices.map((Invoice, index) => {
+          {Invoices?.map((Invoice, index) => {
 
             return (
               <tr key={index}>

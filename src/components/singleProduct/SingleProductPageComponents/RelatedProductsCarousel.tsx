@@ -80,7 +80,7 @@ function RelatedProductsCarousel({ categoryId }: IRelatedProductsCarousel) {
                         )
                     })
                     :
-                    relatedProducts.map((prod) => {
+                    relatedProducts?.map((prod) => {
                         return (
                             <div className="p-1.5 xl:p-2.5 text-left">
                                 <ProductWithRatingsCard name={prod.name} finalPrice={prod.finalPrice} price={prod.price} _id={prod._id}
