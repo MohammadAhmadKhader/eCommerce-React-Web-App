@@ -34,7 +34,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
             }}>
 
 
-            {Iterable.map((category) => {
+            {Iterable?.map((category) => {
                 return (
                     <SwiperSlide key={category.id}>
                         <Link to={`/${category.name}`} className='flex flex-col items-center aspect-square text-center'>

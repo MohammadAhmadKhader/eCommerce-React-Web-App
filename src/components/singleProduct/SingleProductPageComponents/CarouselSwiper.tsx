@@ -41,7 +41,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
     >
       {/* imageUrl={prod?.images[0]?.imageUrl} */}
       {
-        Iterable.map((prod) => {
+        Iterable?.map((prod) => {
           return (
             <SwiperSlide key={prod.id} className='pb-10'>
               <ProductWithRatingsCard _id={prod._id} ratingNumbers={prod.ratingNumbers} name={prod.name}  price={prod.price} imageUrl={prod?.images?.length > 0 ? prod.images[0].imageUrl : ""}

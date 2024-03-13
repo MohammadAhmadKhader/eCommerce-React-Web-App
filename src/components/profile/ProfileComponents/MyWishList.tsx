@@ -68,7 +68,7 @@ function MyWishList() {
                 </h3>
             </div>
             <div className='grid grid-cols-12 gap-5 my-5'>
-                {products.map((prod, index) => {
+                {products?.map((prod, index) => {
                     return (
                         <MyWishListItem  name={prod.name} key={index} imgUrl={prod.imgUrl} />
                     )
