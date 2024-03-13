@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from '../customHooks/useAxios'
-import ImageSkeleton from '../shared/LoadingSkeletons/imageSkeleton'
+import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton'
 
 function Brands() {
     const { GET, isLoading } = useAxios()

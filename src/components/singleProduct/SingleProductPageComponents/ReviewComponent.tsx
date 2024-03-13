@@ -5,7 +5,7 @@ import StarsComponent from '../../shared/StarsComponent';
 import { Review } from '../../../types/types';
 
 
-function ReviewComponent({review } : {review : Review} ) {
+function ReviewComponent({review } : {review : Review}) {
     const { theme } = useContext(ThemeContext)
     return (
         <div className='flex gap-x-4 border border-solid rounded-md p-2'

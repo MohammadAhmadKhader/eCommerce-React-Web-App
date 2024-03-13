@@ -11,7 +11,7 @@ import PriceComponent from '../products/ProductsComponents/PriceComponent';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import useAxios from '../customHooks/useAxios';
-import ImageSkeleton from '../shared/LoadingSkeletons/imageSkeleton';
+import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton';
 import DetailsSkeleton from '../shared/LoadingSkeletons/DetailsSkeleton';
 import { IProduct } from '../../types/types';
 import Rating from '@mui/material/Rating';

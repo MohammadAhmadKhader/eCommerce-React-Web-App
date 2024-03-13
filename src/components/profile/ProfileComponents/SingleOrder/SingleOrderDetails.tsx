@@ -16,10 +16,10 @@ function SingleOrderDetails() {
                 </div>
             </div>
             <div className='flex flex-col gap-y-2'>
-                <SingleOrder price={50.21} name={'Casio WaterProof'} quantity={3} />
-                <SingleOrder price={20.43} name={'Handbag'} quantity={2} />
-                <SingleOrder price={32.1} name={'GoldenWatch'} quantity={1} />
-                <SingleOrder price={9.89} name={'PersonalCare'} quantity={4} />
+                <SingleOrder imgUrl='' price={50.21} name={'Casio WaterProof'} quantity={3} />
+                <SingleOrder imgUrl='' price={20.43} name={'Handbag'} quantity={2} />
+                <SingleOrder imgUrl='' price={32.1} name={'GoldenWatch'} quantity={1} />
+                <SingleOrder imgUrl='' price={9.89} name={'PersonalCare'} quantity={4} />
             </div>
 
             <div>

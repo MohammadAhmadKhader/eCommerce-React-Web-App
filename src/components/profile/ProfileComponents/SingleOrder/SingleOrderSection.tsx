@@ -86,7 +86,7 @@ function SingleOrderSection() {
         </TabPanel>
         <TabPanel value={1} className='bg-transparent'>
 
-          <SingleOrderInvoices />
+          <SingleOrderInvoices name="" price={0} quantity={1} />
         </TabPanel>
       </Tabs>
     </div>

@@ -17,12 +17,43 @@ function MyReviews() {
           My Reviews
         </h4>
       </div>
-      <ReviewComponent />
-      <ReviewComponent />
-      <ReviewComponent />
-      <ReviewComponent />
-      <ReviewComponent />
-      <ReviewComponent />
+      {/* Still under development */}
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
+      <ReviewComponent review={{
+        comment: '',
+        rating: 0,
+        userId: '',
+        _id: ''
+      }} />
 
       <Stack spacing={2} sx={{
         maxWidth: "fit-content",
