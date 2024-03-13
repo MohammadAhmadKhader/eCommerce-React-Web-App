@@ -6,7 +6,7 @@ import useAxios from "../../customHooks/useAxios";
 import ProductWithRatingsCard from "../../products/ProductsComponents/ProductWithRatingsCard";
 import SingleSkeleton from "../../shared/LoadingSkeletons/SingleSkeleton";
 import { Skeleton } from "@mui/joy";
-import ImageSkeleton from "../../shared/LoadingSkeletons/imageSkeleton";
+import ImageSkeleton from "../../shared/LoadingSkeletons/ImageSkeleton";
 import { useParams } from "react-router-dom";
 
 interface IRelatedProductsCarousel {
