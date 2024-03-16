@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import BlackFridayImg from "./ProductsComponents/Imgs/BlackFriday.jfif"
 import "./products.css"
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import ProductWithRatingsCard from './ProductsComponents/ProductWithRatingsCard'
 import ReactSwitch from 'react-switch'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { Link, useSearchParams, useLocation } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import FiltersComponent from './ProductsComponents/FiltersComponent.tsx'
 import SortComponent from './ProductsComponents/SortComponent.tsx'
 import ResponsiveSortFilterControl from './ProductsComponents/ResponsiveSortFilterControl.tsx'
@@ -15,7 +14,6 @@ import ProductsPageSkeleton from '../shared/LoadingSkeletons/ProductsPageSkeleto
 import { IoChevronForwardOutline } from "react-icons/io5";
 import useAxios from '../customHooks/useAxios.tsx'
 import { useNavigate } from 'react-router-dom'
-import { IProduct } from '../../types/types'
 import useDebounce from '../customHooks/useDebounce.tsx'
 
 function Products() {
@@ -31,7 +29,7 @@ function Products() {
     const [products, setProducts] = useState([]);
     const maxLimit = 30;
     const minLimit = 9;
-    const { debounce, debouncedData } = useDebounce()
+    const { debounce } = useDebounce()
 
     const getLimitValue = () => {
         let limit = searchParams.get("limit");
@@ -47,7 +45,7 @@ function Products() {
         return limit
     }
     const getData = async (params) => {
-        console.log(params)
+
         setIsLoading(true)
         const { data } = await GET(`/products?${params}`)
         setProducts(data.products)
@@ -80,7 +78,7 @@ function Products() {
         const price_lte = searchParams.get("price_lte");
         const price_gte = searchParams.get("price_gte");
 
-        console.log(brands)
+
         const params = {
             brand: brands ? brands : "",
             sort: sort ? sort : "",
@@ -92,7 +90,7 @@ function Products() {
             limit: searchParams.get("limit") || 1,
             category: searchParams.get("categoryId") || 2,
         }
-        console.log(params, "params")
+
         let linkPath = "";
         for (const value in params) {
             if (params[value].length > 0) {
@@ -116,7 +114,7 @@ function Products() {
         <section className='products'>
             <div className='w-full px-4 my-5'>
                 <div className='bg-cover h-[450px] bg-no-repeat w-full black-friday-img-section relative rounded-xl' style={{
-                    backgroundImage: `url(${BlackFridayImg})`
+                    backgroundImage: `url(https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/injorsgpdrfl6gpdcjmo)`
                 }} >
                     <div className='text-5xl lg:text-7xl text-black absolute top-2/3 -translate-y-52 
                     text-black-friday-img-section rounded-xl mx-1 sm:mx-3 p-5 lg:p-10 bg-white bg-opacity-25 select-none'>
@@ -163,7 +161,7 @@ function Products() {
                                     }}
                                     onKeyUp={(e) => {
                                         const element = e.target as HTMLInputElement;
-                                        
+
                                         if (Number(element.value) > maxLimit) {
                                             element.value = maxLimit.toString()
                                         }

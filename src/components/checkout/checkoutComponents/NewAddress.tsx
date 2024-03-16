@@ -9,6 +9,9 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from "yup"
 import { Address } from '../../../types/types';
+import useAxios from '../../customHooks/useAxios';
+import { UserContext } from '../../features/UserFeature/UserProvider';
+import { toast } from 'react-toastify';
 
 
 const schema = yup
@@ -23,7 +26,9 @@ const schema = yup
 
 function NewAddress() {
     const { theme } = useContext(ThemeContext)
+    const {userData,userToken} = useContext(UserContext)
     const [open, setOpen] = useState(false);
+    const {POST} = useAxios()
     const handleClick = () => {
         setOpen(!open);
     };
@@ -38,8 +43,25 @@ function NewAddress() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<Address> = (data) => {
-        console.log(data)
+    const createNewAddress: SubmitHandler<Address> = async (submittedData) => {
+        try{
+            const {data} = await POST("/addresses",{
+                streetAddress:submittedData.street,
+                city:submittedData.city,
+                fullName:submittedData.fullName,
+                mobileNumber:submittedData.mobileNumber,
+                pinCode:submittedData.pinCode,
+                state:submittedData.state,
+                userId:userData._id
+            },userToken)
+            console.log(data)
+            if(data.message =="success"){
+                toast.success("New address has been created");
+            }
+        }catch(error){
+            toast.error("Something Went Wrong Please Try Again Later")
+            console.log(error);
+        }
     }
     return (
         <div>
@@ -74,7 +96,7 @@ function NewAddress() {
 
                 </ListItemButton>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    <form className='my-5' onSubmit={handleSubmit(onSubmit)}>
+                    <form className='my-5' onSubmit={handleSubmit(createNewAddress)}>
                         <div className='grid grid-cols-12 gap-x-4'>
                             <Input parentCustomClass='col-span-6' id='name' placeholder='Enter Name' title='Full Name'
                                 type='text' name="fullName" register={register} trigger={trigger} errors={errors} />

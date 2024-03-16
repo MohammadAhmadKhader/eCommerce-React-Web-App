@@ -1,6 +1,8 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import MyWishListItem from './MyWishListItem';
+import useAxios from '../../customHooks/useAxios';
+import { UserContext } from '../../features/UserFeature/UserProvider';
 
 const products = [
     {
@@ -58,6 +60,23 @@ const products = [
 
 function MyWishList() {
     const { theme } = useContext(ThemeContext)
+    const { GET, isLoading: isWishListLoading, setIsLoading: setIsWishListLoading } = useAxios();
+    const { userData, userToken } = useContext(UserContext)
+    const [wishList, setWishList] = useState([])
+    const getUserWishList = async () => {
+        try {
+            const { data } = await GET(`/wishlists/${userData._id}`, userToken);
+            console.log(data)
+            setWishList(data.wishList)
+            setIsWishListLoading(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getUserWishList()
+    }, [userData])
     return (
         <div className='MyWishList'>
             <div className='border-b' style={{
@@ -68,9 +87,12 @@ function MyWishList() {
                 </h3>
             </div>
             <div className='grid grid-cols-12 gap-5 my-5'>
-                {products?.map((prod, index) => {
+                {isWishListLoading ? <div>Loading ..</div>:
+                
+                wishList?.map((prod) => {
                     return (
-                        <MyWishListItem  name={prod.name} key={index} imgUrl={prod.imgUrl} />
+                        <MyWishListItem name={prod.productId.name} key={prod._id} imgUrl={prod.productId.images[0].imageUrl}
+                         productId={prod.productId._id} wishListId={prod._id}/>
                     )
                 })}
             </div>

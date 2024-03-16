@@ -3,26 +3,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import "./cartTable.css"
 import CartTableItem from './CartTableItem';
-import useAxios from '../../customHooks/useAxios';
 import ItemSkeleton from '../../shared/LoadingSkeletons/ItemSkeleton';
-const tempImg = "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=826&t=st=1708290481~exp=1708291081~hmac=2b691806f30732ec151458d70d803fcdbb888db344b5bd9b2b30d749438857f5"
+import { CartContext } from '../../features/CartFeature/CartProvider';
 
 function CartTable() {
-    const { GET, POST, isLoading, setIsLoading } = useAxios()
-    const [cartItems, setCartItems] = useState([])
-
-    const getCartItems = async () => {
-        const { data } = await GET(`/carts/${import.meta.env.VITE_ADMIN_ID}`,import.meta.env.VITE_ADMIN_TOKEN)
-        setCartItems(data.cartItems);
-        setIsLoading(false)
-        return data
-    }
-    useEffect(() => {
-        getCartItems()
-    }, [])
-
-    const { theme } = useContext(ThemeContext)
-
+    const { theme, toggleTheme } = useContext(ThemeContext)
+    const {cartItems ,isCartLoading} : any = useContext(CartContext)
     return (
         <div className='overflow-x-scroll cart-table-container'>
             <table className='mt-5 w-full' style={{
@@ -40,16 +26,16 @@ function CartTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {isLoading ? <div className='mt-4 flex flex-col gap-y-4'>
-                        <ItemSkeleton imgHolderVariant='rectangular' widthTextFirstRectangular={540} widthTextSecondRectangular={540} />
-                        <ItemSkeleton imgHolderVariant='rectangular' widthTextFirstRectangular={540} widthTextSecondRectangular={540} />
+                    {isCartLoading ? <div className='mt-4 flex flex-col gap-y-4'>
+                        <ItemSkeleton imgHolderVariant='rectangular' widthTextFirstRectangular={450} widthTextSecondRectangular={450} />
+                        <ItemSkeleton imgHolderVariant='rectangular' widthTextFirstRectangular={450} widthTextSecondRectangular={450} />
 
                     </div> :
-                        cartItems.map((item) => {
+                        cartItems?.cart?.map((item) => {
                             return (
-                                <React.Fragment key={item._id}>
-                                    <CartTableItem imgUrl={item.images[0].thumbnailUrl}
-                                        name={item.name} price={item.finalPrice} quantity={item.quantity} />
+                                <React.Fragment key={item.productId._id}>
+                                    <CartTableItem imgUrl={item.productId.images[0]?.thumbnailUrl} productId={item.productId._id} brand={item.productId.brand}
+                                    cartItemId={item._id} name={item.productId.name} price={item.productId.finalPrice} quantity={item.quantity}  />
                                 </React.Fragment>
                             )
                         })

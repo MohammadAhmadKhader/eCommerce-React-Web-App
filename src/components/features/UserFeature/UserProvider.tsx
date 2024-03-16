@@ -6,7 +6,8 @@ export interface UserContext {
     setUserToken:React.Dispatch<React.SetStateAction<string | null>>;
     userData:null | User;
     setUserData:React.Dispatch<React.SetStateAction<User | null>>
-    isUserFetchDataLoading:boolean
+    isUserFetchDataLoading:boolean;
+    getUserData:()=>Promise<void>;
 }
 
 export const UserContext = createContext<UserContext>(null)
@@ -17,30 +18,26 @@ function UserProvider({children}) {
     const [isUserFetchDataLoading,setIsUserFetchDataLoading] = useState(true)
     const {GET} = useAxios()
 
-    const getUserDate = async()=>{
-      const {data} = await GET("/users",localStorage.getItem("userTokenGeekOut"))
-      setUserData(data.user);
-      console.log(data)
-      setIsUserFetchDataLoading(false)
-    }
-
-    const getUserTokenAndData = ()=>{
-      const userTokenGeekOut = localStorage.getItem("userTokenGeekOut")
-      if(userTokenGeekOut){
-          setUserToken(userTokenGeekOut);
-          getUserDate();
-      }else{
+    const getUserData = async()=>{
+      try{
+        if(userToken){
+          const {data} = await GET("/users",userToken)
+          setUserData(data.user);
+          console.log(data)
+        }
+      }catch(error){
+        console.log(error)
+      }finally{
         setIsUserFetchDataLoading(false)
       }
-
-  }
+    }
   useEffect(()=>{
-    getUserTokenAndData()
+    getUserData()
   },[])
   
   
     return (
-    <UserContext.Provider value={{ userToken,setUserToken,userData,setUserData,isUserFetchDataLoading }}>
+    <UserContext.Provider value={{ userToken,setUserToken,userData,setUserData,isUserFetchDataLoading,getUserData }}>
         {children}
     </UserContext.Provider>
   )

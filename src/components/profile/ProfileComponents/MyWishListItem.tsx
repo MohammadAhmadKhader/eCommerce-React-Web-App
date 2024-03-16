@@ -1,39 +1,72 @@
-import  { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import StarsComponent from '../../shared/StarsComponent'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { MdOutlineCancel } from "react-icons/md";
-import { IMyWishListItem } from '../../../types/types';
+import { IWishlistItem } from '../../../types/types';
+import { UserContext } from '../../features/UserFeature/UserProvider';
+import useAxios from '../../customHooks/useAxios';
+import useDebounce from '../../customHooks/useDebounce';
+import { toast } from 'react-toastify';
 
-function MyWishListItem({imgUrl,name} : IMyWishListItem) {
-  const { theme } = useContext(ThemeContext)
-  return (
-    <Link className='col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col rounded-lg border relative' to="/" style={{
-      backgroundColor: theme == "dark" ? "var(--dark--bgCard-color)" : "var(--light--bgCard-color)",
-      borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
-      color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
-  }}>
-      <div>
-          <img src={imgUrl} alt={name} className='rounded-t-md' />
-      </div>
-      <div className='py-2 px-3'>
-          <div>
-              <h4 className='text-md font-semibold'>{name}</h4>
-          </div>
-          <div>
-              <StarsComponent />
-          </div>
-      </div>
+function MyWishListItem({ imgUrl, name, productId, wishListId }) {
+    const { theme } = useContext(ThemeContext)
+    const { DELETE } = useAxios();
+    const { userData, userToken, getUserData } = useContext(UserContext)
+    const { debounce } = useDebounce()
 
-      <div className='absolute -right-2 -top-2'>
-          <button className='text-red-600 rounded-full bg-black' style={{
-              backgroundColor: theme == "dark" ? "var(--light--bgCard-color)" : "var(--dark--bgCard-color)",
-          }}>
-              <MdOutlineCancel size={25} />
-          </button>
-      </div>
-  </Link>
-  )
+    const removeFromWishList = async () => {
+        try {
+            console.log("send")
+            const response = await DELETE(`/wishlists`, {
+                userId: userData._id,
+                wishlistItemId: wishListId
+            }, userToken);
+            console.log(response)
+            if (response.status == 202) {
+                toast.success("Product was removed from wishlist");
+                getUserData();
+            }
+        } catch (error) {
+            toast.error("Something Went Wrong Please Try Again Later")
+            console.log(error)
+        }
+    }
+    return (
+        <Link className='col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col rounded-lg border relative' to={`/products/${productId}`} style={{
+            backgroundColor: theme == "dark" ? "var(--dark--bgCard-color)" : "var(--light--bgCard-color)",
+            borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
+            color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
+        }}>
+            <div className=' bg-white flex items-center rounded-t-md'>
+                <img src={imgUrl} alt={name} className='rounded-t-md object-contain aspect-square' />
+            </div>
+            <div className='py-2 px-3'>
+                <div>
+                    <h4 className='text-md font-semibold'>{name}</h4>
+                </div>
+                <div>
+                    <StarsComponent />
+                </div>
+            </div>
+
+            <div className='absolute -right-2 -top-2'>
+                <button className='text-red-600 rounded-full bg-black' style={{
+                    backgroundColor: theme == "dark" ? "var(--light--bgCard-color)" : "var(--dark--bgCard-color)",
+                }}
+                    onClick={(event) => {
+                        debounce(() => { console.log("s"); removeFromWishList() });
+                        event.preventDefault();
+                        event.stopPropagation();
+                        console.log(event);
+
+                    }}
+                >
+                    <MdOutlineCancel size={25} />
+                </button>
+            </div>
+        </Link>
+    )
 }
 
 export default MyWishListItem

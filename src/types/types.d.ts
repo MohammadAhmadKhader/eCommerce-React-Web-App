@@ -103,8 +103,10 @@ export type addReview ={
 export type Review = {
     comment: string;
     rating: number;
-    userId:string;
+    userId:any;
     _id:string;
+    createdAt:string;
+    updatedAt:string;
 }
 
 export type User = {
@@ -118,10 +120,28 @@ export type User = {
     _id:string;
     updatedAt:string;
     createdAt:string;
+    wishList:WishlistItem[]
+    cart:CartItem[]
+}
+
+interface IWishlistItem {
+    productId: IProduct;
+    _id: string;
 }
 
 export type CartItem = {
     _id:string;
+    quantity:number;
+    productId:string;
+}
+
+// This will be removed soon
+export type CartItemTemp = {
+    _id:string;
+    cart:[{
+        quantity:number;
+        productId:IProduct[]
+    }]
 }
 
 export type OrderItem = {
@@ -149,6 +169,7 @@ export interface IProduct {
     updatedAt:string;
     reviewsCount:number; 
     reviews?:Review[]
+    ratingNumbers:number;
 }
 
 export interface IResponsiveSortFilterControl {
@@ -176,11 +197,6 @@ export interface ILogoutButton {
     customClasses?:string;
     isHidden?:boolean;
     isCentered?:boolean;
-}
-
-export interface IMyWishListItem {
-    imgUrl:string;
-    name:string;
 }
 
 export interface IProfileAsideOptions {
@@ -241,6 +257,9 @@ export interface ICartTableItem {
     name:string;
     price:number;
     quantity:number;
+    productId:string;
+    brand:string;
+    cartItemId:string;
 }
 
 export interface ISendAxiosRequest {
@@ -257,7 +276,9 @@ export interface ISingleProductCarousel {
 
 export interface ISingleProductTabs {
     product:IProduct;
-    isLoading:boolean
+    isProductByIdLoading:boolean;
+    reviewsCount:number;
+    reviewsLimit:number;
 }
 
 export type UserData = {
@@ -266,7 +287,10 @@ export type UserData = {
     email: string;
     mobileNumber: string;
     birthDate: Date;
+    userImg:BinaryType
 }
+
+
 
 export type UserSignInDataType = {
     email?: string;

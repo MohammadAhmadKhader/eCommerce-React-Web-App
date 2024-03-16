@@ -5,6 +5,9 @@ import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { IChangePasswordForm, UserChangePassword } from '../../types/types';
+import { UserContext } from '../features/UserFeature/UserProvider';
+import useAxios from '../customHooks/useAxios';
+import { toast } from 'react-toastify';
 
 const schema = yup
     .object({
@@ -15,24 +18,43 @@ const schema = yup
     })
 
 function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePasswordForm) {
-    const { theme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext);
+    const { userData,userToken } = useContext(UserContext);
+    const {PUT} = useAxios();
     const {
         register,
         trigger,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm<UserChangePassword>({
         defaultValues: {
             currentPassword: "",
             newPassword: "",
             confirmNewPassword: ""
         },
+        
         resolver: yupResolver(schema),
     });
 
 
-    const onSubmit: SubmitHandler<UserChangePassword> = (data) => {
-        console.log(data)
+    const onSubmit: SubmitHandler<UserChangePassword> = async(submittedData) => {
+        try {
+            const {data} = await PUT("/users/changepassword",{
+                oldPassword:submittedData.currentPassword,
+                newPassword:submittedData.newPassword,
+                confirmNewPassword:submittedData.confirmNewPassword,
+                userId:userData._id
+            },userToken)
+
+            if(data.message == "success"){
+                toast.success("Your password has been changed successfully!");
+                reset()
+            }
+        } catch (error) {
+            toast.error("Password Is Wrong Try Again")
+            console.log(error)
+        }
     }
     const inputs = [
         {
@@ -59,7 +81,7 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
         },
     ]
     return (
-        <form onSubmit={handleSubmit(onSubmit)} onClick={() => console.log(errors)}
+        <form onSubmit={handleSubmit(onSubmit)}
             className={`${ReBuildFormClasses ? `${ReBuildFormClasses}` : "-translate-y-16 border-solid border w-95% md:w-9/12 max-w-xl mx-auto p-3 md:p-4 rounded-2xl"}`}
             style={{
                 borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",

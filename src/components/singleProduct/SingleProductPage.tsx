@@ -8,37 +8,111 @@ import ProductCarousel from './SingleProductPageComponents/SingleProductCarousel
 import { PiHandbagSimple } from "react-icons/pi";
 import { VscHeart } from "react-icons/vsc";
 import PriceComponent from '../products/ProductsComponents/PriceComponent';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import useAxios from '../customHooks/useAxios';
 import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton';
 import DetailsSkeleton from '../shared/LoadingSkeletons/DetailsSkeleton';
 import { IProduct } from '../../types/types';
 import Rating from '@mui/material/Rating';
+import { UserContext } from '../features/UserFeature/UserProvider';
+import { toast } from 'react-toastify';
+import Tooltip from '@mui/material/Tooltip';
+import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
 
 function SingleProductPage() {
+    const [searchParams, setSearchParams] = useSearchParams()
     const params = useParams()
     const navigate = useNavigate()
-    const [product, setProduct] = useState<IProduct | object>({})
-    const { GET, isLoading, setIsLoading } = useAxios()
+    const { getProductData, isProductByIdLoading, product, reviewsCount, setIsProductByIdLoading } = useContext(GlobalCachingContext)
+    const { POST } = useAxios()
+    const { userData, userToken, getUserData } = useContext(UserContext)
+    const [isItemInCart, setIsItemInCart] = useState(true);
+    const [isItemInWishList, setIsItemInWishList] = useState(true);
+    const maxLimit = 30;
+    const minLimit = 9
 
     const productId = params.productId;
     if (!productId) {
         navigate("/")
     }
-    const getProductData = async () => {
-        const { data } = await GET(`/products/${productId}`)
-        setProduct(data.product)
-        console.log(data.product)
-        setIsLoading(false)
+
+    const addToCart = async () => {
+        try {
+            const { data } = await POST("/carts", {
+                userId: userData._id,
+                quantity: quantity,
+                productId: (product as IProduct)._id
+            }, userToken)
+
+            if (data.message == "success") {
+                toast.success("Items has been added to cart")
+            }
+        } catch (error) {
+            toast.error("")
+            console.log(error)
+        }
     }
 
+    const addToWishList = async () => {
+        try {
+            const { data } = await POST(`/wishlists`, {
+                userId: userData._id,
+                productId: productId
+            }, userToken);
+
+            if (data.message == "success") {
+                toast.success("Product has been added to your wishlist");
+                getUserData()
+            }
+
+            setIsProductByIdLoading(false)
+        } catch (error) {
+            toast.error("Something Went Wrong Please Try Again Later")
+            console.log(error)
+        }
+    }
     useEffect(() => {
-        getProductData()
-    }, [])
+        if (userData) {
+            const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == productId);
+            if (!isItFoundInCart) {
+                setIsItemInCart(false)
+            }
+        }
+
+        if (userData) {
+            const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == productId);
+            if (!isItFoundInWishList) {
+                setIsItemInWishList(false)
+            }
+        }
+    }, [userData, product, productId])
     const { theme } = useContext(ThemeContext);
     const [quantity, setQuantity] = useState(1);
 
+    useEffect(() => {
+        if (!searchParams.get("page") || !searchParams.get("page")) {
+            searchParams.set("page", "1");
+            searchParams.set("limit", "9");
+            setSearchParams(searchParams)
+        } else {
+            getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId);
+        }
+
+    }, [])
+
+    useEffect(() => {
+        if (searchParams.get("limit") > maxLimit.toString()) {
+            searchParams.set("limit", maxLimit.toString())
+            setSearchParams(searchParams)
+        }
+        if (searchParams.get("limit") < minLimit.toString()) {
+            searchParams.set("limit", minLimit.toString())
+            setSearchParams(searchParams)
+        }
+        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId)
+
+    }, [searchParams])
     return (
         <section className='px-3 md:px-5 single-product-page'>
             <div className='px-4 flex items-center gap-x-4 text-color-accent font-semibold my-5'>
@@ -55,7 +129,7 @@ function SingleProductPage() {
                 </Link>
             </div>
 
-            {isLoading ?
+            {isProductByIdLoading ?
                 <div className='grid grid-cols-12 p-0 sm:p-5 gap-x-3 gap-y-5'>
                     <div className='col-span-12 md:col-span-6 p-0 gap-x-3 gap-y-5'>
                         <ImageSkeleton customClass='min-h-[300px] md:min-h-[400px] rounded-xl max-w-[500px] m-auto' />
@@ -102,6 +176,7 @@ function SingleProductPage() {
 
                                     style={{ fontSize: 20 }}
                                     name="read-only" value={(product as IProduct).avgRating} precision={0.1} readOnly />
+
                             </div>
                             <div className='md:border-b md:pb-3'
                                 style={{
@@ -142,27 +217,45 @@ function SingleProductPage() {
                                 </div>
 
                                 <div className='flex justify-between items-center gap-x-3 sm:gap-x-5'>
-                                    <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center
-                                 text-white bg-color-accent hover:bg-transparent hover:text-color-accent border-color-accent border-2 duration-300'>
-                                        <span>
-                                            <PiHandbagSimple size={22} />
-                                        </span>
-                                        <span>
-                                            Add to Cart
-                                        </span>
+                                    <Tooltip title={userData ? isItemInCart ? "Item already in cart" : undefined : "signing in is required"}>
+                                        <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center
+                                 text-white bg-color-accent hover:bg-transparent hover:text-color-accent border-color-accent border-2 duration-300
+                                 disabled:bg-color-accent disabled:opacity-65 disabled:text-white disabled:hover:text-white
+                                 '
+                                            disabled={userData ? isItemInCart ? true : false : true}
+                                            onClick={() => {
+                                                if (userData && !isItemInCart) {
+                                                    addToCart()
+                                                }
+                                            }}
+                                        >
+                                            <span>
+                                                <PiHandbagSimple size={22} />
+                                            </span>
+                                            <span>
+                                                Add to Cart
+                                            </span>
 
-                                    </button>
+                                        </button></Tooltip>
+                                    <Tooltip title={userData ? isItemInWishList ? "Item already in wishlist" : undefined : "signing in is required"}>
+                                        <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
+                                 border-2 border-color-accent hover:bg-color-accent hover:text-white duration-300 
+                                 disabled:hover:bg-transparent disabled:opacity-65 disabled:text-white disabled:hover:text-white
+                                 ' disabled={userData ? isItemInWishList ? true : false : true}
+                                            onClick={() => {
+                                                if (userData && !isItemInWishList) {
+                                                    addToWishList()
+                                                }
+                                            }}
+                                        >
+                                            <span>
+                                                <VscHeart size={22} />
+                                            </span>
+                                            <span>
+                                                Add to Wishlist
+                                            </span>
 
-                                    <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
-                                 border-2 border-color-accent hover:bg-color-accent hover:text-white duration-300'>
-                                        <span>
-                                            <VscHeart size={22} />
-                                        </span>
-                                        <span>
-                                            Add to Wishlist
-                                        </span>
-
-                                    </button>
+                                        </button></Tooltip>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +264,7 @@ function SingleProductPage() {
             }
 
             <div className='my-5'>
-                <SingleProductTabs product={product as IProduct} isLoading={isLoading}/>
+                <SingleProductTabs reviewsCount={reviewsCount} reviewsLimit={Number(searchParams.get("limit"))} product={product as IProduct} isProductByIdLoading={isProductByIdLoading} />
             </div>
 
         </section>

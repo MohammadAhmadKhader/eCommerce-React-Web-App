@@ -12,6 +12,8 @@ import { UserContext } from "../features/UserFeature/UserProvider.tsx";
 import { MdLogin } from 'react-icons/md'
 import { IoPersonAdd } from "react-icons/io5";
 import OneLineSkeleton from "../shared/LoadingSkeletons/OneLineSkeleton.tsx";
+import { GoDotFill } from "react-icons/go";
+import { CartContext } from "../features/CartFeature/CartProvider.tsx";
 
 
 function Header() {
@@ -19,6 +21,7 @@ function Header() {
   const { windowWidth } = useContext(WindowWidthContext)
   const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
 
+  const { cartItems }: any = useContext(CartContext)
 
   const categories = {
     "message": "success",
@@ -93,13 +96,21 @@ function Header() {
             <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"150px"} />
           </div> :
           <>
-            {userToken && userData && <div className="hidden lg:flex items-center ms-4 gap-x-2.5">
+            {userData && <div className="hidden lg:flex items-center ms-4 gap-x-2.5">
               <Link title="Wishlist" to="/profile/wishlist" className="hidden md:block">
                 <HeartIcon height={25} width={25} />
               </Link>
               <Link title="Cart" to="/cart" className="hidden md:block">
-                <div className="opacity-70 duration-300 hover:opacity-100">
+                <div className="opacity-70 duration-300 hover:opacity-100 relative">
                   <BsCart size={25} />
+
+                  {cartItems?.cart?.length > 0 && <div className="absolute -right-1 -top-3">
+                    <GoDotFill color="red" size={29} />
+                    <span className="absolute right-[12.5px] top-[5px] text-[11px] font-semibold text-white">
+                      {cartItems.cart.length}
+                    </span>
+                  </div>
+                  }
                 </div>
               </Link>
               <Link title="Profile" to="/profile" className="hidden md:block">
