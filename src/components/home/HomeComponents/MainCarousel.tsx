@@ -28,7 +28,7 @@ function MainCarousel() {
                         </p>
 
                         <div>
-                            <Link to="/" className='text-white bg-sky-900 rounded-lg flex items-center justify-between gap-x-4 w-fit px-4 py-2'>
+                            <Link to="/products?page=1&limit=9" className='text-white bg-sky-900 rounded-lg flex items-center justify-between gap-x-4 w-fit px-4 py-2'>
                                 <FaArrowRight />
                                 <p> See more</p>
                             </Link>

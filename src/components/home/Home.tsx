@@ -31,79 +31,6 @@ function Home() {
     getNewArrivals();
   }, [])
 
-  const tempData = [
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 34.54
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 34.54
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 14.24
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 134.34
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 213.32
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 114.54
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 97.30
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 34.54
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 34.54
-    },
-    {
-      id: `${Math.floor((Math.random() * 1000) + 1)}`,
-      Title: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe eum quisquam maiores temporibus enim odit vitae corporis perspiciatis, illo ex.",
-      Description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis illo laboriosam dolorem velit animi sint quam aperiam repudiandae possimus debitis alias modi maiores voluptatem et harum porro eveniet, accusantium minus error omnis incidunt deleniti tempora. Cum recusandae dolores praesentium dolore, adipisci facilis incidunt voluptatem odit sed tenetur, nobis deleniti rerum.",
-      ImgUrl: "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg",
-      Price: 4.20
-    },
-  ]
-
   return (
     <div className='home'>
       <div className='grid grid-cols-12 gap-x-2 sm:gap-x-6 lg:gap-x-12 p-4'>
@@ -111,16 +38,12 @@ function Home() {
           <MainCarousel />
         </div>
       </div>
-
-
       <ResponsiveTopCategories />
-
       <div className='my-5'>
         <h2 className='text-xl font-semibold md:text-2xl lg:text-3xl md:font-bold ps-3 mb-5'>
           New Arrivals
         </h2>
         <div className='px-5 my-5'>
-
           {isNewArrivalsLoading ? <Skeleton /> : <CarouselSwiper Iterable={newArrivals} />}
         </div>
       </div>
@@ -163,7 +86,7 @@ function Home() {
             <div className='absolute p-3 md:p-9 right-0 flex flex-col justify-between h-full text-pink-800'>
               <h4 className='text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-bold text-right'>Skincare <br /> Essentials</h4>
 
-              <Link to="" className='ms-auto p-1 rounded-full opacity-80 hover:opacity-100 duration-300 hover:cursor-pointer bg-white'>
+              <Link to="/products?page=1&limit=9&category=65e7d89b62bb29693a0d1c58" className='ms-auto p-1 rounded-full opacity-80 hover:opacity-100 duration-300 hover:cursor-pointer bg-white'>
                 <FaArrowRight className='sm:size-7 lg:size-10' />
               </Link>
             </div>
@@ -174,20 +97,17 @@ function Home() {
             <div className='absolute p-3 md:p-9 right-0 flex flex-col justify-between h-full text-sky-800'>
               <h4 className='text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold'>Handbags</h4>
 
-              <Link to="" className='ms-auto p-1 rounded-full opacity-80 hover:opacity-100 duration-300 hover:cursor-pointer bg-white'>
+              <Link to="/products?page=1&limit=9&category=65e7d89c62bb29693a0d1c5b" className='ms-auto p-1 rounded-full opacity-80 hover:opacity-100 duration-300 hover:cursor-pointer bg-white'>
                 <FaArrowRight className='sm:size-7 lg:size-10' />
               </Link>
             </div>
           </div>
         </div>
       </div>
-
-
       <div>
         <ReactSwitch handleDiameter={25} width={45}
           height={20} checked={theme == "dark"} onChange={toggleTheme} />
       </div>
-
     </div>
   )
 }

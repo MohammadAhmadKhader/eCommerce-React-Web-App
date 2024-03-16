@@ -19,8 +19,7 @@ import { CartContext } from "../features/CartFeature/CartProvider.tsx";
 function Header() {
   const { theme } = useContext(ThemeContext);
   const { windowWidth } = useContext(WindowWidthContext)
-  const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
-
+  const { userData, isUserFetchDataLoading } = useContext(UserContext)
   const { cartItems }: any = useContext(CartContext)
 
   const categories = {
@@ -28,27 +27,27 @@ function Header() {
     "count": 5,
     "categories": [
       {
-        "id": 1,
+        "id": "65e7d89b62bb29693a0d1c58",
         "name": "Skincare",
         "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035673/eCommerceTap/Categories/ypycq2m497dhga7umjhfSkincare.svg"
       },
       {
-        "id": 2,
+        "id": "65e7d89c62bb29693a0d1c5d",
         "name": "Watches",
         "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035742/eCommerceTap/Categories/zood7r05af5otd2qbczlWatches.svg"
       },
       {
-        "id": 3,
+        "id": "65e7d89c62bb29693a0d1c5f",
         "name": "Jewellery",
         "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035610/eCommerceTap/Categories/bl1jpdtswba46sasy12pJewellery.svg"
       },
       {
-        "id": 4,
+        "id": "65e7d89c62bb29693a0d1c5b",
         "name": "Handbags",
         "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035726/eCommerceTap/Categories/aolvbrqkj1xjh48csyotHandbags.svg"
       },
       {
-        "id": 5,
+        "id": "65e7d89c62bb29693a0d1c61",
         "name": "Eyewear",
         "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035673/eCommerceTap/Categories/ypycq2m497dhga7umjhfSkincare.svg"
       }
@@ -76,7 +75,7 @@ function Header() {
               <ul className="flex items-center gap-x-2 font-semibold">
                 {categories.categories.map((category) => {
                   return (
-                    <li key={category.id} className="opacity-100 duration-300 hover:opacity-75">
+                    <li key={category.id + "category"} className="opacity-100 duration-300 hover:opacity-75">
                       <Link to={`/products?page=1&limit=9&category=${category.id}`}>
                         {category.name}
                       </Link>

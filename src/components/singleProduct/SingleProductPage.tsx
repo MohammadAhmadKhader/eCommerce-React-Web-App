@@ -19,6 +19,7 @@ import { UserContext } from '../features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
 import Tooltip from '@mui/material/Tooltip';
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
+import { BsCart } from 'react-icons/bs';
 
 function SingleProductPage() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -31,9 +32,7 @@ function SingleProductPage() {
     const [isItemInWishList, setIsItemInWishList] = useState(true);
     const maxLimit = 30;
     const minLimit = 9
-
-    const productId = params.productId;
-    if (!productId) {
+    if (!params.productId) {
         navigate("/")
     }
 
@@ -58,7 +57,7 @@ function SingleProductPage() {
         try {
             const { data } = await POST(`/wishlists`, {
                 userId: userData._id,
-                productId: productId
+                productId: params.productId
             }, userToken);
 
             if (data.message == "success") {
@@ -74,19 +73,19 @@ function SingleProductPage() {
     }
     useEffect(() => {
         if (userData) {
-            const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == productId);
+            const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInCart) {
                 setIsItemInCart(false)
             }
         }
 
         if (userData) {
-            const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == productId);
+            const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInWishList) {
                 setIsItemInWishList(false)
             }
         }
-    }, [userData, product, productId])
+    }, [userData, product, params.productId])
     const { theme } = useContext(ThemeContext);
     const [quantity, setQuantity] = useState(1);
 
@@ -96,7 +95,7 @@ function SingleProductPage() {
             searchParams.set("limit", "9");
             setSearchParams(searchParams)
         } else {
-            getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId);
+            getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
         }
 
     }, [])
@@ -110,7 +109,7 @@ function SingleProductPage() {
             searchParams.set("limit", minLimit.toString())
             setSearchParams(searchParams)
         }
-        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId)
+        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId)
 
     }, [searchParams])
     return (
@@ -230,7 +229,7 @@ function SingleProductPage() {
                                             }}
                                         >
                                             <span>
-                                                <PiHandbagSimple size={22} />
+                                                <BsCart size={22} />
                                             </span>
                                             <span>
                                                 Add to Cart
@@ -238,10 +237,10 @@ function SingleProductPage() {
 
                                         </button></Tooltip>
                                     <Tooltip title={userData ? isItemInWishList ? "Item already in wishlist" : undefined : "signing in is required"}>
-                                        <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
+                                        <button className={`text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
                                  border-2 border-color-accent hover:bg-color-accent hover:text-white duration-300 
-                                 disabled:hover:bg-transparent disabled:opacity-65 disabled:text-white disabled:hover:text-white
-                                 ' disabled={userData ? isItemInWishList ? true : false : true}
+                                 disabled:hover:bg-color-accent disabled:opacity-65 }`}
+                                            disabled={userData ? isItemInWishList ? true : false : true}
                                             onClick={() => {
                                                 if (userData && !isItemInWishList) {
                                                     addToWishList()

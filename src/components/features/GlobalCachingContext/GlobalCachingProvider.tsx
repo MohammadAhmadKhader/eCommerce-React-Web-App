@@ -74,8 +74,8 @@ function GlobalCachingProvider({ children }) {
     const getRelatedProducts = async (categoryId: string, productId: string) => {
         try {
             const { data } = await GET_RelatedProducts(`/products?page=1&limit=9&category=${categoryId}`)
-            const removedCurrentProduct = data.products.filter((prod) => prod._id !== productId)
-            setRelatedProducts(removedCurrentProduct)
+            //const removedCurrentProduct = data.products.filter((prod) => prod._id !== productId)
+            setRelatedProducts(data.products)
             setIsRelatedProductLoading(false)
         } catch (error) {
             console.log(error)

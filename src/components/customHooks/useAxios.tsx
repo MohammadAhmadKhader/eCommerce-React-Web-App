@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { ISendAxiosRequest } from "../../types/types";
 
-export default function useAxios(enableCache: boolean = false,name="") {
+export default function useAxios(enableCache: boolean = false) {
     const apiLink = import.meta.env.VITE_API_LINK as string
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -26,12 +26,11 @@ export default function useAxios(enableCache: boolean = false,name="") {
             }
             
             const response = await axios(config);
-            console.log("did not get cached" + name)
             setData(response.data)
 
             if (method === "GET") {
                 setCache(prevCache =>
-                    ({ ...prevCache, [path]: response.data }))
+                    ({ ...prevCache, [path]: response }))
             }
 
             return response;
