@@ -1,10 +1,10 @@
-import React from 'react'
 import "./aboutUs.css"
 
 function AboutUs() {
     return (
         <section className='mb-24'>
-            <div className='aboutUs-bg w-full h-[600px] relative'>
+            <div className='aboutUs-bg w-full h-[600px] relative'
+            style={{backgroundImage:"url(https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/ywskwv3aflgz4ayt7ynd)"}}>
                 <div className='absolute right-0 md:right-20 top-1/4 w-72 sm:w-96 text-black select-none'>
                     <h2 className='text-5xl md:text-7xl font-semibold tracking-wider'>
                         ABOUT
@@ -42,7 +42,9 @@ function AboutUs() {
                         </div>
 
                         <div className='col-span-12 md:col-span-7'>
-                            <img className='object-cover max-h-[300px] w-full blur-sm' src="./AboutUs/Handbags.jfif" alt="Handbags"
+                            <img className='object-cover max-h-[300px] w-full blur-sm'
+                                src="https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/kkqreaeuwjarazkguio7"
+                                alt="Handbags"
                                 onLoad={(e) => {
                                     const Img = e.currentTarget
                                     Img.classList.remove("blur-sm")
@@ -52,10 +54,12 @@ function AboutUs() {
 
                     <div className='grid grid-cols-12 gap-5 mt-8'>
                         <div className='col-span-12 md:col-span-7'>
-                            <img className='object-cover max-h-[300px] w-full blur-sm' src="./AboutUs/SmartWatch.jfif" alt="SmartWatch" onLoad={(e) => {
-                                const Img = e.currentTarget
-                                Img.classList.remove("blur-sm")
-                            }} />
+                            <img className='object-cover max-h-[300px] w-full blur-sm'
+                                src="https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/qhitz3xevdyxdyafc2hn"
+                                alt="SmartWatch" onLoad={(e) => {
+                                    const Img = e.currentTarget
+                                    Img.classList.remove("blur-sm")
+                                }} />
                         </div>
 
                         <div className='col-span-12 md:col-span-5 flex flex-col justify-center'>
@@ -81,10 +85,12 @@ function AboutUs() {
 
                         </div>
                         <div className='col-span-12 md:col-span-7'>
-                            <img className='object-cover max-h-[300px] w-full blur-sm' src="./AboutUs/Sunglasses.jfif" alt="Sun glasses" onLoad={(e) => {
-                                const Img = e.currentTarget
-                                Img.classList.remove("blur-sm")
-                            }} />
+                            <img className='object-cover max-h-[300px] w-full blur-sm'
+                                src="https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/lst3plh0drg9tlkspfc6"
+                                alt="Sun glasses" onLoad={(e) => {
+                                    const Img = e.currentTarget
+                                    Img.classList.remove("blur-sm")
+                                }} />
                         </div>
                     </div>
                 </div>

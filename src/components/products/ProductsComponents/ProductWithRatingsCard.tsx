@@ -1,13 +1,53 @@
-import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import HeartIcon from '../../shared/HeartIcon';
 import PriceComponent from './PriceComponent';
 import { IProductWithRatingsCardProps } from '../../../types/types';
 import Rating from '@mui/material/Rating';
+import Tooltip from '@mui/material/Tooltip';
+import { UserContext } from '../../features/UserFeature/UserProvider';
+import useAxios from '../../customHooks/useAxios';
+import useDebounce from '../../customHooks/useDebounce';
+import { toast } from 'react-toastify';
+
 
 function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgRating, brand, ratingNumbers, _id }: IProductWithRatingsCardProps) {
-    const { theme } = useContext(ThemeContext)
+    const navigate = useNavigate()
+    const { theme } = useContext(ThemeContext);
+    const { POST, setIsLoading } = useAxios();
+    const { userData, userToken, getUserData } = useContext(UserContext)
+    const { debounce } = useDebounce()
+    const [isItemOwned, setIsItemOwned] = useState(false);
+
+    const addToWishList = async () => {
+        try {
+            const { data } = await POST(`/wishlists`, {
+                userId: userData._id,
+                productId: _id
+            }, userToken);
+
+            if (data.message == "success") {
+                toast.success("Product has been added to your wishlist");
+                getUserData()
+            }
+
+            setIsLoading(false)
+        } catch (error) {
+            toast.error("Something Went Wrong Please Try Again Later")
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (userData) {
+            userData.wishList.map((item) => {
+                if (item.productId == _id) {
+                    setIsItemOwned(true)
+                }
+            })
+        }
+    }, [userData])
 
     return (
         <div className='col-span-12 sm:col-span-6 xl:col-span-4 border rounded-md' style={{
@@ -26,8 +66,25 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
                         <span title={name} className='line-clamp-1 font-semibold'>
                             {name}
                         </span>
-                        <span className='hover:cursor-pointer'>
-                            <HeartIcon />
+                        <span className='hover:cursor-pointer' onClick={() => {
+                            if (userData && userData.wishList.length < 6) {
+                                debounce(() => { addToWishList() })
+                            } else if (userData && userData.wishList.length == 6) {
+                                toast.info("You have exceeded the limitations, max wishlist items is 6")
+                            } else {
+                                navigate("/login")
+                            }
+
+                        }}>
+                            <Tooltip title={isItemOwned ? "You already have this item" : "Add to wishlist"} placement="top-end" arrow>
+                                <span>
+                                    <HeartIcon strokeWidth={2.5} respectTheme={isItemOwned ? false : true}
+                                        stroke={isItemOwned ? "#FF4444" : undefined}
+                                        fill={isItemOwned ? "#FF4444" : "none"}
+                                        customClasses={isItemOwned ? "opacity-[1]" : ""}
+                                    />
+                                </span>
+                            </Tooltip>
                         </span>
                     </h3>
                     <h3 className='mb-1 text-sm opacity-80'>Brand : {brand}</h3>

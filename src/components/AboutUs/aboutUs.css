@@ -1,6 +1,3 @@
-.aboutUs-bg{
-    background-image: url("./AboutUs/AboutUsBg.png");
-}
 .aboutUs-linear{
     background: linear-gradient(to left,rgba(222, 222, 222, 0.75),rgba(180, 180, 180, 0));
 }

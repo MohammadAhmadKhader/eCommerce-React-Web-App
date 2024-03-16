@@ -4,6 +4,16 @@ import { useState, useEffect, useRef, ImgHTMLAttributes } from "react";
 import Slider from "react-slick";
 import { IProduct } from "../../../types/types";
 import "./SingleProductCarousel.css"
+//import ReactImageZoom from "react-image-zoom"
+// import {
+//     Magnifier,
+//     GlassMagnifier,
+//     SideBySideMagnifier,
+//     PictureInPictureMagnifier,
+//     MOUSE_ACTIVATION,
+//     TOUCH_ACTIVATION,
+//     MagnifierContainer
+// } from "react-image-magnifiers";
 
 function SingleProductCarousel({ product }: { product: IProduct }) {
 
@@ -22,13 +32,14 @@ function SingleProductCarousel({ product }: { product: IProduct }) {
                 className="single-product-image w-full"
                 nextArrow={<GoChevronRight size={70} />}
                 prevArrow={<GoChevronLeft size={70} />}
-                
+
 
             >
                 {product?.images?.map((image, index) => {
                     return (
-                        <div className="max-w-[400px] max-h-[600px]" key={image._id + "image"}>
+                        <div className="max-w-[400px] max-h-[600px] outline-none relative" key={image._id + "image"}>
                             <img src={image.imageUrl} alt={`${product.name} image number ${index + 1}`} className="rounded-lg m-auto max-h-[500px]" />
+
                         </div>
                     )
                 })}
@@ -112,6 +123,7 @@ function SingleProductCarousel({ product }: { product: IProduct }) {
                 })}
 
             </Slider>
+
         </div>
     );
 }

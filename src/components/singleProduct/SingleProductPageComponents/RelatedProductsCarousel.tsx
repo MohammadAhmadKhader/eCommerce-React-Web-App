@@ -1,39 +1,30 @@
 import { GoChevronRight } from "react-icons/go";
 import { GoChevronLeft } from "react-icons/go";
 import Slider from "react-slick";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useAxios from "../../customHooks/useAxios";
 import ProductWithRatingsCard from "../../products/ProductsComponents/ProductWithRatingsCard";
 import SingleSkeleton from "../../shared/LoadingSkeletons/SingleSkeleton";
 import { Skeleton } from "@mui/joy";
 import ImageSkeleton from "../../shared/LoadingSkeletons/ImageSkeleton";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { GlobalCachingContext } from "../../features/GlobalCachingContext/GlobalCachingProvider";
 
 interface IRelatedProductsCarousel {
     categoryId: string;
 }
-
-const lorem = "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae quia id architecto. Perspiciatis sed consectetur, ea voluptates at hic quis est ratione alias! Optio, magni necessitatibus facere aliquid vero minima"
-
 function RelatedProductsCarousel({ categoryId }: IRelatedProductsCarousel) {
     const params = useParams()
-    const [relatedProducts, setRelatedProducts] = useState([])
-    const { GET, isLoading, setIsLoading } = useAxios()
     // This is just to create a correct loading cards in carousel
     const loadingArr = ['', '', '', '', '']
 
-    const getRelatedProducts = async () => {
-        const { data } = await GET(`/products?page=1&limit=9&category=${categoryId}`)
-        const removedCurrentProduct = data.products.filter((prod) => prod._id !== params.productId)
-        setRelatedProducts(removedCurrentProduct)
-        setIsLoading(false)
-        return data;
-    }
+    const { product, relatedProducts, setIsRelatedProductLoading, isRelatedProductLoading, getRelatedProducts }
+        = useContext(GlobalCachingContext);
+
     useEffect(() => {
-        setIsLoading(true)
-        console.log("Related Products was sent")
-        //getRelatedProducts()
-    }, [])
+        setIsRelatedProductLoading(true)
+        getRelatedProducts(categoryId, params.productId)
+    }, [product, params.productId])
     return (
         <div className="slider-container">
             <Slider
@@ -71,7 +62,7 @@ function RelatedProductsCarousel({ categoryId }: IRelatedProductsCarousel) {
                 ]}
             >
 
-                {isLoading ?
+                {isRelatedProductLoading ?
                     loadingArr.map(() => {
                         return (
                             <div className="px-2 my-5">

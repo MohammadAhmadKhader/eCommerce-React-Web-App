@@ -4,7 +4,6 @@ import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import ReviewComponent from './ReviewComponent';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
-import antiMuiClasses from "./forcedStylesForMui.module.css"
 import Rating from '@mui/material/Rating';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -16,7 +15,7 @@ import RelatedProductsCarousel from './RelatedProductsCarousel';
 import { ISingleProductTabs, addReview } from '../../../types/types';
 import LongTextSkeleton from '../../shared/LoadingSkeletons/LongTextSkeleton';
 import useAxios from '../../customHooks/useAxios';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from 'react-router-dom';
 
@@ -25,130 +24,13 @@ const schema = yup.object({
     rating: yup.number().oneOf([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).required()
 })
 
-
-const products = [
-    {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 80.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-    {
-        name: "product 1 Awesome amazing bag! With all what u wish",
-        finalPrice: 39.22,
-        price: 56.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "40%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "10%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-    {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 56.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "40%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "10%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-    {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 56.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "40%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "10%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-]
-
-
-export default function SingleProductTabs({ product, isLoading }: ISingleProductTabs) {
-    const { POST, GET } = useAxios()
+export default function SingleProductTabs({ product, isProductByIdLoading,reviewsCount,reviewsLimit }: ISingleProductTabs) {
+    const { POST } = useAxios()
     const { theme } = useContext(ThemeContext);
     const [value_, setValue_] = useState<number | null>(0);
     const params = useParams()
 
-    const [page, setPage] = useState(1)
-    const [reviews, setReviews] = useState([])
     const [searchParams, setSearchParams] = useSearchParams()
-    const maxLimit = 30;
-    const minLimit = 9
 
     const {
         handleSubmit,
@@ -160,31 +42,8 @@ export default function SingleProductTabs({ product, isLoading }: ISingleProduct
         resolver: yupResolver(schema),
     })
 
-    useEffect(() => {
-        searchParams.set("page", "1");
-        searchParams.set("limit", "9");
-        setSearchParams(searchParams)
-
-
-    }, [])
-
-    useEffect(() => {
-        if (searchParams.get("limit") > maxLimit.toString()) {
-            searchParams.set("limit", maxLimit.toString())
-            setSearchParams(searchParams)
-        }
-        if (searchParams.get("limit") < minLimit.toString()) {
-            searchParams.set("limit", minLimit.toString())
-            setSearchParams(searchParams)
-        }
-
-
-    }, [searchParams])
-
-
-
     const onSubmit: SubmitHandler<addReview> = async (submittedData) => {
-        try{
+        try {
             const { data } = await POST("/reviews", {
                 productId: params.productId,
                 userId: import.meta.env.VITE_ADMIN_ID,
@@ -192,39 +51,78 @@ export default function SingleProductTabs({ product, isLoading }: ISingleProduct
                 comment: submittedData.comment
             }, import.meta.env.VITE_ADMIN_TOKEN as string);
 
-            if(data["message"] == "success") {
+            if (data["message"] == "success") {
                 toast.success("Review was added successfully!")
             }
-        }catch(error){
+        } catch (error) {
             console.error(error);
             toast.error("Something Went Wrong Please Try Again Later!")
         }
-        
     }
 
     return (
         <Tabs aria-label="Basic tabs"
-            className={`${antiMuiClasses.text__inherit__forced} bg-red-500 rounded-lg`}
+            className={` bg-red-500 rounded-lg`}
             defaultValue={0} style={{
                 backgroundColor: theme == "dark" ? "var(--dark--bgCard-color)" : "var(--light--bgCard-color)",
                 borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                 color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)"
-
+            }}
+            sx={{
+                color: "inherit !important"
             }}
         >
-            <TabList className={`${antiMuiClasses.text__inherit__forced}`}>
-                <Tab className={`${antiMuiClasses.text__inherit__forced} ${antiMuiClasses.list__tabs__style}`} disableIndicator>Products Description</Tab>
-                <Tab className={`${antiMuiClasses.text__inherit__forced} ${antiMuiClasses.list__tabs__style}`} disableIndicator>Related Products</Tab>
-                <Tab className={`${antiMuiClasses.text__inherit__forced} ${antiMuiClasses.list__tabs__style}`} disableIndicator>Ratings and Reviews</Tab>
+            <TabList sx={{
+                color: "inherit !important"
+            }}>
+                <Tab sx={{
+                    color: "inherit !important",
+                    transition: "400ms !important",
+                    margin: "4px",
+                    borderRadius: "10px",
+                    '&:hover, &[aria-selected="true"]': {
+                        backgroundColor: 'var(--accent-color) !important',
+                        color: "white !important"
+                    },
+
+                }}
+
+                    disableIndicator>Products Description</Tab>
+                <Tab sx={{
+                    color: "inherit !important",
+                    transition: "400ms !important",
+                    margin: "4px",
+                    borderRadius: "10px",
+                    '&:hover, &[aria-selected="true"]': {
+                        backgroundColor: 'var(--accent-color) !important',
+                        color: "white !important"
+                    },
+
+
+                }}
+
+                    disableIndicator>Related Products</Tab>
+                <Tab sx={{
+                    color: "inherit !important",
+                    transition: "400ms !important",
+                    margin: "4px",
+                    borderRadius: "10px",
+                    '&:hover, &[aria-selected="true"]': {
+                        backgroundColor: 'var(--accent-color) !important',
+                        color: "white !important"
+                    },
+                }}
+
+                    disableIndicator>Ratings and Reviews</Tab>
             </TabList>
-            <TabPanel className={`${antiMuiClasses.text__inherit__forced}`}>
-                {isLoading ? <LongTextSkeleton /> : product.description}
+            <TabPanel sx={{ color: "inherit !important" }}>
+                {isProductByIdLoading ? <LongTextSkeleton /> : product.description}
             </TabPanel>
-            <TabPanel value={1} className={`${antiMuiClasses.text__inherit__forced}`}>
+            <TabPanel value={1} sx={{ color: "inherit !important" }}>
                 <h3 className='ps-2 text-2xl text-left font-semibold'>You may also like :</h3>
-                <RelatedProductsCarousel categoryId={isLoading ? "" : product.categoryId} />
+                <RelatedProductsCarousel categoryId={isProductByIdLoading ? "" : product.categoryId} />
             </TabPanel>
-            <TabPanel value={2} className={`${antiMuiClasses.text__inherit__forced}`}>
+            <TabPanel value={2} sx={{ color: "inherit !important" }}>
                 <div className='flex flex-col'>
                     <div className='flex flex-col gap-y-4 my-4'>
                         <h3 className='text-2xl font-semibold'>Add Review</h3>
@@ -263,7 +161,7 @@ export default function SingleProductTabs({ product, isLoading }: ISingleProduct
                             </div>
                             <div className='text-end'>
                                 <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
-                                border border-color-accent hover:bg-transparent hover:text-color-accent'>
+                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm'>
                                     Submit Review
                                 </button>
                             </div>
@@ -276,7 +174,7 @@ export default function SingleProductTabs({ product, isLoading }: ISingleProduct
                         <div className='flex flex-col gap-y-5'>
                             {product?.reviews?.map((rev) => {
                                 return (
-                                    <ReviewComponent review={rev} />
+                                    <ReviewComponent mode="public" review={rev} key={rev._id} />
                                 )
                             })}
 
@@ -293,7 +191,7 @@ export default function SingleProductTabs({ product, isLoading }: ISingleProduct
                                 <Pagination sx={{
                                     color: "white !important;"
                                 }}
-                                    count={10} onChange={(event, value) => {
+                                    count={Math.ceil(reviewsCount / reviewsLimit)} onChange={(event, value) => {
                                         searchParams.set("page", value.toString());
                                         setSearchParams(searchParams);
                                     }}
