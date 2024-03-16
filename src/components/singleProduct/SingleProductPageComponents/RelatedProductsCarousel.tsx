@@ -1,13 +1,10 @@
 import { GoChevronRight } from "react-icons/go";
 import { GoChevronLeft } from "react-icons/go";
 import Slider from "react-slick";
-import { useContext, useEffect, useState } from "react";
-import useAxios from "../../customHooks/useAxios";
+import { useContext, useEffect } from "react";
 import ProductWithRatingsCard from "../../products/ProductsComponents/ProductWithRatingsCard";
 import SingleSkeleton from "../../shared/LoadingSkeletons/SingleSkeleton";
-import { Skeleton } from "@mui/joy";
-import ImageSkeleton from "../../shared/LoadingSkeletons/ImageSkeleton";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { GlobalCachingContext } from "../../features/GlobalCachingContext/GlobalCachingProvider";
 
 interface IRelatedProductsCarousel {

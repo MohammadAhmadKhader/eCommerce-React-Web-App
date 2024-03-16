@@ -27,6 +27,7 @@ function Products() {
     const [count, setCount] = useState(9);
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
+    const [category, setCategory] = useState("All Categories")
     const maxLimit = 30;
     const minLimit = 9;
     const { debounce } = useDebounce()
@@ -45,14 +46,18 @@ function Products() {
         return limit
     }
     const getData = async (params) => {
-
-        setIsLoading(true)
-        const { data } = await GET(`/products?${params}`)
-        setProducts(data.products)
-        console.log(data.products)
-        setIsLoading(false)
-        setCount(data.count);
-        console.log("SENT")
+        try {
+            setIsLoading(true)
+            const { data } = await GET(`/products?${params}`)
+            setProducts(data.products)
+            console.log(data.products)
+            setCount(data.count);
+            console.log("SENT")
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
     useEffect(() => {
 
@@ -88,14 +93,22 @@ function Products() {
             price_gte: price_gte ? price_gte : "",
             page: searchParams.get("page") || 9,
             limit: searchParams.get("limit") || 1,
-            category: searchParams.get("categoryId") || 2,
+            category: searchParams.get("category") ? searchParams.get("category") : undefined,
         }
 
         let linkPath = "";
         for (const value in params) {
-            if (params[value].length > 0) {
+            if (params[value]?.length > 0) {
                 linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(params[value]) : params[value]) + "&";
             }
+        }
+        switch (searchParams.get("category")) {
+            case "65e7d89b62bb29693a0d1c58": setCategory("Skincare"); break;
+            case "65e7d89c62bb29693a0d1c5d": setCategory("Watches"); break;
+            case "65e7d89c62bb29693a0d1c5f": setCategory("Jewellery"); break;
+            case "65e7d89c62bb29693a0d1c5b": setCategory("Handbags"); break;
+            case "65e7d89c62bb29693a0d1c61": setCategory("Eyewear"); break;
+            default: setCategory("All Categories"); searchParams.delete("category"); setSearchParams(searchParams)
         }
         linkPath = linkPath.slice(0, -1)
         debounce(() => { getData(linkPath) }, 500)
@@ -130,17 +143,17 @@ function Products() {
                 </Link>
                 <IoChevronForwardOutline />
                 <Link to="/products">
-                    Handbags
+                    {category}
                 </Link>
             </div>
             <div className='px-4 text-color-accent'>
                 <h2 className='text-4xl mb-5 font-semibold'>
-                    Handbags
+                    {category}
                 </h2>
             </div>
             <div className='flex'>
                 {shouldItBeRendered && <FiltersComponent />}
-                <div className='px-3 md:ps-1 md:me-1.5 lg:px-3 xl:px-4'>
+                <div className='px-3 md:ps-1 md:me-1.5 lg:px-3 xl:px-4 w-full'>
                     <div className='my-3'>
                         <div className={`flex flex-wrap justify-between items-center px-2 py-1.5 rounded-lg gap-y-3 accent-text-color accent-bg-color`}
                             style={{
@@ -189,13 +202,15 @@ function Products() {
 
                     <div className='grid grid-cols-12 gap-2 lg:gap-5'>
                         {isLoading ? <ProductsPageSkeleton /> :
-                            products?.map((prod) => {
+                            products?.length > 0 ? products?.map((prod) => {
                                 return (
                                     <ProductWithRatingsCard name={prod.name} finalPrice={prod.finalPrice} price={prod.price} _id={prod._id}
                                         brand={prod.brand} avgRating={prod.avgRating} offer={prod.offer} key={prod._id} imageUrl={prod.images[0].imageUrl} ratingNumbers={prod.ratingNumbers} quantity={prod.quantity} />
                                 )
 
-                            })
+                            }) : <div className='min-w-56'>
+                                <h3 className='text-xl font-semibold'>No Products Available</h3>
+                            </div>
                         }
                     </div>
 
@@ -217,9 +232,6 @@ function Products() {
                     </Stack>
                 </div>
             </div>
-
-
-
             <ReactSwitch handleDiameter={25} width={45}
                 height={20} checked={theme == "dark"} onChange={toggleTheme} />
         </section>

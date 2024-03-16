@@ -55,7 +55,7 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
             borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
             boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
         }}>
-            <Link to={`/products/${_id}`} className=' bg-white flex items-center rounded-t-md'>
+            <Link to={`/products/${_id}?page=1&limit=9`} className=' bg-white flex items-center rounded-t-md'>
                 <img src={imageUrl}
                     alt={name}
                     className='rounded-t-md object-contain aspect-square' />
