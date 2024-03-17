@@ -2,10 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../../features/CartFeature/CartProvider';
 
 function OrderCalcs() {
-  let {cartItems } :any= useContext(CartContext)
-  // * Will be fixed soon
-  
-  cartItems = cartItems.cart
+  const { cartItems}: any = useContext(CartContext)
   const [subTotal, setSubTotal] = useState(0);
   const [discount, setDiscount] = useState(10);
   const [deliveryFee, setDeliveryFee] = useState(0);
@@ -14,8 +11,8 @@ function OrderCalcs() {
     let calculatedSubTotal = 0;
     let quantity = 1;
     cartItems?.forEach((item) => {
-      calculatedSubTotal += item.productId.finalPrice;
-      quantity = item.quantity
+      calculatedSubTotal += item.cartItem.finalPrice;
+      quantity = item.cartItem.quantity
     })
     console.log(cartItems)
     if (cartItems) {

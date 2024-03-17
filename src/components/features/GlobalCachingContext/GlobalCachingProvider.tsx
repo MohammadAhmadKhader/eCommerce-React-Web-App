@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from 'react'
-import { CartItemTemp, IProduct } from '../../../types/types';
+import React, { createContext, useState } from 'react'
+import { IProduct } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
 
 export interface GlobalCachingContext {
@@ -8,7 +8,7 @@ export interface GlobalCachingContext {
     isBrandsLoading: boolean;
     isProductByIdLoading: boolean;
     isRelatedProductLoading: boolean;
-    isTopRatedProducts:boolean;
+    isTopRatedProductsLoading:boolean;
     reviewsCount: number;
     product: IProduct | object;
     topRatedProducts:IProduct[];
@@ -37,7 +37,7 @@ function GlobalCachingProvider({ children }) {
     const [relatedProducts, setRelatedProducts] = useState([])
     const { GET :GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
-    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProducts, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true)
+    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true)
     
     const getBrands = async () => {
         try {
@@ -101,7 +101,7 @@ function GlobalCachingProvider({ children }) {
             brands, setBrands, getBrands, isBrandsLoading,
             categories, product, reviewsCount, isProductByIdLoading,
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
-            isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts,isTopRatedProducts,setIsTopRatedProductsLoading,
+            isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts,isTopRatedProductsLoading,setIsTopRatedProductsLoading,
             topRatedProducts
         }}>
             {children}

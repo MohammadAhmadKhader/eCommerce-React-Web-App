@@ -23,7 +23,7 @@ function Brands() {
                         return (
                             <Link to={`/products?page=1&limit=9&brands=${brand.name}`} className='rounded-2xl bg-gray-200 bg-opacity-80 flex items-center justify-center
                        col-span-6 lg:col-span-4 xl:col-span-2 p-3 aspect-square'
-                                key={brand.id}>
+                                key={brand._id}>
 
                                 <img className='w-full' src={brand.imageUrl} alt={brand.name} />
                             </Link>

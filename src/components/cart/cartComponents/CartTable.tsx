@@ -8,7 +8,7 @@ import { CartContext } from '../../features/CartFeature/CartProvider';
 
 function CartTable() {
     const { theme, toggleTheme } = useContext(ThemeContext)
-    const {cartItems ,isCartLoading} : any = useContext(CartContext)
+    const { cartItems, isCartLoading }: any = useContext(CartContext)
     return (
         <div className='overflow-x-scroll cart-table-container'>
             <table className='mt-5 w-full' style={{
@@ -31,11 +31,11 @@ function CartTable() {
                         <ItemSkeleton imgHolderVariant='rectangular' widthTextFirstRectangular={450} widthTextSecondRectangular={450} />
 
                     </div> :
-                        cartItems?.cart?.map((item) => {
+                        cartItems?.map((item) => {
                             return (
-                                <React.Fragment key={item.productId._id}>
-                                    <CartTableItem imgUrl={item.productId.images[0]?.thumbnailUrl} productId={item.productId._id} brand={item.productId.brand}
-                                    cartItemId={item._id} name={item.productId.name} price={item.productId.finalPrice} quantity={item.quantity}  />
+                                <React.Fragment key={item.cartItem._id}>
+                                    <CartTableItem imgUrl={item.cartItem.images[0]?.thumbnailUrl} productId={item.cartItem._id} brand={item.cartItem.brand}
+                                        cartItemId={item._id} name={item.cartItem.name} price={item.cartItem.finalPrice} quantity={item.quantity} />
                                 </React.Fragment>
                             )
                         })

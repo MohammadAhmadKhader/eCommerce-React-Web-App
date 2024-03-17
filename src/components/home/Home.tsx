@@ -23,7 +23,7 @@ function Home() {
     setIsNewArrivalsLoading(false)
     console.log(data.products)
   }
-  const { getBrands,getTopRatedProducts,topRatedProducts } = useContext(GlobalCachingContext)
+  const { getBrands,getTopRatedProducts,topRatedProducts ,isTopRatedProductsLoading} = useContext(GlobalCachingContext)
 
   useEffect(() => {
     getTopRatedProducts()
@@ -53,7 +53,7 @@ function Home() {
           <h2 className='text-xl font-semibold md:text-2xl lg:text-3xl md:font-bold ps-3 mb-5'>Top Rated Products</h2>
 
           <div className='px-5 my-5'>
-            <CarouselSwiper Iterable={topRatedProducts} />
+           {isTopRatedProductsLoading ? <Skeleton /> :<CarouselSwiper Iterable={topRatedProducts} />}  
           </div>
         </div>
       </div>

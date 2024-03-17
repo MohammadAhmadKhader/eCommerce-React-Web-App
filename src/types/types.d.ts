@@ -103,7 +103,7 @@ export type addReview ={
 export type Review = {
     comment: string;
     rating: number;
-    userId:any;
+    user:any;
     _id:string;
     createdAt:string;
     updatedAt:string;
