@@ -18,15 +18,19 @@ import useAxios from '../../customHooks/useAxios';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { UserContext } from '../../features/UserFeature/UserProvider';
+import Tooltip from '@mui/material/Tooltip';
+
 
 const schema = yup.object({
     comment: yup.string().min(4).max(256).required(),
     rating: yup.number().oneOf([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).required()
 })
 
-export default function SingleProductTabs({ product, isProductByIdLoading,reviewsCount,reviewsLimit }: ISingleProductTabs) {
+export default function SingleProductTabs({ product, isProductByIdLoading, reviewsCount, reviewsLimit }: ISingleProductTabs) {
     const { POST } = useAxios()
     const { theme } = useContext(ThemeContext);
+    const {userData,userToken} = useContext(UserContext)
     const [value_, setValue_] = useState<number | null>(0);
     const params = useParams()
 
@@ -44,12 +48,16 @@ export default function SingleProductTabs({ product, isProductByIdLoading,review
 
     const onSubmit: SubmitHandler<addReview> = async (submittedData) => {
         try {
+            if(!userData){
+                toast.error("You must sign in!")
+                return;
+            }
             const { data } = await POST("/reviews", {
                 productId: params.productId,
                 userId: import.meta.env.VITE_ADMIN_ID,
                 rating: submittedData.rating,
                 comment: submittedData.comment
-            }, import.meta.env.VITE_ADMIN_TOKEN as string);
+            },userToken);
 
             if (data["message"] == "success") {
                 toast.success("Review was added successfully!")
@@ -160,10 +168,13 @@ export default function SingleProductTabs({ product, isProductByIdLoading,review
                                 {errors["comment"] && <span className='text-red-700 text-xs ps-2 mt-2 '>{errors["comment"].message}</span>}
                             </div>
                             <div className='text-end'>
+                            <Tooltip title={userData ? undefined :"You must sign in" }>
+                                <span>
                                 <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
-                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm'>
+                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={ userData ? false : true}>
                                     Submit Review
-                                </button>
+                                </button></span>
+                            </Tooltip>
                             </div>
                         </form>
                     </div>

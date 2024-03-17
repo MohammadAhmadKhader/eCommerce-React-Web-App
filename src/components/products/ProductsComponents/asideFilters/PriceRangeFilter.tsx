@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from "react"
-import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 import Box from '@mui/joy/Box';
 import Slider from '@mui/joy/Slider';
 import { useSearchParams } from "react-router-dom";
-import useDebounce from "../../../customHooks/useDebounce";
 import { WindowWidthContext } from "../../../features/WindowWidthFeature/WindowWidthProvider";
-import { CssVarsProvider, ThemeProvider, extendTheme } from '@mui/joy/styles';
+import { ThemeProvider, extendTheme } from '@mui/joy/styles';
 
 const PriceRangeFilter = () => {
     const { windowWidth } = useContext(WindowWidthContext)
@@ -36,7 +34,6 @@ const PriceRangeFilter = () => {
         setValue(newValue as number[]);
     };
     useEffect(() => {
-        console.log("value has been changed")
         searchParams.set("price_lte", value[1].toString())
         searchParams.set("price_gte", value[0].toString())
         setSearchParams(searchParams)

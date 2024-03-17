@@ -15,6 +15,7 @@ import { IoChevronForwardOutline } from "react-icons/io5";
 import useAxios from '../customHooks/useAxios.tsx'
 import { useNavigate } from 'react-router-dom'
 import useDebounce from '../customHooks/useDebounce.tsx'
+import { objectIdSchemaOptional } from '../shared/IdValidation.ts'
 
 function Products() {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ function Products() {
     const [count, setCount] = useState(9);
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
-    const [category, setCategory] = useState("All Categories")
+    const [category, setCategory] = useState("All Categories");
     const maxLimit = 30;
     const minLimit = 9;
     const { debounce } = useDebounce()
@@ -60,9 +61,17 @@ function Products() {
         }
     }
     useEffect(() => {
-
+        if(searchParams.get("category")){
+            const {error} = objectIdSchemaOptional.validate({categoryId:searchParams.get("category")})
+            if(error){
+                navigate("/")
+            }
+        }
+        
         if (!searchParams.get("limit") || !searchParams.get("page")) {
-            navigate("/products?page=1&limit=9")
+            searchParams.set("limit", "9");
+            searchParams.set("page", "1");
+            setSearchParams(searchParams)
         }
     }, [])
 
@@ -73,6 +82,17 @@ function Products() {
         }
         if (parseInt(searchParams.get("limit")) < minLimit) {
             searchParams.set("limit", minLimit.toString())
+            setSearchParams(searchParams)
+        }
+        if(searchParams.get("category")){
+            const {error} = objectIdSchemaOptional.validate({categoryId:searchParams.get("category")})
+            if(error){
+                navigate("/")
+            }
+        }
+        if (!searchParams.get("limit") || !searchParams.get("page")) {
+            searchParams.set("limit", "9");
+            searchParams.set("page", "1");
             setSearchParams(searchParams)
         }
 
@@ -110,6 +130,7 @@ function Products() {
             case "65e7d89c62bb29693a0d1c61": setCategory("Eyewear"); break;
             default: setCategory("All Categories"); searchParams.delete("category"); setSearchParams(searchParams)
         }
+        
         linkPath = linkPath.slice(0, -1)
         debounce(() => { getData(linkPath) }, 500)
     }, [searchParams])

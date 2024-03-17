@@ -18,8 +18,8 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
 
             <div className='flex-shrink-0'>
                 <img className='rounded-full hover:cursor-pointer border border-solid object-cover w-[50px] h-[50px] '
-                    src={mode == "self" ? userData.userImg : review.userId.userImg}
-                    alt={mode == "self" ? userData.firstName + userData.lastName + "image" : review.userId.firstName + review.userId.lastName + "image"}
+                    src={mode == "self" ? userData.userImg : review.user.userImg}
+                    alt={mode == "self" ? userData.firstName + userData.lastName + "image" : review.user.firstName + review.user.lastName + "image"}
                     style={{
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                     }}
@@ -28,7 +28,7 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
 
             <div className='w-full'>
                 <div className='flex gap-x-3 font-semibold mb-1.5'>
-                    <h4 className='inline-block text-lg hover:cursor-pointer'>{mode == "self" ? userData.firstName + userData.lastName : review.userId.firstName + review.userId.lastName}</h4>
+                    <h4 className='inline-block text-lg hover:cursor-pointer'>{mode == "self" ? userData.firstName + userData.lastName : review.user.firstName + review.user.lastName}</h4>
                     <p className='flex items-center px-2 rounded-lg text-sm ms-auto bg-amber-400'>{review.createdAt}</p>
                 </div>
 
@@ -55,10 +55,14 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
                     </div>
 
                     <div className='flex gap-x-4 text-sm'>
-                        <button title="Edit" className='opacity-65 hover:opacity-100 duration-300'>
+                        <button title="Edit" className='opacity-65 hover:opacity-100 duration-300' disabled={true} onClick={()=>{
+                            
+                        }}>
                             <FaEdit />
                         </button>
-                        <button title="Delete" className='opacity-65 hover:opacity-100 duration-300'>
+                        <button title="Delete" className='opacity-65 hover:opacity-100 duration-300' disabled={true} onClick={()=>{
+                            
+                        }}>
                             <FaTrash />
                         </button>
                     </div>

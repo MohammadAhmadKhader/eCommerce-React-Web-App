@@ -87,14 +87,14 @@ function MyWishList() {
                 </h3>
             </div>
             <div className='grid grid-cols-12 gap-5 my-5'>
-                {isWishListLoading ? <div>Loading ..</div>:
-                
-                wishList?.map((prod) => {
-                    return (
-                        <MyWishListItem name={prod.productId.name} key={prod._id} imgUrl={prod.productId.images[0].imageUrl}
-                         productId={prod.productId._id} wishListId={prod._id}/>
-                    )
-                })}
+                {isWishListLoading ? <div>Loading ..</div> :
+
+                    wishList?.map((prod) => {
+                        return (
+                            <MyWishListItem name={prod.wishListItem.name} key={prod._id} imgUrl={prod.wishListItem.images[0].imageUrl}
+                                productId={prod.wishListItem._id} wishListId={prod._id} />
+                        )
+                    })}
             </div>
         </div>
     )

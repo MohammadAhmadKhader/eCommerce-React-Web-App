@@ -28,7 +28,6 @@ function CartOrderSummary() {
     } catch (error) {
       console.log(error)
       toast.error("Something Went Wrong Please Try Again Later")
-      return error;
     }
   }
   return (
@@ -52,7 +51,7 @@ function CartOrderSummary() {
 
           </Link>
 
-          <Link to="/" title='Continue Shopping'
+          <Link to="/products?page=1&limit=9" title='Continue Shopping'
             className='duration-300 text-color-accent border-color-accent border rounded-md px-1 md:px-3
            py-1.5 w-1/2 hover:text-white hover:bg-color-accent flex items-center justify-center text-sm'>
             <span className='line-clamp-1'>

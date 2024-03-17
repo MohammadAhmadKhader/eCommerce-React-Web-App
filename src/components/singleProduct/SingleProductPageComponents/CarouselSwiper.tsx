@@ -43,7 +43,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
       {
         Iterable?.map((prod) => {
           return (
-            <SwiperSlide key={prod.id} className='pb-10'>
+            <SwiperSlide key={prod._id} className='pb-10'>
               <ProductWithRatingsCard _id={prod._id} ratingNumbers={prod.ratingNumbers} name={prod.name}  price={prod.price} imageUrl={prod?.images?.length > 0 ? prod.images[0].imageUrl : ""}
                 avgRating={prod.avgRating} finalPrice={prod.finalPrice} brand={prod.brand} quantity={prod.quantity} offer={prod.offer} />
             </SwiperSlide>

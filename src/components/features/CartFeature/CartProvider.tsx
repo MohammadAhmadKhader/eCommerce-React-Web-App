@@ -22,9 +22,7 @@ function CartProvider({ children }) {
         try {
             if (userData) {
                 const { data } = await GET(`/carts/${userData._id}`, userToken)
-                console.log(userData._id)
-                console.log(data.cartItems)
-                setCartItems(data.cartItems);
+                setCartItems(data.cart);
                 setIsCartLoading(false)
             }
         } catch (error) {
