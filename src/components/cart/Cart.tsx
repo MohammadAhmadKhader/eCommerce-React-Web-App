@@ -3,7 +3,6 @@ import CartTable from './cartComponents/CartTable'
 import CartOrderSummary from './cartComponents/CartOrderSummary'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import CouponSection from './cartComponents/CouponSection'
-import ReactSwitch from 'react-switch'
 import { Link } from 'react-router-dom'
 import { IoChevronForwardOutline } from 'react-icons/io5'
 import { CartContext } from '../features/CartFeature/CartProvider'
@@ -36,8 +35,6 @@ function Cart() {
                     <CartOrderSummary />
                 </div>
             </div>
-            <ReactSwitch handleDiameter={25} width={45}
-                height={20} checked={theme == "dark"} onChange={toggleTheme} />
         </section>
     )
 }
