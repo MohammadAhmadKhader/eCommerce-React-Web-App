@@ -1,7 +1,6 @@
 import NewAddress from './checkoutComponents/NewAddress'
 import CheckoutOrderSummary from './checkoutComponents/CheckoutOrderSummary'
 import OrderDetails from './checkoutComponents/OrderDetails'
-import ReactSwitch from 'react-switch'
 import { useContext } from 'react'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import PaymentMethod from './checkoutComponents/PaymentMethod'
@@ -38,8 +37,6 @@ function Checkout() {
           <OrderDetails />
         </div>
       </div>
-      <ReactSwitch handleDiameter={25} width={45}
-        height={20} checked={theme == "dark"} onChange={toggleTheme} />
     </section>
   )
 }
