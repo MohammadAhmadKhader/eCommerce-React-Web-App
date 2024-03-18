@@ -336,3 +336,12 @@ export type ContactUsMessage = {
     email: string;
     message: string;
 }
+
+export type ResetPasswordForm = {
+    newPassword?:string;
+    confirmedNewPassword?:string;
+}
+
+export type UserForgotPassword = {
+    email?:string;
+}

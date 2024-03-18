@@ -10,19 +10,19 @@ import { ThemeContext } from "../components/features/ThemeFeature/ThemeProvider.
 
 function Layout() {
   const { windowWidth } = useContext(WindowWidthContext)
-  const { theme } =useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
   return (
     <>
-        <ToastContainer theme={`${theme == "dark" ? "dark" : "light"}`} />
-        <div className='w-full min-h-screen'>
-          <Header />
-          <div className="scr" style={{
-            paddingTop: `${windowWidth < 768 ? "75px" : ""}`
-          }}></div>
-            <Outlet  />
-          <Footer />
-          <ResponsiveBottomNavbar />
-        </div>
+      <ToastContainer theme={`${theme == "dark" ? "dark" : "light"}`} />
+      <div className='w-full min-h-screen'>
+        <Header />
+        <div className="scr" style={{
+          paddingTop: `${windowWidth < 768 ? "75px" : ""}`
+        }}></div>
+        <Outlet />
+        <Footer />
+        <ResponsiveBottomNavbar />
+      </div>
     </>
   )
 }

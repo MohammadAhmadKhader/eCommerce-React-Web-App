@@ -4,55 +4,44 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useContext } from 'react'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
-import { Link, useNavigate } from 'react-router-dom'
-import { UserSignInDataType } from '../../types/types'
+import { useNavigate } from 'react-router-dom'
 import useAxios from '../customHooks/useAxios'
-import { UserContext } from '../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
+import { UserForgotPassword } from '../../types/types'
 
 const schema = yup
     .object({
         email: yup.string().email().min(5, "Minimum characters allowed is 5").max(64, "Max characters allowed is 64").required(),
-        password: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
     })
-
-function Login() {
+function ForgotPassword() {
     const navigate = useNavigate()
     const { POST } = useAxios()
     const { theme } = useContext(ThemeContext);
-    const { setUserToken, setUserData } = useContext(UserContext)
 
     const {
         register,
         handleSubmit,
         trigger,
         formState: { errors,isSubmitting }
-    } = useForm<UserSignInDataType>({
+    } = useForm<UserForgotPassword>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<UserSignInDataType> = async (submittedData) => {
+    const onSubmit: SubmitHandler<UserForgotPassword> = async (submittedData) => {
         console.log(submittedData)
         try {
-            const { data } = await POST("/users/signin", {
+            const { data } = await POST("/users/forgotPassword", {
                 email: submittedData.email,
-                password: submittedData.password
             })
-            console.log(submittedData)
-            if (data["user"]) {
-                setUserToken(data.token);
-                setUserData(data.user);
-                localStorage.setItem("userTokenGeekOut", data.token)
-                toast.success("You have sign in successfully!")
+            if(data["message"]=="success"){
+                toast.success("A Message has been sent to your email");
                 navigate("/")
             }
-
         } catch (error) {
             console.error(error)
-            toast.error("Email or password is wrong!")
+            toast.error("Something Went Wrong Please Try Again Later")
         }
     }
-
     return (
         <div>
             <div className='flex justify-center items-center' style={{ minHeight: "800px" }}>
@@ -63,26 +52,21 @@ function Login() {
                         boxShadow: theme == "dark" ? "var(--dark--boxShadow)" : "var(--light--boxShadow)"
                     }}
                 >
-                    <h2 className='text-2xl font-semibold mb-5'>Sign In</h2>
+                    <h2 className='text-2xl font-semibold mb-5'>Request password reset</h2>
 
                     <Input register={register} type={"email"} title={"Email:"} id={"email"} placeholder={"email"}
                         trigger={trigger} errors={errors} name={"email"} />
 
-                    <Input register={register} type={"password"} title={"Password:"} id={"password"} placeholder={"password"}
-                        trigger={trigger} errors={errors} name={"password"} parentCustomClass='mb-0' />
-
-                    <Link className='block text-blue-700 underline w-fit text-sm font-semibold mb-5' to="/forgotPassword">Forgot password ?</Link>
                     <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
                     border-color-accent font-semibold text-sm border
                      hover:text-white duration-300 px-6 py-1.5 rounded-md'
                      type='submit' disabled={isSubmitting}
                      >
-                        Login
+                        Send
                     </button>
-                    <Link className='ms-auto mt-2 block text-blue-700 underline w-fit text-sm font-semibold' to="/signup">Sign Up?</Link>
                 </form></div>
         </div>
     )
 }
 
-export default Login
+export default ForgotPassword

@@ -26,7 +26,7 @@ function SignUp() {
     register,
     trigger,
     handleSubmit,
-    formState: { errors },
+    formState: { errors,isSubmitting },
   } = useForm<UserSigUpDataType>({
     resolver: yupResolver(schema)
   });
@@ -59,36 +59,12 @@ function SignUp() {
 
 
   }
-  const inputs = [
-    {
-      type: "email",
-      title: "Email:",
-      placeholder: "email",
-      id: "email",
-      name: "email",
-    },
-
-    {
-      type: "text",
-      title: "Name:",
-      placeholder: "name",
-      id: "username",
-      name: "username",
-    },
-    {
-      type: "password",
-      title: "Password:",
-      placeholder: "password",
-      id: "password",
-      name: "password",
-    },
-  ]
 
   return (
     <div className=''>
       <div className='flex justify-center items-center' style={{ minHeight: "800px" }}>
 
-        <form onSubmit={handleSubmit(onSubmit)} onClick={() => console.log(errors)}
+        <form onSubmit={handleSubmit(onSubmit)}
           className='-translate-y-16 border-solid border w-9/12 max-w-xl mx-auto p-4 rounded-2xl'
           style={{
             borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
@@ -111,13 +87,12 @@ function SignUp() {
             <Input register={register} type={"password"} title={"Password"} id={"password"} placeholder={"password"}
               trigger={trigger} name={"password"} errors={errors} parentCustomClass=' min-h-20 [margin-bottom:0.75rem;]' />
           </div>
-          <button className='bg-white text-black hover:bg-black hover:text-white duration-500 px-7 py-1 rounded-md border'
-            style={{
-              borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
-            }}
-            type='submit'
-          >
-            Sign up
+          <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
+                    border-color-accent font-semibold text-sm border
+                     hover:text-white duration-300 px-6 py-1.5 rounded-md' type='submit'
+                     disabled={isSubmitting}
+                     >
+                 Sign Up
           </button>
 
           <Link className='ms-auto mt-2 block text-blue-700 underline w-fit' to="/login">Sign In?</Link>

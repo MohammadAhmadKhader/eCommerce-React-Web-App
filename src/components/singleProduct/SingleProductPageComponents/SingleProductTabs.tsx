@@ -30,7 +30,7 @@ const schema = yup.object({
 export default function SingleProductTabs({ product, isProductByIdLoading, reviewsCount, reviewsLimit }: ISingleProductTabs) {
     const { POST } = useAxios()
     const { theme } = useContext(ThemeContext);
-    const {userData,userToken} = useContext(UserContext)
+    const { userData, userToken } = useContext(UserContext)
     const [value_, setValue_] = useState<number | null>(0);
     const params = useParams()
 
@@ -48,7 +48,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
 
     const onSubmit: SubmitHandler<addReview> = async (submittedData) => {
         try {
-            if(!userData){
+            if (!userData) {
                 toast.error("You must sign in!")
                 return;
             }
@@ -57,7 +57,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                 userId: import.meta.env.VITE_ADMIN_ID,
                 rating: submittedData.rating,
                 comment: submittedData.comment
-            },userToken);
+            }, userToken);
 
             if (data["message"] == "success") {
                 toast.success("Review was added successfully!")
@@ -158,9 +158,9 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                             </div>
 
                             <div className='mt-4'>
-                                <label htmlFor="reviewText">Review Description</label>
+                                <label htmlFor="reviewText">Review comment</label>
                                 <textarea {...register("comment")} name="comment" id="reviewText" rows={10} className='mt-2 resize-none w-full rounded-lg p-2 bg-transparent border'
-                                    placeholder='Enter Description' style={{
+                                    placeholder='Enter Your Comment' style={{
                                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                                     }} onBlur={() => {
                                         trigger("comment")
@@ -168,13 +168,13 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                                 {errors["comment"] && <span className='text-red-700 text-xs ps-2 mt-2 '>{errors["comment"].message}</span>}
                             </div>
                             <div className='text-end'>
-                            <Tooltip title={userData ? undefined :"You must sign in" }>
-                                <span>
-                                <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
-                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={ userData ? false : true}>
-                                    Submit Review
-                                </button></span>
-                            </Tooltip>
+                                <Tooltip title={userData ? undefined : "You must sign in"}>
+                                    <span>
+                                        <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
+                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={userData ? false : true}>
+                                            Submit Review
+                                        </button></span>
+                                </Tooltip>
                             </div>
                         </form>
                     </div>

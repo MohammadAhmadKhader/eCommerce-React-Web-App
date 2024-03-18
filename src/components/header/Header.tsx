@@ -5,7 +5,7 @@ import ShortWebSiteLogo from "../shared/ShortWebSiteLogo.tsx";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../features/ThemeFeature/ThemeProvider.tsx";
 import { WindowWidthContext } from "../features/WindowWidthFeature/WindowWidthProvider.tsx";
-import HeartIcon from '../shared/HeartIcon';
+import HeartIcon from '../shared/HeartIcon.tsx';
 import { CgProfile } from "react-icons/cg";
 import { BsCart } from "react-icons/bs";
 import { UserContext } from "../features/UserFeature/UserProvider.tsx";
@@ -14,45 +14,20 @@ import { IoPersonAdd } from "react-icons/io5";
 import OneLineSkeleton from "../shared/LoadingSkeletons/OneLineSkeleton.tsx";
 import { GoDotFill } from "react-icons/go";
 import { CartContext } from "../features/CartFeature/CartProvider.tsx";
+import { GlobalCachingContext } from "../features/GlobalCachingContext/GlobalCachingProvider.tsx";
+import { MdDarkMode } from "react-icons/md";
+import { MdLightMode } from "react-icons/md";
+import Tooltip from '@mui/material/Tooltip';
+
 
 
 function Header() {
-  const { theme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { windowWidth } = useContext(WindowWidthContext)
   const { userData, isUserFetchDataLoading } = useContext(UserContext)
   const { cartItems }: any = useContext(CartContext)
+  const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
 
-  const categories = {
-    "message": "success",
-    "count": 5,
-    "categories": [
-      {
-        "id": "65e7d89b62bb29693a0d1c58",
-        "name": "Skincare",
-        "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035673/eCommerceTap/Categories/ypycq2m497dhga7umjhfSkincare.svg"
-      },
-      {
-        "id": "65e7d89c62bb29693a0d1c5d",
-        "name": "Watches",
-        "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035742/eCommerceTap/Categories/zood7r05af5otd2qbczlWatches.svg"
-      },
-      {
-        "id": "65e7d89c62bb29693a0d1c5f",
-        "name": "Jewellery",
-        "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035610/eCommerceTap/Categories/bl1jpdtswba46sasy12pJewellery.svg"
-      },
-      {
-        "id": "65e7d89c62bb29693a0d1c5b",
-        "name": "Handbags",
-        "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035726/eCommerceTap/Categories/aolvbrqkj1xjh48csyotHandbags.svg"
-      },
-      {
-        "id": "65e7d89c62bb29693a0d1c61",
-        "name": "Eyewear",
-        "image_secure_url": "https://res.cloudinary.com/doxhxgz2g/image/upload/v1706035673/eCommerceTap/Categories/ypycq2m497dhga7umjhfSkincare.svg"
-      }
-    ]
-  }
 
   return (
 
@@ -73,16 +48,21 @@ function Header() {
             </h1>
             <nav className="hidden lg:flex items-center">
               <ul className="flex items-center gap-x-2 font-semibold">
-                {categories.categories.map((category) => {
-                  return (
-                    <li key={category.id + "category"} className="opacity-100 duration-300 hover:opacity-75">
-                      <Link to={`/products?page=1&limit=9&category=${category.id}`}>
-                        {category.name}
-                      </Link>
-                    </li>
-                  )
-                })}
 
+                {isCategoriesLoading ? <div className="flex justify-center items-center mx-4">
+                  <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"250px"} />
+                </div>
+                  :
+                  categories?.map((category) => {
+                    return (
+                      <li key={category._id} className="opacity-100 duration-300 hover:opacity-75">
+                        <Link to={`/products?page=1&limit=9&category=${category._id}`}>
+                          {category.name}
+                        </Link>
+                      </li>
+                    )
+                  })
+                }
               </ul>
             </nav>
           </div>
@@ -103,10 +83,10 @@ function Header() {
                 <div className="opacity-70 duration-300 hover:opacity-100 relative">
                   <BsCart size={25} />
 
-                  {cartItems?.cart?.length > 0 && <div className="absolute -right-1 -top-3">
-                    <GoDotFill color="red" size={29} />
-                    <span className="absolute right-[12.5px] top-[5px] text-[11px] font-semibold text-white">
-                      {cartItems.cart.length}
+                  {cartItems?.length > 0 && <div className="absolute -right-1 -top-3">
+                    <GoDotFill color="red" size={30} />
+                    <span className="absolute right-[12px] top-[5px] text-[11px] font-semibold text-white">
+                      {cartItems.length}
                     </span>
                   </div>
                   }
@@ -117,22 +97,50 @@ function Header() {
                   <CgProfile size={25} />
                 </div>
               </Link>
+
+              <button className="rounded-md bg-black" onClick={toggleTheme}>
+                {theme == "dark" ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
+              </button>
             </div>}
 
             {!userData &&
               <div className="hidden lg:flex items-center ms-4 gap-x-2.5">
-                <Link title="Sign Up" to="/signup" className="hidden md:block">
-                  <div className="opacity-70 duration-300 hover:opacity-100">
-                    <IoPersonAdd size={25} />
-                  </div>
+                <Link to="/signup" className="hidden md:block">
+                  <Tooltip title="Sign Up">
+                    <div className="opacity-70 duration-300 hover:opacity-100">
+                      <IoPersonAdd size={25} />
+                    </div>
+                  </Tooltip>
                 </Link>
-                <Link title="Login" to="/login" className="hidden md:block">
-                  <div className="opacity-70 duration-300 hover:opacity-100">
-                    <MdLogin size={25} />
-                  </div>
+                <Link to="/login" className="hidden md:block">
+                  <Tooltip title="Login">
+                    <div className="opacity-70 duration-300 hover:opacity-100">
+                      <MdLogin size={25} />
+                    </div>
+                  </Tooltip>
                 </Link>
               </div>
             }
+            <div className="flex items-center ms-3">
+              <button className="rounded-md bg-black" onClick={toggleTheme} style={{
+                backgroundColor: "transparent"
+              }}>
+                {
+                  theme == "dark" ?
+                    <Tooltip title="Switch To Light Mode">
+                      <span>
+                        <MdLightMode size={25} />
+                      </span>
+                    </Tooltip>
+                    :
+                    <Tooltip title="Switch To Dark Mode">
+                      <span>
+                        <MdDarkMode size={25} />
+                      </span>
+                    </Tooltip>
+                }
+              </button>
+            </div>
           </>
         }
       </div>

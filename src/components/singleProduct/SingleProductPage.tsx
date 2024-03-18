@@ -20,6 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
 import { BsCart } from 'react-icons/bs';
 import { objectIdSchemaRequired } from '../shared/IdValidation';
+import { CartContext } from '../features/CartFeature/CartProvider';
 
 
 function SingleProductPage() {
@@ -29,8 +30,26 @@ function SingleProductPage() {
     const { getProductData, isProductByIdLoading, product, reviewsCount, setIsProductByIdLoading } = useContext(GlobalCachingContext)
     const { POST } = useAxios()
     const { userData, userToken, getUserData } = useContext(UserContext)
+    const { getCartItems } = useContext(CartContext)
     const [isItemInCart, setIsItemInCart] = useState(true);
     const [isItemInWishList, setIsItemInWishList] = useState(true);
+    const { theme } = useContext(ThemeContext);
+    const [quantity, setQuantity] = useState(1);
+    const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
+    const [categoryName, setCategoryName] = useState("All Categories");
+    const [categoryId, setCategoryId] = useState("");
+    
+    
+    function setCategoryNameAndId(){
+       if (!isCategoriesLoading && !isProductByIdLoading) {
+            categories.forEach((category) => {
+                if (category._id == (product as IProduct).categoryId) {
+                    setCategoryId(category._id)
+                    setCategoryName(category.name)
+                }
+            })
+        } 
+    }
     const maxLimit = 30;
     const minLimit = 9
 
@@ -47,6 +66,7 @@ function SingleProductPage() {
             }
             if (data.message == "success") {
                 toast.success("Items has been added to cart")
+                getCartItems();
             }
         } catch (error) {
             toast.error("Something Went Wrong Please Try Again later")
@@ -63,7 +83,7 @@ function SingleProductPage() {
 
             if (data.message == "success") {
                 toast.success("Product has been added to your wishlist");
-                getUserData()
+                getUserData();
             }
 
             setIsProductByIdLoading(false)
@@ -72,6 +92,7 @@ function SingleProductPage() {
             console.log(error)
         }
     }
+
     useEffect(() => {
         if (userData) {
             const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
@@ -86,9 +107,9 @@ function SingleProductPage() {
                 setIsItemInWishList(false)
             }
         }
+        setCategoryNameAndId()
     }, [userData, product, params.productId])
-    const { theme } = useContext(ThemeContext);
-    const [quantity, setQuantity] = useState(1);
+
 
     useEffect(() => {
         const { error } = objectIdSchemaRequired.validate({ productId: params.productId });
@@ -103,8 +124,10 @@ function SingleProductPage() {
             getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
         }
 
+        setCategoryNameAndId()
     }, [])
 
+    
     useEffect(() => {
         if (searchParams.get("limit") > maxLimit.toString()) {
             searchParams.set("limit", maxLimit.toString())
@@ -115,7 +138,10 @@ function SingleProductPage() {
             setSearchParams(searchParams)
         }
         getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId)
-    }, [searchParams])
+
+        
+        setCategoryNameAndId()
+    }, [searchParams, params.productId])
     return (
         <section className='px-3 md:px-5 single-product-page'>
             <div className='px-4 flex items-center gap-x-4 text-color-accent font-semibold my-5'>
@@ -123,8 +149,8 @@ function SingleProductPage() {
                     Home
                 </Link>
                 <IoChevronForwardOutline />
-                <Link to="/products">
-                    Handbags
+                <Link to={`/products?page=1&limit=9&category=${categoryId}`}>
+                    {categoryName}
                 </Link>
                 <IoChevronForwardOutline />
                 <Link to={`/products/${params.productId}`}>
@@ -203,11 +229,11 @@ function SingleProductPage() {
                                         <input id='quantity'
                                             className='w-16 px-3 text-sm outline-none rounded-md text-black bg-transparent mx-0.5 text-center'
                                             type="number" value={quantity} placeholder='quantity'
-                                            onChange={()=>{
-                                                if((product as IProduct).quantity <= quantity){
+                                            onChange={() => {
+                                                if ((product as IProduct).quantity <= quantity) {
                                                     setQuantity((product as IProduct).quantity)
                                                 }
-                                                
+
                                             }}
                                             style={{
                                                 borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
@@ -216,12 +242,12 @@ function SingleProductPage() {
                                         />
                                         <button className='size-fit duration-500 border-l py-0.5 px-1 hover:bg-color-accent rounded-r-md'
                                             onClick={() => {
-                                                if(!((product as IProduct).quantity <= quantity)){
+                                                if (!((product as IProduct).quantity <= quantity)) {
                                                     setQuantity(prev => prev + 1)
-                                                }else{
+                                                } else {
                                                     toast.info("You have exceeded the limitation")
                                                 }
-                                                
+
                                             }}>
                                             <FiPlus size={18} />
                                         </button>
@@ -230,46 +256,46 @@ function SingleProductPage() {
 
                                 <div className='flex justify-between items-center gap-x-3 sm:gap-x-5'>
                                     <Tooltip title={userData ? isItemInCart ? "Item already in cart" : undefined : "signing in is required"}>
-                                        <>
-                                            <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center
+
+                                        <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center
                                  text-white bg-color-accent hover:bg-transparent hover:text-color-accent border-color-accent border-2 duration-300
                                  disabled:bg-color-accent disabled:opacity-65 disabled:text-white disabled:hover:text-white
                                  '
-                                                disabled={userData ? isItemInCart ? true : false : true}
-                                                onClick={() => {
-                                                    if (userData && !isItemInCart) {
-                                                        addToCart()
-                                                    }
-                                                }}
-                                            >
-                                                <span>
-                                                    <BsCart size={22} />
-                                                </span>
-                                                <span>
-                                                    Add to Cart
-                                                </span>
+                                            disabled={userData ? (isItemInCart ? true : false) : true}
+                                            onClick={() => {
+                                                if (userData && !isItemInCart) {
+                                                    addToCart()
+                                                }
+                                            }}
+                                        >
+                                            <span>
+                                                <BsCart size={22} />
+                                            </span>
+                                            <span>
+                                                Add to Cart
+                                            </span>
 
-                                            </button></></Tooltip>
-                                    <Tooltip title={userData ? isItemInWishList ? "Item already in wishlist" : undefined : "signing in is required"}>
-                                        <>
-                                            <button className={`text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
+                                        </button></Tooltip>
+                                    <Tooltip title={userData ? (isItemInWishList ? "Item already in wishlist" : "gdg") : "signing in is required"}>
+
+                                        <button className={`text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
                                  border-2 border-color-accent hover:bg-color-accent hover:text-white duration-300 
                                  disabled:hover:bg-transparent disabled:hover:text-color-accent  disabled:opacity-65 }`}
-                                                disabled={userData ? isItemInWishList ? true : false : true}
-                                                onClick={() => {
-                                                    if (userData && !isItemInWishList) {
-                                                        addToWishList()
-                                                    }
-                                                }}
-                                            >
-                                                <span>
-                                                    <VscHeart size={22} />
-                                                </span>
-                                                <span>
-                                                    Add to Wishlist
-                                                </span>
+                                            disabled={userData ? (isItemInWishList ? true : false) : true}
+                                            onClick={() => {
+                                                if (userData && !isItemInWishList) {
+                                                    addToWishList()
+                                                }
+                                            }}
+                                        >
+                                            <span>
+                                                <VscHeart size={22} />
+                                            </span>
+                                            <span>
+                                                Add to Wishlist
+                                            </span>
 
-                                            </button></></Tooltip>
+                                        </button></Tooltip>
                                 </div>
                             </div>
                         </div>
@@ -286,3 +312,4 @@ function SingleProductPage() {
 }
 
 export default SingleProductPage
+

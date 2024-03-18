@@ -19,8 +19,8 @@ const schema = yup
 
 function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePasswordForm) {
     const { theme } = useContext(ThemeContext);
-    const { userData,userToken } = useContext(UserContext);
-    const {PUT} = useAxios();
+    const { userData, userToken,setUserToken } = useContext(UserContext);
+    const { PUT } = useAxios();
     const {
         register,
         trigger,
@@ -33,21 +33,23 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
             newPassword: "",
             confirmNewPassword: ""
         },
-        
+
         resolver: yupResolver(schema),
     });
 
 
-    const onSubmit: SubmitHandler<UserChangePassword> = async(submittedData) => {
+    const onSubmit: SubmitHandler<UserChangePassword> = async (submittedData) => {
         try {
-            const {data} = await PUT("/users/changepassword",{
-                oldPassword:submittedData.currentPassword,
-                newPassword:submittedData.newPassword,
-                confirmNewPassword:submittedData.confirmNewPassword,
-                userId:userData._id
-            },userToken)
-
-            if(data.message == "success"){
+            const { data } = await PUT("/users/changepassword", {
+                oldPassword: submittedData.currentPassword,
+                newPassword: submittedData.newPassword,
+                confirmNewPassword: submittedData.confirmNewPassword,
+                userId: userData._id
+            }, userToken)
+            console.log(data)
+            if (data.message == "success") {
+                setUserToken(data.token);
+                localStorage.setItem("userTokenGeekOut",data.token)
                 toast.success("Your password has been changed successfully!");
                 reset()
             }

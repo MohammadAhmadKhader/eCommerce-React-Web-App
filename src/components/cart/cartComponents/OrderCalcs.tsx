@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../../features/CartFeature/CartProvider';
 
 function OrderCalcs() {
-  const { cartItems}: any = useContext(CartContext)
+  const { cartItems }: any = useContext(CartContext)
   const [subTotal, setSubTotal] = useState(0);
   const [discount, setDiscount] = useState(10);
   const [deliveryFee, setDeliveryFee] = useState(0);
@@ -12,7 +12,7 @@ function OrderCalcs() {
     let quantity = 1;
     cartItems?.forEach((item) => {
       calculatedSubTotal += item.cartItem.finalPrice;
-      quantity = item.cartItem.quantity
+      quantity = item.quantity
     })
     console.log(cartItems)
     if (cartItems) {
@@ -45,7 +45,7 @@ function OrderCalcs() {
 
       <li className='flex items-center justify-between'>
         <h4 className='font-bold'>GrandTotal</h4>
-        <span className='font-bold'>${grandTotal}</span>
+        <span className='font-bold'>${grandTotal.toFixed(2)}</span>
       </li>
     </ul>
   )
