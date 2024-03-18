@@ -1,28 +1,32 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { IProduct } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
 
 export interface GlobalCachingContext {
     brands: any;
     setBrands: React.Dispatch<React.SetStateAction<any>>;
+    isCategoriesLoading:boolean;
     isBrandsLoading: boolean;
     isProductByIdLoading: boolean;
     isRelatedProductLoading: boolean;
-    isTopRatedProductsLoading:boolean;
+    isTopRatedProductsLoading: boolean;
     reviewsCount: number;
     product: IProduct | object;
-    topRatedProducts:IProduct[];
+    topRatedProducts: IProduct[];
     categories: any;
     relatedProducts: IProduct[];
     getBrands: () => Promise<void>;
+    getCategories:()=> Promise<void>;
     getProductData: (page: string, limit: string, productId: string) => Promise<void>;
     getRelatedProducts: (categoryId: string, productId: string) => Promise<void>;
-    getTopRatedProducts:() => Promise<void>;
+    getTopRatedProducts: () => Promise<void>;
     setIsProductByIdLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setIsTopRatedProductsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setRelatedProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
     setIsRelatedProductLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
+
 
 export const GlobalCachingContext = createContext<GlobalCachingContext>(null)
 
@@ -35,10 +39,10 @@ function GlobalCachingProvider({ children }) {
     const [reviewsCount, setReviewsCount] = useState(9);
     const [product, setProduct] = useState<IProduct | object>({})
     const [relatedProducts, setRelatedProducts] = useState([])
-    const { GET :GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
+    const { GET: GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
     const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true)
-    
+
     const getBrands = async () => {
         try {
             const { data } = await GET_Brands("/brands")
@@ -50,7 +54,7 @@ function GlobalCachingProvider({ children }) {
 
     const getCategories = async () => {
         try {
-            const { data } = await GET_Categories("//")
+            const { data } = await GET_Categories("/categories")
             setCategories(data.categories)
         } catch (error) {
             console.log(error)
@@ -83,16 +87,21 @@ function GlobalCachingProvider({ children }) {
     }
 
     const getTopRatedProducts = async () => {
-        try{
+        try {
             const { data } = await GET_TopRatedProducts("/products?page=1&limit=7&sort=ratings_desc")
             setTopRatedProducts(data.products)
             console.log(data.products)
-        }catch(error){
+        } catch (error) {
             console.log(error)
-        }finally{
+        } finally {
             setIsTopRatedProductsLoading(false)
         }
     }
+
+    useEffect(()=>{
+        getCategories()
+    },[])
+
 
 
 
@@ -101,8 +110,8 @@ function GlobalCachingProvider({ children }) {
             brands, setBrands, getBrands, isBrandsLoading,
             categories, product, reviewsCount, isProductByIdLoading,
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
-            isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts,isTopRatedProductsLoading,setIsTopRatedProductsLoading,
-            topRatedProducts
+            isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
+            topRatedProducts, getCategories,isCategoriesLoading
         }}>
             {children}
         </GlobalCachingContext.Provider>

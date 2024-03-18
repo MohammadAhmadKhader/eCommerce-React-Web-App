@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import "./products.css"
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import ProductWithRatingsCard from './ProductsComponents/ProductWithRatingsCard'
-import ReactSwitch from 'react-switch'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Link, useSearchParams } from 'react-router-dom'
@@ -16,6 +15,7 @@ import useAxios from '../customHooks/useAxios.tsx'
 import { useNavigate } from 'react-router-dom'
 import useDebounce from '../customHooks/useDebounce.tsx'
 import { objectIdSchemaOptional } from '../shared/IdValidation.ts'
+import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
 
 function Products() {
     const navigate = useNavigate()
@@ -29,6 +29,7 @@ function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState("All Categories");
+    const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
     const maxLimit = 30;
     const minLimit = 9;
     const { debounce } = useDebounce()
@@ -61,20 +62,20 @@ function Products() {
         }
     }
     useEffect(() => {
-        if(searchParams.get("category")){
-            const {error} = objectIdSchemaOptional.validate({categoryId:searchParams.get("category")})
-            if(error){
+        if (searchParams.get("category")) {
+            const { error } = objectIdSchemaOptional.validate({ categoryId: searchParams.get("category") })
+            if (error) {
                 navigate("/")
             }
         }
-        
+
         if (!searchParams.get("limit") || !searchParams.get("page")) {
             searchParams.set("limit", "9");
             searchParams.set("page", "1");
             setSearchParams(searchParams)
         }
     }, [])
-
+    
     useEffect(() => {
         if (parseInt(searchParams.get("limit")) > maxLimit) {
             searchParams.set("limit", maxLimit.toString())
@@ -84,9 +85,9 @@ function Products() {
             searchParams.set("limit", minLimit.toString())
             setSearchParams(searchParams)
         }
-        if(searchParams.get("category")){
-            const {error} = objectIdSchemaOptional.validate({categoryId:searchParams.get("category")})
-            if(error){
+        if (searchParams.get("category")) {
+            const { error } = objectIdSchemaOptional.validate({ categoryId: searchParams.get("category") })
+            if (error) {
                 navigate("/")
             }
         }
@@ -122,15 +123,18 @@ function Products() {
                 linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(params[value]) : params[value]) + "&";
             }
         }
-        switch (searchParams.get("category")) {
-            case "65e7d89b62bb29693a0d1c58": setCategory("Skincare"); break;
-            case "65e7d89c62bb29693a0d1c5d": setCategory("Watches"); break;
-            case "65e7d89c62bb29693a0d1c5f": setCategory("Jewellery"); break;
-            case "65e7d89c62bb29693a0d1c5b": setCategory("Handbags"); break;
-            case "65e7d89c62bb29693a0d1c61": setCategory("Eyewear"); break;
-            default: setCategory("All Categories"); searchParams.delete("category"); setSearchParams(searchParams)
+
+        if (!isCategoriesLoading) {
+            categories.forEach((category) => {
+                if (category._id == searchParams.get("category")) {
+                    setCategory(category.name)
+                }
+                if(!searchParams.get("category")){
+                    setCategory("All Categories")
+                }
+            })
         }
-        
+
         linkPath = linkPath.slice(0, -1)
         debounce(() => { getData(linkPath) }, 500)
     }, [searchParams])
@@ -253,8 +257,6 @@ function Products() {
                     </Stack>
                 </div>
             </div>
-            <ReactSwitch handleDiameter={25} width={45}
-                height={20} checked={theme == "dark"} onChange={toggleTheme} />
         </section>
     )
 }

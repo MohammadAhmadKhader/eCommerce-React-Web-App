@@ -20,6 +20,9 @@ import AboutUs from '../components/AboutUs/AboutUs';
 import ContactUs from '../components/ContactUs/ContactUs';
 import PrivateRoute from '../components/protectedRoutes/PrivateRoute';
 import Auth from '../components/protectedRoutes/Auth';
+import ResetPassword from '../components/resetPassword/ResetPassword';
+import ForgotPassword from '../components/forgotPassword/ForgotPassword';
+import ResetPasswordProtectingRoute from '../components/protectedRoutes/ResetPasswordProtectingRoute';
 
 
 export const router = createBrowserRouter([
@@ -33,24 +36,35 @@ export const router = createBrowserRouter([
             }, {
                 path: "/login",
                 element:
-                <Auth>
-                    <Login />
-                </Auth>
+                    <Auth>
+                        <Login />
+                    </Auth>
             },
             {
                 path: "/signup",
-                element: 
-                <Auth>
-                  <SignUp />  
-                </Auth>
-                
+                element:
+                    <Auth>
+                        <SignUp />
+                    </Auth>
+
+            },
+            {
+                path: "/resetPassword/:token",
+                element:
+                    <ResetPasswordProtectingRoute>
+                        <ResetPassword />
+                    </ResetPasswordProtectingRoute>
+            },
+            {
+                path: "/forgotPassword",
+                element: <ForgotPassword />
             },
             {
                 path: "/changepassword",
-                element: 
-                <PrivateRoute>
-                    <ChangePassword />
-                </PrivateRoute>
+                element:
+                    <PrivateRoute>
+                        <ChangePassword />
+                    </PrivateRoute>
             },
             {
                 path: "/products/:productId",
@@ -64,10 +78,10 @@ export const router = createBrowserRouter([
             ,
             {
                 path: "/cart",
-                element: 
-                <PrivateRoute>
-                    <Cart />
-                </PrivateRoute>
+                element:
+                    <PrivateRoute>
+                        <Cart />
+                    </PrivateRoute>
             },
             {
                 path: "/checkout",
@@ -75,43 +89,43 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/profile",
-                element: 
-                <PrivateRoute>
-                    <Profile />
-                </PrivateRoute>
+                element:
+                    <PrivateRoute>
+                        <Profile />
+                    </PrivateRoute>
                 ,
                 children: [{
                     path: "",
                     element: <ReDirectorProfiles>
-                                <ProfileInformation />
-                            </ReDirectorProfiles>
-                    }, {
-                        index: true,
-                        path: "information",
-                        element: <ProfileInformation />
-                    }, {
-                        path: "changepassword",
-                        element: <ChangePasswordFromProfile />
-                    }, {
-                        path: "orders",
-                        element: <MyOrders />
-                    }, {
-                        path: "orders/:id",
-                        element: <SingleOrderSection />
-                    }, {
-                        path: "reviews",
-                        element: <MyReviews />
-                    }, {
-                        path: "wishlist",
-                        element: <MyWishList />
-                    }]
-            },{
-                path:"aboutus",
-                element:<AboutUs/>
-            },{
-                path:"contactus",
-                element:<ContactUs/>
+                        <ProfileInformation />
+                    </ReDirectorProfiles>
+                }, {
+                    index: true,
+                    path: "information",
+                    element: <ProfileInformation />
+                }, {
+                    path: "changepassword",
+                    element: <ChangePasswordFromProfile />
+                }, {
+                    path: "orders",
+                    element: <MyOrders />
+                }, {
+                    path: "orders/:id",
+                    element: <SingleOrderSection />
+                }, {
+                    path: "reviews",
+                    element: <MyReviews />
+                }, {
+                    path: "wishlist",
+                    element: <MyWishList />
+                }]
+            }, {
+                path: "aboutus",
+                element: <AboutUs />
+            }, {
+                path: "contactus",
+                element: <ContactUs />
             }
-            ]
+        ]
     }
 ])

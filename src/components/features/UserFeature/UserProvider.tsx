@@ -20,10 +20,11 @@ function UserProvider({children}) {
 
     const getUserData = async()=>{
       try{
-        if(userToken){
-          const {data} = await GET("/users",userToken)
+        if(localStorage.getItem("userTokenGeekOut")){
+          const {data} = await GET("/users",localStorage.getItem("userTokenGeekOut"))
+          setUserToken(data.token)
+          localStorage.setItem("userTokenGeekOut",data.token)
           setUserData(data.user);
-          console.log(data)
         }
       }catch(error){
         console.log(error)

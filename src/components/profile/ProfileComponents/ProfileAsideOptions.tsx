@@ -1,12 +1,11 @@
 
 import { useContext } from 'react'
-import ReactSwitch from 'react-switch'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import ProfileNavLinkComponents from './ProfileNavLinkComponents'
 import { IProfileAsideOptions } from '../../../types/types';
 
 function ProfileAsideOptions({ CustomComponent }: IProfileAsideOptions) {
-    const { theme, toggleTheme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
     return (
         <aside className='flex-col rounded-md p-3 md:bg-color-secondaryTabs h-full ' style={{
             color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)"
@@ -21,8 +20,6 @@ function ProfileAsideOptions({ CustomComponent }: IProfileAsideOptions) {
                 {CustomComponent && <CustomComponent isHidden={false} isCentered={true}
                     customClasses='flex w-full justify-center py-2 gap-x-2' />}
             </div>
-            <ReactSwitch handleDiameter={25} width={45}
-                height={20} checked={theme == "dark"} onChange={toggleTheme} />
         </aside>
     )
 }

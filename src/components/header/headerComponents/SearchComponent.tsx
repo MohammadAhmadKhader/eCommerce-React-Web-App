@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 function SearchComponent() {
 
     const [isFocused, setIsFocused] = useState(false);
-    const [inputText,setInputText] = useState("")
+    const [inputText, setInputText] = useState("")
     const { theme } = useContext(ThemeContext)
-    const { debounce, debouncedData } = useDebounce()
+    const { debounce } = useDebounce()
     const { GET, isLoading: isSearchUnderProcessing, setIsLoading: setIsSearchUnderProcessing } = useAxios()
     const [searchedProducts, setSearchedProducts] = useState([]);
     const inputRef = useRef(null);
@@ -31,7 +31,7 @@ function SearchComponent() {
 
     useEffect(() => {
         const searchListener = (event) => {
-            if(event.target == searchRef.current){
+            if (event.target == searchRef.current) {
                 setInputText("")
             }
             if (event.target != inputRef.current && event.target != searchRef.current) {
@@ -48,13 +48,13 @@ function SearchComponent() {
 
     }, [searchedProducts])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (inputText) {
             debounce(() => {
                 searchForProducts(inputText)
             }, 400)
-        } 
-    },[inputText])
+        }
+    }, [inputText])
 
     return (
         <search className="block max-w-fit my-2 rounded-lg relative">
@@ -63,8 +63,8 @@ function SearchComponent() {
                 borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)"
             }}>
                 <input id="searchInput" className="border-none outline-none bg-transparent py-1 text-sm"
-                value={inputText}
-                type="text" placeholder="Search Products..."
+                    value={inputText}
+                    type="text" placeholder="Search Products..."
 
                     onFocus={(e) => {
                         setIsFocused(true);
@@ -121,7 +121,7 @@ function SearchComponent() {
                                 </li>
                             )
                         })}
-                       {searchedProducts.length == 0 && inputText.length != 0 && <div>No Products Avaliable</div>}
+                        {searchedProducts.length == 0 && inputText.length != 0 && <div>No Products Avaliable</div>}
                     </ul>
                 </div>
             }

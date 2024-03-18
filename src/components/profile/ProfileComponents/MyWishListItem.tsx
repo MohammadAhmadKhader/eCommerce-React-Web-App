@@ -1,6 +1,5 @@
 import { useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import StarsComponent from '../../shared/StarsComponent'
+import { Link } from 'react-router-dom'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { MdOutlineCancel } from "react-icons/md";
 import { IWishlistItem } from '../../../types/types';
@@ -44,9 +43,6 @@ function MyWishListItem({ imgUrl, name, productId, wishListId }) {
             <div className='py-2 px-3'>
                 <div>
                     <h4 className='text-md font-semibold'>{name}</h4>
-                </div>
-                <div>
-                    <StarsComponent />
                 </div>
             </div>
 
