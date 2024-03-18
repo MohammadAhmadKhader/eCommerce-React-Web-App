@@ -97,10 +97,6 @@ function Header() {
                   <CgProfile size={25} />
                 </div>
               </Link>
-
-              <button className="rounded-md bg-black" onClick={toggleTheme}>
-                {theme == "dark" ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
-              </button>
             </div>}
 
             {!userData &&
