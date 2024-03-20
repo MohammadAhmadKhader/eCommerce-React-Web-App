@@ -32,7 +32,7 @@ function MyWishListItem({ imgUrl, name, productId, wishListId }) {
         }
     }
     return (
-        <Link className='col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col rounded-lg border relative' to={`/products/${productId}`} style={{
+        <Link className='col-span-12 sm:col-span-6 lg:col-span-4 flex flex-col rounded-lg border relative' to={`/products/${productId}?page=1&limit=9`} style={{
             backgroundColor: theme == "dark" ? "var(--dark--bgCard-color)" : "var(--light--bgCard-color)",
             borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
             color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",

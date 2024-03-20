@@ -4,7 +4,7 @@ import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import ProductWithRatingsCard from './ProductsComponents/ProductWithRatingsCard'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useBlocker, useLocation, useSearchParams } from 'react-router-dom'
 import FiltersComponent from './ProductsComponents/FiltersComponent.tsx'
 import SortComponent from './ProductsComponents/SortComponent.tsx'
 import ResponsiveSortFilterControl from './ProductsComponents/ResponsiveSortFilterControl.tsx'
@@ -19,7 +19,7 @@ import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCac
 
 function Products() {
     const navigate = useNavigate()
-    const { theme, toggleTheme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
     const { windowWidth } = useContext(WindowWidthContext)
     const [isResponsiveFilterActive, setIsResponsiveFilterActive] = useState(false);
     const [isResponsiveSortActive, setIsResponsiveSortActive] = useState(false);
@@ -61,6 +61,7 @@ function Products() {
             setIsLoading(false)
         }
     }
+
     useEffect(() => {
         if (searchParams.get("category")) {
             const { error } = objectIdSchemaOptional.validate({ categoryId: searchParams.get("category") })
@@ -74,7 +75,10 @@ function Products() {
             searchParams.set("page", "1");
             setSearchParams(searchParams)
         }
+
+
     }, [])
+
 
     useEffect(() => {
         if (parseInt(searchParams.get("limit")) > maxLimit) {
@@ -138,7 +142,6 @@ function Products() {
         linkPath = linkPath.slice(0, -1)
         debounce(() => { getData(linkPath) }, 500)
     }, [searchParams])
-
 
     useEffect(() => {
         if (windowWidth < 768) {

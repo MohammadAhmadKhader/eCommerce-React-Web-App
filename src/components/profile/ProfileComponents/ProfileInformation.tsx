@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef, useState } from 'react'
 import Input from '../../shared/Input'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,51 +11,52 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import CircularLoader from '../../shared/CircularLoader';
+import axios from 'axios';
 
 
 const schema = Joi.object({
   firstName: Joi.string().min(4).max(32).allow(""),
-  lastName: Joi.string().min(4).max(32),
-  email: Joi.string().email({ tlds: { allow: tlds } }).min(7).max(64),
-  mobileNumber: Joi.string().min(7).max(20),
-  userImg: Joi.string().base64(),
+  lastName: Joi.string().min(4).max(32).allow(""),
+  email: Joi.string().email({ tlds: { allow: tlds } }).min(7).max(64).allow(""),
+  mobileNumber: Joi.string().min(7).max(20).allow(""),
+  userImg: Joi.any(),
   // minimum is before 80 years from now and max is before 5 years from now
-  birthDate: Joi.date().max(new Date(Date.now() - 157680000000)).min(new Date(Date.now() - 2522880000000)),
+  birthDate: Joi.date().max(new Date(Date.now() - 157680000000)).min(new Date(Date.now() - 2522880000000)).allow(""),
 })
 
 function ProfileInformation() {
   const { theme } = useContext(ThemeContext)
-  const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
+  const { userData, userToken, isUserFetchDataLoading, getUserData } = useContext(UserContext)
   const { PUT } = useAxios()
-  const { register, handleSubmit, formState, reset } = useForm<UserData>({
+  const { register, handleSubmit, formState, reset,getFieldState } = useForm<UserData>({
     mode: "onChange",
     resolver: joiResolver(schema),
   });
-  const { errors, isValid, isDirty } = formState;
-  console.log(isValid)
-  console.log(errors, "ERRORS")
-
+  const { errors, isValid, isDirty, isSubmitting } = formState;
+  const inputFileRef = useRef(null);
+  const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
+  const [userImage, setUserImage] = useState(null);
 
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
     try {
+      console.log(submittedData)
+      const formData = new FormData()
+      { userImage != null && formData.append("userImg", userImage) }
       for (const key in submittedData) {
-        if (submittedData[key as keyof UserData] == "") {
-          delete submittedData[key as keyof UserData]
+        if (submittedData[key as keyof UserData] != undefined && submittedData[key as keyof UserData] != "") {
+          if (key !== "userImg") {
+            { formData.append(key, submittedData[key]) }
+          } else {
+            formData.append("userImg", userImage)
+          }
         }
       }
-      const { data } = await PUT(`/users/${userData._id}`, {
-        email: submittedData.email,
-        firstName: submittedData.firstName,
-        lastName: submittedData.lastName,
-        userImg: submittedData.userImg,
-        birthdate: submittedData.birthDate,
-        mobileNumber: submittedData.mobileNumber,
-
-      }, userToken)
-
+      console.log(Array.from(formData.entries()))
+      const { data } = await PUT(`/users/${userData._id}`, formData, userToken)
       if (data.message == "success") {
         toast.success("Information has been changed successfully");
         reset();
+        getUserData();
       }
     } catch (error) {
       toast.error("Something Went Wrong Please Try Again Later")
@@ -74,13 +75,13 @@ function ProfileInformation() {
         </h3>
       </div>
 
-      <div>
+      <form onSubmit={handleSubmit(changeUserInfo)} encType='multipart/form-data'>
         {isUserFetchDataLoading ? <CircularLoader minHeight={500} /> : <div className='flex my-3 flex-col'>
 
           <div className='flex-shrink-0 sm:max-w-96 flex justify-center sm:justify-between flex-col sm:flex-row'>
             <div className='flex-shrink-0'>
               <img className='rounded-full m-auto mb-5 sm:m-0 object-cover w-[80px] h-[80px]'
-                src={userData.userImg}
+                src={userData.userImg || defaultUserImage}
                 alt="User Img" onLoad={(e) => {
                   const Img = e.currentTarget
                   Img.classList.remove("blur-sm")
@@ -88,11 +89,24 @@ function ProfileInformation() {
             </div>
             <div className='flex items-end gap-x-3.5 justify-center sm:justify-normal'>
               <button className='px-10 py-1 border h-fit duration-300 rounded-md
-               text-white border-color-accent hover:text-color-accent hover:bg-transparent bg-color-accent'>
+               text-white border-color-accent hover:text-color-accent hover:bg-transparent bg-color-accent'
+                onClick={() => {
+                  inputFileRef.current.click()
+                }} type='button'
+              >
                 Upload
+                <input {...register("userImg")} accept="image/*" ref={inputFileRef} type='file' className='hidden' id="userImg" onChange={(event) => {
+                  const file = event.target.files[0];
+                  setUserImage(file)
+                  console.log(file)
+                }} />
               </button>
               <button className='px-10 py-1 border h-fit duration-300 rounded-md
-               text-red-600 border-red-600 hover bg-transparent hover:text-white hover:bg-red-600'>
+               text-red-600 border-red-600 hover bg-transparent hover:text-white hover:bg-red-600'
+                type='button' onClick={() => {
+                  setUserImage("deleteImg")
+                }}
+              >
                 Delete
               </button>
             </div>
@@ -100,7 +114,7 @@ function ProfileInformation() {
 
 
           <div>
-            <form onSubmit={handleSubmit(changeUserInfo)} className='mt-5'>
+            <div className='mt-5'>
               <div className='flex gap-x-5 flex-wrap sm:flex-nowrap'>
                 <Input name="firstName" type="text" register={register} title="First Name"
                   id="firstName" placeholder={userData?.firstName} errors={errors} parentCustomClass={'w-full'} />
@@ -117,18 +131,18 @@ function ProfileInformation() {
               </div>
 
 
-              <button disabled={!isValid || !isDirty} type='submit' className='rounded-md px-8 py-1 bg-color-accent text-white
+              <button disabled={!isValid || !isDirty || isSubmitting } type='submit' className='rounded-md px-8 py-1 bg-color-accent text-white
                duration-300 border border-color-accent hover:bg-transparent hover:text-color-accent
                disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent
                '>
 
                 Save Changes
               </button>
-            </form>
+            </div>
 
           </div>
         </div>}
-      </div>
+      </form>
     </div>
   )
 }

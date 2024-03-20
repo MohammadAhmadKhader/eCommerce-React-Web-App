@@ -4,10 +4,12 @@ import Slider from '@mui/joy/Slider';
 import { useSearchParams } from "react-router-dom";
 import { WindowWidthContext } from "../../../features/WindowWidthFeature/WindowWidthProvider";
 import { ThemeProvider, extendTheme } from '@mui/joy/styles';
+import useDebounce from "../../../customHooks/useDebounce";
 
 const PriceRangeFilter = () => {
-    const { windowWidth } = useContext(WindowWidthContext)
-    const [searchParams, setSearchParams] = useSearchParams()
+    const { windowWidth } = useContext(WindowWidthContext);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {debounce} = useDebounce()
 
     const customTheme = extendTheme({
         components: {
@@ -34,9 +36,16 @@ const PriceRangeFilter = () => {
         setValue(newValue as number[]);
     };
     useEffect(() => {
-        searchParams.set("price_lte", value[1].toString())
-        searchParams.set("price_gte", value[0].toString())
-        setSearchParams(searchParams)
+        
+       debounce(()=>{
+        if(value[0] > 0 || value [1] < 300){
+            searchParams.set("price_lte", value[1].toString())
+            searchParams.set("price_gte", value[0].toString())
+            setSearchParams(searchParams)
+        }
+       },200) 
+        
+        
     }, [value])
     return (
         <div className="flex flex-col gap-y-4 my-5">
