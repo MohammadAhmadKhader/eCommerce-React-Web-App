@@ -3,65 +3,13 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import MyWishListItem from './MyWishListItem';
 import useAxios from '../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
-
-const products = [
-    {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 80.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-    {
-        name: "product 1 Awesome amazing bag! With all what u wish",
-        finalPrice: 39.22,
-        price: 56.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "40%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "10%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }, {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 39.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    },
-    {
-        name: "product 1",
-        finalPrice: 39.22,
-        price: 56.22,
-        offer: "50%",
-        avgRating: 4.2,
-        imgUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        ratingsNumbers: 25
-    }
-]
+import CircularLoader from '../../shared/CircularLoader';
+const emptyWishList = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/ebck3buaoerk2dhnjfcg"
 
 function MyWishList() {
     const { theme } = useContext(ThemeContext)
     const { GET, isLoading: isWishListLoading, setIsLoading: setIsWishListLoading } = useAxios();
-    const { userData, userToken } = useContext(UserContext)
+    const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
     const [wishList, setWishList] = useState([])
     const getUserWishList = async () => {
         try {
@@ -87,14 +35,28 @@ function MyWishList() {
                 </h3>
             </div>
             <div className='grid grid-cols-12 gap-5 my-5'>
-                {isWishListLoading ? <div>Loading ..</div> :
+                {isWishListLoading || isUserFetchDataLoading ?
+                    <div className='col-span-12'>
+                        <CircularLoader minHeight={500} />
+                    </div> : wishList.length > 0 ?
 
-                    wishList?.map((prod) => {
-                        return (
-                            <MyWishListItem name={prod.wishListItem.name} key={prod._id} imgUrl={prod.wishListItem.images[0].imageUrl}
-                                productId={prod.wishListItem._id} wishListId={prod._id} />
-                        )
-                    })}
+                        wishList?.map((item) => {
+                            return (
+                                <MyWishListItem name={item.wishListItem.name} key={item._id + "key"} imgUrl={item.wishListItem.images[0].imageUrl}
+                                    productId={item.wishListItem._id} wishListId={item._id} />
+                            )
+                        }) :
+                        <div className='col-span-12'>
+                            <div className='flex justify-center items-center min-h-[500px] text-center flex-col'>
+                                <div>
+                                    <img src={emptyWishList} alt="empty wish List" />
+                                </div>
+                                <div className='mt-2'>
+                                    <h4 className='text-2xl font-semibold'>Well...</h4>
+                                    <h4>It seems you have not added any products to for wishlist. </h4>
+                                </div>
+                            </div>
+                        </div>}
             </div>
         </div>
     )

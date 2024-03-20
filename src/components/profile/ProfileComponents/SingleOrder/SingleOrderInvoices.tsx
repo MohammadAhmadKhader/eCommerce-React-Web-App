@@ -1,21 +1,18 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 import OrderCalcs from "../../../cart/cartComponents/OrderCalcs";
 import { LuDownload } from "react-icons/lu";
+import { GlobalCachingContext } from "../../../features/GlobalCachingContext/GlobalCachingProvider";
+import { useParams } from "react-router-dom";
 
-
-export interface ISingleOrderInvoices {
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-const Invoices = [
-  { name: "Couch", price: 34.54, quantity: 2 }, { name: "Handbag", price: 63.54, quantity: 1 }, { name: "Watch Casio", price: 134.54, quantity: 7 },
-]
-
-function SingleOrderInvoices({ name, price, quantity }: ISingleOrderInvoices) {
-  const { theme } = useContext(ThemeContext)
+function SingleOrderInvoices() {
+  const { theme } = useContext(ThemeContext);
+  const { singleOrderDetails,getSingleOrderDetails } = useContext(GlobalCachingContext);
+  // const params = useParams()
+  // console.log(params)
+  // useEffect(()=>{
+  //   getSingleOrderDetails(params.orderId)
+  // },[])
   return (
     <div>
       <div>
@@ -28,7 +25,7 @@ function SingleOrderInvoices({ name, price, quantity }: ISingleOrderInvoices) {
         </div>
       </div>
       <div className="text-gray-400 font-semibold my-4">
-        3 Item(s)
+        {singleOrderDetails?.orderItems?.length} Item(s)
       </div>
       <table className="w-full text-left">
         <thead>
@@ -41,13 +38,13 @@ function SingleOrderInvoices({ name, price, quantity }: ISingleOrderInvoices) {
           </tr>
         </thead>
         <tbody>
-          {Invoices?.map((Invoice, index) => {
+          {singleOrderDetails.orderItems?.map((orderItem, index) => {
 
             return (
-              <tr key={index}>
-                <td className="py-1">{Invoice.name}</td>
-                <td className="py-1">${Invoice.price}</td>
-                <td className="py-1">{Invoice.quantity}</td>
+              <tr key={orderItem._id + index}>
+                <td className="py-1.5 text-sm font-semibold">{orderItem.name}</td>
+                <td className="py-1.5 text-sm font-semibold">${Number(orderItem.subTotal)}</td>
+                <td className="py-1.5 text-sm font-semibold">{orderItem.quantity}</td>
               </tr>
             )
           })}
@@ -63,7 +60,11 @@ function SingleOrderInvoices({ name, price, quantity }: ISingleOrderInvoices) {
             Price Details
           </h5>
         </div>
-        <OrderCalcs />
+
+        {singleOrderDetails?.deliveryFee != undefined ?
+          <OrderCalcs deliveryFee={singleOrderDetails?.deliveryFee} grandTotal={singleOrderDetails?.grandTotal}
+            subTotal={singleOrderDetails?.subTotal} discount={singleOrderDetails?.discount} />
+        : <div>loading</div>}
       </div>
 
       <div >

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
@@ -7,11 +7,32 @@ import { ThemeContext } from '../../../features/ThemeFeature/ThemeProvider';
 import SingleOrderDetails from './SingleOrderDetails';
 import SingleOrderInvoices from './SingleOrderInvoices';
 import OrderCalcs from '../../../cart/cartComponents/OrderCalcs';
-import { Link } from 'react-router-dom';
+import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
+import { useParams } from 'react-router-dom';
 
 
 function SingleOrderSection() {
-  const { theme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
+  const { orders, singleOrderDetails, setSingleOrderDetails,getSingleOrderDetails } = useContext(GlobalCachingContext);
+  const params = useParams()
+  useEffect(() => {
+    if (orders) {
+      const wantedOrder = orders.find((item) => {
+        return item._id === params.id
+      })
+     
+      if(wantedOrder){
+        setSingleOrderDetails(wantedOrder)
+      }else{
+        getSingleOrderDetails(params.id)
+      }
+      
+    }
+  }, [])
+
+  useEffect(()=>{
+    console.log(singleOrderDetails)
+  },[singleOrderDetails])
   return (
     <div className='overflow-scroll MyOrdersContainer'>
       <Tabs className='MyOrders Tabs rounded-lg min-w-[600px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={0} style={{
@@ -49,7 +70,8 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Order Details</h5>
                 <div className='min-w-72'>
-                  <OrderCalcs />
+                  {singleOrderDetails ? <OrderCalcs deliveryFee={singleOrderDetails.deliveryFee} discount={singleOrderDetails.discount}
+                    grandTotal={singleOrderDetails.grandTotal} subTotal={singleOrderDetails.subTotal} /> : <div>loading</div>}
                 </div>
               </div>
 
@@ -58,7 +80,7 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Payment Details</h5>
                 <div>
-                  <h6>Cash on Delivery</h6>
+                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails}</h6>
                 </div>
               </div>
 
@@ -67,26 +89,20 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Address Details</h5>
                 <div>
-                  <p>Palestine</p>
-                  <p>WestBank</p>
-                  <p>Nablus</p>
-                  <p>Falasten street</p>
+                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.country || "Palestine"}</p>
+                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.state}</p>
+                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.city}</p>
+                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.streetAddress}</p>
                 </div>
               </div>
 
-            </div>
-            <div className='lg:text-right my-8'>
-              <Link to="" className='bg-color-accent text-white rounded-md px-6 py-1.5 duration-300
-               border-color-accent border hover:bg-white hover:text-color-accent text-sm font-semibold'>
-                Add Rating
-              </Link>
             </div>
           </div>
 
         </TabPanel>
         <TabPanel value={1} className='bg-transparent'>
 
-          <SingleOrderInvoices name="" price={0} quantity={1} />
+          <SingleOrderInvoices />
         </TabPanel>
       </Tabs>
     </div>

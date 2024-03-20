@@ -10,22 +10,24 @@ import { UserData } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
+import CircularLoader from '../../shared/CircularLoader';
+
 
 const schema = Joi.object({
   firstName: Joi.string().min(4).max(32).allow(""),
   lastName: Joi.string().min(4).max(32),
   email: Joi.string().email({ tlds: { allow: tlds } }).min(7).max(64),
   mobileNumber: Joi.string().min(7).max(20),
-  userImg:Joi.string().base64(),
+  userImg: Joi.string().base64(),
   // minimum is before 80 years from now and max is before 5 years from now
   birthDate: Joi.date().max(new Date(Date.now() - 157680000000)).min(new Date(Date.now() - 2522880000000)),
 })
 
 function ProfileInformation() {
   const { theme } = useContext(ThemeContext)
-  const { userData, userToken } = useContext(UserContext)
+  const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
   const { PUT } = useAxios()
-  const { register, handleSubmit, formState,reset } = useForm<UserData>({
+  const { register, handleSubmit, formState, reset } = useForm<UserData>({
     mode: "onChange",
     resolver: joiResolver(schema),
   });
@@ -35,7 +37,7 @@ function ProfileInformation() {
 
 
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
-    try{
+    try {
       for (const key in submittedData) {
         if (submittedData[key as keyof UserData] == "") {
           delete submittedData[key as keyof UserData]
@@ -51,11 +53,11 @@ function ProfileInformation() {
 
       }, userToken)
 
-      if(data.message =="success"){
+      if (data.message == "success") {
         toast.success("Information has been changed successfully");
         reset();
       }
-    }catch(error){
+    } catch (error) {
       toast.error("Something Went Wrong Please Try Again Later")
       console.log(error)
     }
@@ -73,7 +75,8 @@ function ProfileInformation() {
       </div>
 
       <div>
-        <div className='flex my-3 flex-col'>
+        {isUserFetchDataLoading ? <CircularLoader minHeight={500} /> : <div className='flex my-3 flex-col'>
+
           <div className='flex-shrink-0 sm:max-w-96 flex justify-center sm:justify-between flex-col sm:flex-row'>
             <div className='flex-shrink-0'>
               <img className='rounded-full m-auto mb-5 sm:m-0 object-cover w-[80px] h-[80px]'
@@ -81,7 +84,7 @@ function ProfileInformation() {
                 alt="User Img" onLoad={(e) => {
                   const Img = e.currentTarget
                   Img.classList.remove("blur-sm")
-              }} />
+                }} />
             </div>
             <div className='flex items-end gap-x-3.5 justify-center sm:justify-normal'>
               <button className='px-10 py-1 border h-fit duration-300 rounded-md
@@ -94,6 +97,7 @@ function ProfileInformation() {
               </button>
             </div>
           </div>
+
 
           <div>
             <form onSubmit={handleSubmit(changeUserInfo)} className='mt-5'>
@@ -123,7 +127,7 @@ function ProfileInformation() {
             </form>
 
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   )

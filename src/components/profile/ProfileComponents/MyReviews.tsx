@@ -7,15 +7,16 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import useAxios from '../../customHooks/useAxios';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
+import CircularLoader from '../../shared/CircularLoader';
 
 function MyReviews() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { theme } = useContext(ThemeContext)
-  const { GET, isLoading } = useAxios()
-  const { userData, userToken } = useContext(UserContext)
+  const { GET, isLoading: isReviewsLoading } = useAxios()
+  const { userData, userToken, isUserFetchDataLoading } = useContext(UserContext)
   const [userReviews, setUserReviews] = useState([])
   const [count, setCount] = useState(1);
-  const [maxCount,setMaxCount] = useState(1)
+  const [maxCount, setMaxCount] = useState(1)
 
   const getUserReviews = async () => {
     try {
@@ -48,16 +49,19 @@ function MyReviews() {
       </div>
 
       <div className='flex flex-col gap-y-3'>
-        {userReviews?.map((rev) => {
+        {isReviewsLoading || isUserFetchDataLoading ? <div className='col-span-12'><CircularLoader minHeight={500} /></div> : count > 0 ? userReviews?.map((rev) => {
           return (
             <ReviewComponent mode="self" review={rev} key={rev._id} />
           )
-        })
+        }) :
+          <div className='col-span-12 text-center flex justify-center items-center min-h-[500px]'>
+            <h4 className='font-semibold text-2xl'>Seems you did not make any reviews yet!</h4>
+          </div>
         }
       </div>
 
 
-      <Stack spacing={2} sx={{
+      {count > 0 ? <Stack spacing={2} sx={{
         maxWidth: "fit-content",
         marginBlock: "10px",
         marginInline: "auto"
@@ -72,7 +76,7 @@ function MyReviews() {
             setSearchParams(searchParams)
           }}
         />
-      </Stack>
+      </Stack> : <></>}
     </div>
   )
 }

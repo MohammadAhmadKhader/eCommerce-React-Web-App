@@ -1,9 +1,11 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { ThemeContext } from '../../../features/ThemeFeature/ThemeProvider';
 import SingleOrder from './SingleOrder';
+import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
 
 function SingleOrderDetails() {
-    const { theme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext);
+    const { singleOrderDetails } = useContext(GlobalCachingContext);
     return (
         <div>
             <div>
@@ -16,13 +18,17 @@ function SingleOrderDetails() {
                 </div>
             </div>
             <div className='flex flex-col gap-y-2'>
-                <SingleOrder imgUrl='' price={50.21} name={'Casio WaterProof'} quantity={3} />
-                <SingleOrder imgUrl='' price={20.43} name={'Handbag'} quantity={2} />
-                <SingleOrder imgUrl='' price={32.1} name={'GoldenWatch'} quantity={1} />
-                <SingleOrder imgUrl='' price={9.89} name={'PersonalCare'} quantity={4} />
-            </div>
+                {singleOrderDetails?.orderItems?.length > 0 ?
+                    singleOrderDetails?.orderItems.map((orderItem) => {
+                        console.log(singleOrderDetails)
+                        return (
+                            <SingleOrder imgUrl={orderItem.thumbnailUrl} price={orderItem.subTotal}
+                                name={orderItem.name} quantity={orderItem.quantity} key={orderItem._id} />
+                        )
+                    })
 
-            <div>
+                    : <div>No data</div>
+                }
 
             </div>
         </div>

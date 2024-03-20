@@ -6,7 +6,7 @@ function ImageSkeleton({ customClass }: IImageSkeleton) {
     return (
         <>
             <Skeleton className={`${customClass}`}
-                sx={{ bgcolor: 'grey.900', width: "100%", aspectRatio: 1 / 1 }}
+                sx={{ bgcolor: 'grey.900', width: "100%", aspectRatio: 1 / 1,height:"auto" }}
                 variant="rectangular"
 
             />

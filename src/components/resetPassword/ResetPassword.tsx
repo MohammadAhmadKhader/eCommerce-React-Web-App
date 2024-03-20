@@ -71,8 +71,8 @@ function ResetPassword() {
                         trigger={trigger} errors={errors} name={"confirmedNewPassword"} />
 
                     <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
-                    border-color-accent font-semibold text-sm border
-                     hover:text-white duration-300 px-6 py-1.5 rounded-md'
+                    border-color-accent font-semibold text-sm border 
+                     hover:text-white duration-300 px-6 py-1.5 rounded-md disabled:hover:bg-color-accent disabled:hover:text-white'
                         type='submit' disabled={isSubmitting}
                     >
                         Reset

@@ -84,7 +84,7 @@ export const router = createBrowserRouter([
                     </PrivateRoute>
             },
             {
-                path: "/checkout",
+                path: "/checkout/:orderId",
                 element: <Checkout />
             },
             {
