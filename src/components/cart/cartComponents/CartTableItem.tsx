@@ -1,10 +1,10 @@
 import { FaTrash } from "react-icons/fa";
 import { PiHandbagSimple } from 'react-icons/pi';
-import { ICartTableItem, IProduct } from "../../../types/types";
+import { ICartTableItem, } from "../../../types/types";
 import { Link } from "react-router-dom";
 import useDebounce from "../../customHooks/useDebounce";
 import useAxios from "../../customHooks/useAxios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../features/UserFeature/UserProvider";
 import Tooltip from '@mui/material/Tooltip';
 import { toast } from "react-toastify";
@@ -12,14 +12,13 @@ import { CartContext } from "../../features/CartFeature/CartProvider";
 
 
 
-function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartItemId}: ICartTableItem) {
+function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartItemId }: ICartTableItem) {
     const [includedCount, setIncludedCount] = useState(0)
     const { debounce } = useDebounce()
-    const { DELETE, isLoading: isItemDeleting } = useAxios()
-    const { userData, userToken } = useContext(UserContext)
-    const { POST, isLoading } = useAxios()
-    const loadingToastRef = useRef(null)
-    const {getCartItems} = useContext(CartContext)
+    const { DELETE } = useAxios()
+    const { userData, userToken, getUserData } = useContext(UserContext)
+    const { POST } = useAxios()
+    const { getCartItems } = useContext(CartContext)
     useEffect(() => {
         userData.wishList.map((item) => {
             if (item.productId == productId) {
@@ -27,7 +26,7 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
             }
         })
 
-    }, [])
+    }, [userData])
     const deleteItemFromCart = async (cartItemId: string) => {
         try {
             const response = await DELETE("/carts/deleteCartItem", {
@@ -35,7 +34,7 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
                 cartItemId: cartItemId
             }, userToken)
             if (response.status == 204) {
-                toast.loading("Updating cart items",{
+                toast.loading("Updating cart items", {
                     position: "top-center",
                 })
                 await getCartItems()
@@ -47,13 +46,19 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
         }
     }
 
-    const addItemToWishList = async (productId) => {
+    const addItemToWishList = async (productId: string) => {
         try {
-            await POST("/wishlists", {
+            const { data } = await POST("/wishlists", {
                 userId: userData._id,
                 productId: productId
             }, userToken)
+
+            if (data["message"] == "success") {
+                getUserData();
+                toast.success("Product added to your wishlist")
+            }
         } catch (error) {
+            toast.error("Something Went Wrong Please Try Again Later")
             return error
         }
     }

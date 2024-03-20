@@ -38,17 +38,17 @@ function SingleProductPage() {
     const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
-    
-    
-    function setCategoryNameAndId(){
-       if (!isCategoriesLoading && !isProductByIdLoading) {
+
+
+    function setCategoryNameAndId() {
+        if (!isCategoriesLoading && !isProductByIdLoading) {
             categories.forEach((category) => {
                 if (category._id == (product as IProduct).categoryId) {
                     setCategoryId(category._id)
                     setCategoryName(category.name)
                 }
             })
-        } 
+        }
     }
     const maxLimit = 30;
     const minLimit = 9
@@ -66,6 +66,7 @@ function SingleProductPage() {
             }
             if (data.message == "success") {
                 toast.success("Items has been added to cart")
+                getUserData();
                 getCartItems();
             }
         } catch (error) {
@@ -127,7 +128,7 @@ function SingleProductPage() {
         setCategoryNameAndId()
     }, [])
 
-    
+
     useEffect(() => {
         if (searchParams.get("limit") > maxLimit.toString()) {
             searchParams.set("limit", maxLimit.toString())
@@ -139,7 +140,7 @@ function SingleProductPage() {
         }
         getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId)
 
-        
+
         setCategoryNameAndId()
     }, [searchParams, params.productId])
     return (
@@ -284,7 +285,7 @@ function SingleProductPage() {
                                             disabled={userData ? (isItemInWishList ? true : false) : true}
                                             onClick={() => {
                                                 if (userData && !isItemInWishList) {
-                                                    addToWishList()
+                                                    addToWishList();
                                                 }
                                             }}
                                         >

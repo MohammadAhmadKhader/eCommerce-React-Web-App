@@ -1,11 +1,12 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { IProduct } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
+import { UserContext } from '../UserFeature/UserProvider';
 
 export interface GlobalCachingContext {
     brands: any;
     setBrands: React.Dispatch<React.SetStateAction<any>>;
-    isCategoriesLoading:boolean;
+    isCategoriesLoading: boolean;
     isBrandsLoading: boolean;
     isProductByIdLoading: boolean;
     isRelatedProductLoading: boolean;
@@ -13,13 +14,18 @@ export interface GlobalCachingContext {
     reviewsCount: number;
     product: IProduct | object;
     topRatedProducts: IProduct[];
+    orders: any;
+    singleOrderDetails: any;
     categories: any;
     relatedProducts: IProduct[];
+    getSingleOrderDetails: (orderId: string) => Promise<void>;
     getBrands: () => Promise<void>;
-    getCategories:()=> Promise<void>;
+    getCategories: () => Promise<void>;
     getProductData: (page: string, limit: string, productId: string) => Promise<void>;
     getRelatedProducts: (categoryId: string, productId: string) => Promise<void>;
     getTopRatedProducts: () => Promise<void>;
+    setOrders: React.Dispatch<React.SetStateAction<any>>;
+    setSingleOrderDetails: React.Dispatch<React.SetStateAction<any>>;
     setIsProductByIdLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setIsTopRatedProductsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setRelatedProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
@@ -42,6 +48,10 @@ function GlobalCachingProvider({ children }) {
     const { GET: GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
     const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true)
+    const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(true)
+    const [singleOrderDetails, setSingleOrderDetails] = useState([]);
+    const [orders, setOrders] = useState([])
+    const { userToken } = useContext(UserContext)
 
     const getBrands = async () => {
         try {
@@ -51,6 +61,16 @@ function GlobalCachingProvider({ children }) {
             console.log(error)
         }
     }
+
+    const getSingleOrderDetails = async (orderId: string) => {
+        try {
+            const { data } = await GET_SingleOrderDetails(`/orders/singleOrder/${orderId}`, userToken);
+            setSingleOrderDetails(data.order)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     const getCategories = async () => {
         try {
@@ -98,9 +118,9 @@ function GlobalCachingProvider({ children }) {
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getCategories()
-    },[])
+    }, [])
 
 
 
@@ -111,7 +131,7 @@ function GlobalCachingProvider({ children }) {
             categories, product, reviewsCount, isProductByIdLoading,
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
             isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
-            topRatedProducts, getCategories,isCategoriesLoading
+            topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails
         }}>
             {children}
         </GlobalCachingContext.Provider>

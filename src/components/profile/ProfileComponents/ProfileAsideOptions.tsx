@@ -12,7 +12,7 @@ function ProfileAsideOptions({ CustomComponent }: IProfileAsideOptions) {
         }}>
             <ProfileNavLinkComponents title={"Personal Information"} href={"/profile/information"} />
             <ProfileNavLinkComponents title={"Change password"} href={"/profile/changepassword"} />
-            <ProfileNavLinkComponents title={"My Orders"} href={"/profile/orders"} />
+            <ProfileNavLinkComponents title={"My Orders"} href={"/profile/orders?status=Completed"} />
             <ProfileNavLinkComponents title={"My Wishlist"} href={"/profile/wishlist"} />
             <ProfileNavLinkComponents title={"My Reviews"} href={"/profile/reviews"} />
 

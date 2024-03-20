@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, Dispatch } from "react";
 import { UseFormRegister, UseFormTrigger } from "react-hook-form";
 
 export interface ICheckboxInputProps {
@@ -14,11 +14,15 @@ export interface IChangePasswordForm {
 }
 
 export interface ICheckoutProcessStepper {
-    NextStep:string;
+    setCheckoutSteps:Dispatch.SetStateAction<number>
 }
 
 export interface IOrderSummaryItem {
     customClasses?:string;
+    image:string;
+    name:string;
+    quantity:number;
+    brand:string;
 }
 
 export interface IThemeContextType {
@@ -120,8 +124,19 @@ export type User = {
     _id:string;
     updatedAt:string;
     createdAt:string;
-    wishList:WishlistItem[]
-    cart:CartItem[]
+    wishList:WishlistItem[];
+    cart:CartItem[];
+    addresses:address[]
+}
+
+type address = {
+    _id:string;
+    fullName:string;
+    mobileNumber:string;
+    state:string;
+    city:string;
+    pinCode:string;
+    streetAddress:string;
 }
 
 interface IWishlistItem {
@@ -129,19 +144,23 @@ interface IWishlistItem {
     _id: string;
 }
 
-export type CartItem = {
+export type CartItems = {
     _id:string;
     quantity:number;
-    productId:string;
+    cartItem:CartItem;
 }
 
 // This will be removed soon
-export type CartItemTemp = {
+export type CartItem = {
     _id:string;
-    cart:[{
-        quantity:number;
-        productId:IProduct[]
-    }]
+    brand:string;
+    finalPrice:number;
+    price:number;
+    quantity:number;
+    images:ProductImages[];
+    productId:string;
+    offer:number;
+    name:string;
 }
 
 export type OrderItem = {
@@ -332,8 +351,9 @@ export type UserSigUpDataType = {
 }
 
 export type ContactUsMessage = {
-    firstName: string;
+    fullName: string;
     email: string;
+    subject:string;
     message: string;
 }
 

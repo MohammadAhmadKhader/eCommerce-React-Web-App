@@ -1,51 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { CartContext } from '../../features/CartFeature/CartProvider';
+import { useEffect } from 'react'
 
-function OrderCalcs() {
-  const { cartItems }: any = useContext(CartContext)
-  const [subTotal, setSubTotal] = useState(0);
-  const [discount, setDiscount] = useState(10);
-  const [deliveryFee, setDeliveryFee] = useState(0);
-  const [grandTotal, setGrandTotal] = useState(0)
+function OrderCalcs({ grandTotal, discount, subTotal, deliveryFee }) {
+
   useEffect(() => {
-    let calculatedSubTotal = 0;
-    let quantity = 1;
-    cartItems?.forEach((item) => {
-      calculatedSubTotal += item.cartItem.finalPrice;
-      quantity = item.quantity
-    })
-    console.log(cartItems)
-    if (cartItems) {
-      setDiscount(Number((cartItems?.length * discount).toFixed(2)));
-      setSubTotal(Number((calculatedSubTotal * quantity).toFixed(2)))
-    }
 
-  }, [cartItems])
-  useEffect(() => {
-    setGrandTotal(subTotal - discount - deliveryFee)
-
-  }, [discount, subTotal, deliveryFee])
+  }, [])
 
   return (
     <ul className='flex flex-col gap-y-3 my-4'>
       <li className='flex items-center justify-between'>
         <h4>SubTotal</h4>
-        <span className='font-bold'>${subTotal}</span>
+        <span className='font-bold'>${subTotal?.toFixed(2)}</span>
       </li>
 
       <li className='flex items-center justify-between'>
         <h4>Discount</h4>
-        <span className='font-bold'>${discount}</span>
+        <span className='font-bold'>${discount?.toFixed(2)}</span>
       </li>
 
       <li className='flex items-center justify-between'>
         <h4>DeliveryFee</h4>
-        <span className='font-bold'>${deliveryFee}</span>
+        <span className='font-bold'>${deliveryFee?.toFixed(2)}</span>
       </li>
 
       <li className='flex items-center justify-between'>
         <h4 className='font-bold'>GrandTotal</h4>
-        <span className='font-bold'>${grandTotal.toFixed(2)}</span>
+        <span className='font-bold'>${grandTotal?.toFixed(2)}</span>
       </li>
     </ul>
   )

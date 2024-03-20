@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { CartItem, CartItemTemp, User } from '../../../types/types';
+import { CartItems } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
 import { UserContext } from '../UserFeature/UserProvider';
 
 export interface CartContext {
-    cartItems: CartItemTemp[];
-    setCartItems: React.Dispatch<React.SetStateAction<CartItemTemp[] | []>>;
+    cartItems: CartItems[];
+    setCartItems: React.Dispatch<React.SetStateAction<CartItems[] | []>>;
     isCartLoading: boolean;
     setIsCartLoading: React.Dispatch<React.SetStateAction<boolean>>;
     getCartItems: () => Promise<void>
@@ -24,6 +24,7 @@ function CartProvider({ children }) {
                 const { data } = await GET(`/carts/${userData._id}`, userToken)
                 setCartItems(data.cart);
                 setIsCartLoading(false)
+                console.log(data.cart)
             }
         } catch (error) {
             console.log(error)

@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import "./cartTable.css"
 import CartTableItem from './CartTableItem';
@@ -7,7 +7,7 @@ import ItemSkeleton from '../../shared/LoadingSkeletons/ItemSkeleton';
 import { CartContext } from '../../features/CartFeature/CartProvider';
 
 function CartTable() {
-    const { theme, toggleTheme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
     const { cartItems, isCartLoading }: any = useContext(CartContext)
     return (
         <div className='overflow-x-scroll cart-table-container'>

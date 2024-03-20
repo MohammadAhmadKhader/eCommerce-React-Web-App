@@ -75,7 +75,7 @@ function Products() {
             setSearchParams(searchParams)
         }
     }, [])
-    
+
     useEffect(() => {
         if (parseInt(searchParams.get("limit")) > maxLimit) {
             searchParams.set("limit", maxLimit.toString())
@@ -129,7 +129,7 @@ function Products() {
                 if (category._id == searchParams.get("category")) {
                     setCategory(category.name)
                 }
-                if(!searchParams.get("category")){
+                if (!searchParams.get("category")) {
                     setCategory("All Categories")
                 }
             })
