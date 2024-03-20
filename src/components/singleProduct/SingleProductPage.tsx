@@ -7,7 +7,7 @@ import SingleProductTabs from './SingleProductPageComponents/SingleProductTabs';
 import ProductCarousel from './SingleProductPageComponents/SingleProductCarousel';
 import { VscHeart } from "react-icons/vsc";
 import PriceComponent from '../products/ProductsComponents/PriceComponent';
-import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useNavigate, useSearchParams, useBlocker } from 'react-router-dom';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import useAxios from '../customHooks/useAxios';
 import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton';
@@ -39,7 +39,6 @@ function SingleProductPage() {
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
 
-
     function setCategoryNameAndId() {
         if (!isCategoriesLoading && !isProductByIdLoading) {
             categories.forEach((category) => {
@@ -51,7 +50,7 @@ function SingleProductPage() {
         }
     }
     const maxLimit = 30;
-    const minLimit = 9
+    const minLimit = 9;
 
     const addToCart = async () => {
         try {
@@ -125,16 +124,17 @@ function SingleProductPage() {
             getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
         }
 
-        setCategoryNameAndId()
+        setCategoryNameAndId();
     }, [])
 
 
     useEffect(() => {
-        if (searchParams.get("limit") > maxLimit.toString()) {
+        if ((Number(searchParams.get("limit")) ? Number(searchParams.get("limit")) : 30) > maxLimit) {
             searchParams.set("limit", maxLimit.toString())
             setSearchParams(searchParams)
         }
-        if (searchParams.get("limit") < minLimit.toString()) {
+
+        if ((Number(searchParams.get("limit")) ? Number(searchParams.get("limit")) : 9) < minLimit) {
             searchParams.set("limit", minLimit.toString())
             setSearchParams(searchParams)
         }
@@ -265,7 +265,8 @@ function SingleProductPage() {
                                             disabled={userData ? (isItemInCart ? true : false) : true}
                                             onClick={() => {
                                                 if (userData && !isItemInCart) {
-                                                    addToCart()
+                                                    addToCart();
+                                                    getUserData()
                                                 }
                                             }}
                                         >
@@ -286,6 +287,7 @@ function SingleProductPage() {
                                             onClick={() => {
                                                 if (userData && !isItemInWishList) {
                                                     addToWishList();
+                                                    getUserData()
                                                 }
                                             }}
                                         >

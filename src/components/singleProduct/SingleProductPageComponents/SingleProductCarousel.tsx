@@ -1,6 +1,6 @@
 import { GoChevronRight } from "react-icons/go";
 import { GoChevronLeft } from "react-icons/go";
-import { useState, useEffect, useRef, ImgHTMLAttributes } from "react";
+import { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import { IProduct } from "../../../types/types";
 import "./SingleProductCarousel.css"

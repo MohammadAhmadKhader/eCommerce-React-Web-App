@@ -4,6 +4,7 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import useDebounce from '../../customHooks/useDebounce';
 import useAxios from '../../customHooks/useAxios';
 import { Link } from 'react-router-dom';
+import CircularLoader from '../../shared/CircularLoader';
 
 function SearchComponent() {
 
@@ -81,6 +82,7 @@ function SearchComponent() {
                         searchIcon?.classList.remove("w-0");
                     }}
                     onChange={(e) => {
+                        setIsSearchUnderProcessing(true)
                         setInputText(e.target.value)
                     }}
                 />
@@ -90,14 +92,14 @@ function SearchComponent() {
                     <SearchIcon IdName={'searchInput'} />
                 </div>
             </div>
-            {searchedProducts.length > 0 && inputText.length != 0 &&
-                <div ref={searchRef} className={`absolute min-w-[350px] z-20 right-1 top-[36px] rounded-md overflow-hidden border`} style={{
+            {searchedProducts.length >= 0 && inputText.length > 0 &&
+                <div ref={searchRef} className={`absolute min-w-[250px] md:min-w-[350px] z-20 right-[1px]  top-[36px] rounded-md overflow-hidden border`} style={{
                     backgroundColor: theme === "dark" ? "var(--dark--bg--color)" : "var(--light--bg--color)",
                     borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)"
 
                 }}>
                     <ul className='max-h-[330px] overflow-y-scroll flex flex-col gap-1.5 px-1'>
-                        {searchedProducts?.map((prod) => {
+                        {!isSearchUnderProcessing && searchedProducts?.map((prod) => {
                             return (
                                 <li>
                                     <Link to={`/products/${prod._id}`} className={`relative flex gap-x-2 duration-300 
@@ -121,8 +123,9 @@ function SearchComponent() {
                                 </li>
                             )
                         })}
-                        {searchedProducts.length == 0 && inputText.length != 0 && <div>No Products Avaliable</div>}
+
                     </ul>
+                    {isSearchUnderProcessing ? <div className='text-center py-3'><CircularLoader minHeight={5} /></div> : <div className='text-center py-3'>Search results 0..</div>}
                 </div>
             }
         </search>

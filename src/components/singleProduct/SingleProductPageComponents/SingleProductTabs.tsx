@@ -38,7 +38,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
 
     const {
         handleSubmit,
-        formState: { isValid, errors },
+        formState: { isValid, errors,isSubmitting },
         register,
         setValue,
         trigger,
@@ -171,7 +171,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                                 <Tooltip title={userData ? undefined : "You must sign in"}>
                                     <span>
                                         <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
-                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={userData ? false : true}>
+                                border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={userData || !isSubmitting ? false : true}>
                                             Submit Review
                                         </button></span>
                                 </Tooltip>

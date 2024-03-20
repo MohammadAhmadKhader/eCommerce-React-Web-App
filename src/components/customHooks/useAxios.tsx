@@ -34,7 +34,6 @@ export default function useAxios(enableCache: boolean = false,reCacheEvery : num
                 url: apiLink + path,
                 headers: {
                     Authorization: token,
-                    "Content-Type": "application/json",
                 },
                 data: body || undefined
             }
