@@ -41,7 +41,7 @@ function ProfileInformation() {
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      isDefaultValues === false && isValid || isSubmitting &&
+      isDefaultValues === false && isValid &&
       currentLocation.pathname !== nextLocation.pathname
   );
 
@@ -168,7 +168,7 @@ function ProfileInformation() {
         </div>}
       </form>
 
-      {blocker.state === "blocked" && !isDefaultValues && isValid || isSubmitting && (
+      {blocker.state === "blocked" && !isDefaultValues && isValid && (
         <ProfileModal blocker={blocker} />
       )}
     </div>

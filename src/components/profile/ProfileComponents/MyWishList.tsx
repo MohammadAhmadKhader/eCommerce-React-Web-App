@@ -42,8 +42,8 @@ function MyWishList() {
 
                         wishList?.map((item) => {
                             return (
-                                <MyWishListItem name={item.wishListItem.name} key={item._id + "key"} imgUrl={item.wishListItem.images[0].imageUrl}
-                                    productId={item.wishListItem._id} wishListId={item._id} />
+                                <MyWishListItem name={item.product.name} key={item._id + "key"} imgUrl={item.product.images[0].imageUrl}
+                                    productId={item.product._id} wishListId={item._id} />
                             )
                         }) :
                         <div className='col-span-12'>
