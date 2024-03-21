@@ -8,31 +8,31 @@ import SingleOrderDetails from './SingleOrderDetails';
 import SingleOrderInvoices from './SingleOrderInvoices';
 import OrderCalcs from '../../../cart/cartComponents/OrderCalcs';
 import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 function SingleOrderSection() {
   const { theme } = useContext(ThemeContext);
-  const { orders, singleOrderDetails, setSingleOrderDetails,getSingleOrderDetails } = useContext(GlobalCachingContext);
+  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails } = useContext(GlobalCachingContext);
   const params = useParams()
   useEffect(() => {
     if (orders) {
       const wantedOrder = orders.find((item) => {
         return item._id === params.id
       })
-     
-      if(wantedOrder){
+
+      if (wantedOrder) {
         setSingleOrderDetails(wantedOrder)
-      }else{
+      } else {
         getSingleOrderDetails(params.id)
       }
-      
+
     }
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(singleOrderDetails)
-  },[singleOrderDetails])
+  }, [singleOrderDetails])
   return (
     <div className='overflow-scroll MyOrdersContainer'>
       <Tabs className='MyOrders Tabs rounded-lg min-w-[600px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={0} style={{
@@ -96,6 +96,14 @@ function SingleOrderSection() {
                 </div>
               </div>
 
+            </div>
+
+            <div className='text-left lg:text-right'>
+              
+                <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
+               text-white hover:bg-transparent hover:text-color-accent px-8 py-1.5 rounded-md text-sm font-semibold tracking-wide'>
+                  Complete Checkout
+                </Link>
             </div>
           </div>
 

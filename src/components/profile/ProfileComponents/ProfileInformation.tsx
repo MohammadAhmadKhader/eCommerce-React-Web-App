@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Input from '../../shared/Input'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,7 +11,8 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import CircularLoader from '../../shared/CircularLoader';
-import axios from 'axios';
+import { useBlocker } from 'react-router-dom';
+import ProfileModal from './ProfileModal';
 
 
 const schema = Joi.object({
@@ -27,8 +28,9 @@ const schema = Joi.object({
 function ProfileInformation() {
   const { theme } = useContext(ThemeContext)
   const { userData, userToken, isUserFetchDataLoading, getUserData } = useContext(UserContext)
+  const [isDefaultValues, setIsDefaultValues] = useState(true);
   const { PUT } = useAxios()
-  const { register, handleSubmit, formState, reset,getFieldState } = useForm<UserData>({
+  const { register, handleSubmit, formState, reset, watch, getValues } = useForm<UserData>({
     mode: "onChange",
     resolver: joiResolver(schema),
   });
@@ -37,11 +39,33 @@ function ProfileInformation() {
   const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
   const [userImage, setUserImage] = useState(null);
 
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDefaultValues === false && isValid || isSubmitting &&
+      currentLocation.pathname !== nextLocation.pathname
+  );
+
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      console.log(values?.birthDate)
+      if (values?.birthDate.toString() == "" && values?.email == "" && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
+        setIsDefaultValues(true)
+      } else {
+        setIsDefaultValues(false)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
+
+
+
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
     try {
-      console.log(submittedData)
       const formData = new FormData()
-      { userImage != null && formData.append("userImg", userImage) }
+      if (userImage != null) {
+        formData.append("userImg", userImage)
+      }
       for (const key in submittedData) {
         if (submittedData[key as keyof UserData] != undefined && submittedData[key as keyof UserData] != "") {
           if (key !== "userImg") {
@@ -131,7 +155,7 @@ function ProfileInformation() {
               </div>
 
 
-              <button disabled={!isValid || !isDirty || isSubmitting } type='submit' className='rounded-md px-8 py-1 bg-color-accent text-white
+              <button disabled={isDefaultValues || !isValid || !isDirty || isSubmitting} type='submit' className='rounded-md px-8 py-1 bg-color-accent text-white
                duration-300 border border-color-accent hover:bg-transparent hover:text-color-accent
                disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent
                '>
@@ -143,6 +167,10 @@ function ProfileInformation() {
           </div>
         </div>}
       </form>
+
+      {blocker.state === "blocked" && !isDefaultValues && isValid || isSubmitting && (
+        <ProfileModal blocker={blocker} />
+      )}
     </div>
   )
 }

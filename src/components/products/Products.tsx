@@ -252,9 +252,10 @@ function Products() {
                         }}>
                         <Pagination count={Math.ceil(count / parseInt(searchParams.get("limit")))}
                             onChange={(event, value) => {
-
-                                searchParams.set("page", value.toString())
-                                setSearchParams(searchParams);
+                                if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
+                                    searchParams.set("page", value.toString())
+                                    setSearchParams(searchParams);
+                                  }
                             }}
                         />
                     </Stack>
