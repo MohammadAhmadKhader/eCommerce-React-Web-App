@@ -1,17 +1,31 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import MyOrdersItem from './MyOrdersItem';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import CircularLoader from '../../shared/CircularLoader';
 import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import useDebounce from '../../customHooks/useDebounce';
 
 
-function OldOrdersTable({ orders }) {
+function OldOrdersTable({ orders, count, getOrders }) {
   const { theme } = useContext(ThemeContext);
-  const { isUserFetchDataLoading } = useContext(UserContext)
-  console.log(isUserFetchDataLoading)
-  const { singleOrderDetails } = useContext(GlobalCachingContext)
+  const { isUserFetchDataLoading } = useContext(UserContext);
+  const { debounce } = useDebounce()
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  useEffect(() => {
+    if (searchParams.get("status") && (searchParams.get("status") == "Processing" ||
+      searchParams.get("status") == "Completed" || searchParams.get("status") == "Cancelled")) {
+      debounce(() => {
+        getOrders(searchParams.get("status"), searchParams.get("page"), searchParams.get("limit"));
+      }, 400)
+    }
+
+  }, [searchParams])
+
   return (
     <div>
       <div className='grid grid-cols-10 py-2 border-b opacity-70 font-semibold text-left w-full px-6 gap-x-5' style={{
@@ -39,7 +53,27 @@ function OldOrdersTable({ orders }) {
               </div>
             </div> : <CircularLoader minHeight={500} />
         }
+        {orders?.length > 0 && <Stack className='bg-color-accent rounded-md mx-auto mt-auto' spacing={2} sx={{
+          bgcolor: theme === "dark" ? "var(--light--bgCard--color)" : "var(--dark--bgCard--color)",
+          maxWidth: "fit-content",
+          marginBlock: "10px",
+        }}
+          style={{
+            boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
+            backgroundColor: "var(--accent-color)",
 
+          }}>
+          <Pagination
+            count={Math.ceil(count / parseInt(searchParams.get("limit")))}
+            onChange={(event, value) => {
+              if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
+                searchParams.set("page", value.toString())
+                setSearchParams(searchParams);
+              }
+
+            }}
+          />
+        </Stack>}
       </div>
 
     </div>

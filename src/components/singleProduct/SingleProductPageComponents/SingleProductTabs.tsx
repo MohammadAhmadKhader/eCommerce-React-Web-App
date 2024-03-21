@@ -203,8 +203,10 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                                     color: "white !important;"
                                 }}
                                     count={Math.ceil(reviewsCount / reviewsLimit)} onChange={(event, value) => {
-                                        searchParams.set("page", value.toString());
-                                        setSearchParams(searchParams);
+                                        if (Number(searchParams.get("page")) <= Number(Math.ceil(reviewsCount / reviewsLimit))) {
+                                            searchParams.set("page", value.toString())
+                                            setSearchParams(searchParams);
+                                          }
                                     }}
                                 />
                             </Stack>

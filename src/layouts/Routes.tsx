@@ -23,6 +23,7 @@ import Auth from '../components/protectedRoutes/Auth';
 import ResetPassword from '../components/resetPassword/ResetPassword';
 import ForgotPassword from '../components/forgotPassword/ForgotPassword';
 import ResetPasswordProtectingRoute from '../components/protectedRoutes/ResetPasswordProtectingRoute';
+import NotFound404 from '../components/notFound404/NotFound404';
 
 
 export const router = createBrowserRouter([
@@ -125,6 +126,10 @@ export const router = createBrowserRouter([
             }, {
                 path: "contactus",
                 element: <ContactUs />
+            },
+            {
+                path:"*",
+                element:<NotFound404/>
             }
         ]
     }

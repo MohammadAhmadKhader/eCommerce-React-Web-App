@@ -4,6 +4,8 @@ import { FaEdit, FaTrash, FaReply } from "react-icons/fa";
 import { Review } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
+const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
+
 
 function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "public" }) {
     const { theme } = useContext(ThemeContext)
@@ -18,7 +20,7 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
 
             <div className='flex-shrink-0'>
                 <img className='rounded-full hover:cursor-pointer border border-solid object-cover w-[50px] h-[50px] '
-                    src={mode == "self" ? userData.userImg : review.user.userImg}
+                    src={mode == "self" ? userData.userImg ? userData.userImg : defaultUserImage : review.user.userImg}
                     alt={mode == "self" ? userData.firstName + userData.lastName + "image" : review.user.firstName + review.user.lastName + "image"}
                     style={{
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",

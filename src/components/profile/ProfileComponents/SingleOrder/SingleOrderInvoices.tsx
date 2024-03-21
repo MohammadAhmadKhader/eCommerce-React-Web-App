@@ -1,13 +1,14 @@
-import { useContext, useEffect } from "react";
+import { useContext} from "react";
 import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 import OrderCalcs from "../../../cart/cartComponents/OrderCalcs";
 import { LuDownload } from "react-icons/lu";
 import { GlobalCachingContext } from "../../../features/GlobalCachingContext/GlobalCachingProvider";
-import { useParams } from "react-router-dom";
+
 
 function SingleOrderInvoices() {
   const { theme } = useContext(ThemeContext);
   const { singleOrderDetails,getSingleOrderDetails } = useContext(GlobalCachingContext);
+  console.log(singleOrderDetails)
   // const params = useParams()
   // console.log(params)
   // useEffect(()=>{

@@ -16,14 +16,14 @@ function MyOrders() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { GET } = useAxios(true, 600000) // reCache every 10 mins
     const { userData, userToken } = useContext(UserContext);
-    const {orders,setOrders} = useContext(GlobalCachingContext)
-
-    const getOrders = async (status: string) => {
+    const { orders, setOrders } = useContext(GlobalCachingContext)
+    const [count, setCount] = useState(0);
+    const getOrders = async (status: string, page: string, limit: string) => {
         try {
             if (userData) {
-                const { data } = await GET(`/orders/${userData._id}?status=${status}`, userToken);
-                console.log(data.orders)
-                setOrders(data.orders)
+                const { data } = await GET(`/orders/${userData._id}?status=${status}&page=${page}&limit=${limit}`, userToken);
+                setCount(data.count)
+                setOrders(data.orders);
             }
         } catch (error) {
             console.log(error)
@@ -42,14 +42,28 @@ function MyOrders() {
             setSearchParams(searchParams)
         }
     }
+    const ensureCorrectValueOfPagination = () => {
+        if (!searchParams.get("limit") || !searchParams.get("page") ||
+            Number(searchParams.get("limit")) > 30 || Number(searchParams.get("page")) > count) {
+            searchParams.set("limit", "9");
+            searchParams.set("page", "1");
+            setSearchParams(searchParams)
+        }
+    }
 
     useEffect(() => {
+        ensureCorrectValueOfPagination();
         ensureCorrectValueOfStatus();
+
+
     }, [])
 
     useEffect(() => {
+        getOrders(searchParams.get("status"), searchParams.get("page"), searchParams.get("limit"));
+    }, [userData])
+    useEffect(() => {
         ensureCorrectValueOfStatus();
-        getOrders(searchParams.get("status"));
+        ensureCorrectValueOfPagination()
     }, [searchParams])
 
 
@@ -58,6 +72,7 @@ function MyOrders() {
             <Tabs className='MyOrders Tabs rounded-lg min-w-[700px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={searchParams.get("status") || "Completed"}
                 onChange={(event, newValue) => {
                     searchParams.set("status", `${newValue}`);
+                    searchParams.set("page", "1")
                     setSearchParams(searchParams);
                 }}
                 style={{
@@ -90,15 +105,15 @@ function MyOrders() {
                 </TabList>
                 <TabPanel value={"Completed"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} />
+                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
                 <TabPanel value={"Processing"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} />
+                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
                 <TabPanel value={"Cancelled"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} />
+                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
             </Tabs>
         </div>

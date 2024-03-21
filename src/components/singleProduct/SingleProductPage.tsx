@@ -98,6 +98,8 @@ function SingleProductPage() {
             const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInCart) {
                 setIsItemInCart(false)
+            }else{
+                setIsItemInCart(true)
             }
         }
 
@@ -105,9 +107,12 @@ function SingleProductPage() {
             const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInWishList) {
                 setIsItemInWishList(false)
+            }else{
+                setIsItemInWishList(true)
             }
         }
-        setCategoryNameAndId()
+        setCategoryNameAndId();
+        
     }, [userData, product, params.productId])
 
 
@@ -266,7 +271,7 @@ function SingleProductPage() {
                                             onClick={() => {
                                                 if (userData && !isItemInCart) {
                                                     addToCart();
-                                                    getUserData()
+
                                                 }
                                             }}
                                         >
@@ -278,7 +283,7 @@ function SingleProductPage() {
                                             </span>
 
                                         </button></Tooltip>
-                                    <Tooltip title={userData ? (isItemInWishList ? "Item already in wishlist" : "gdg") : "signing in is required"}>
+                                    <Tooltip title={userData ? (isItemInWishList ? "Item already in wishlist" : "") : "signing in is required"}>
 
                                         <button className={`text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center text-color-accent bg-transparent
                                  border-2 border-color-accent hover:bg-color-accent hover:text-white duration-300 
@@ -287,7 +292,6 @@ function SingleProductPage() {
                                             onClick={() => {
                                                 if (userData && !isItemInWishList) {
                                                     addToWishList();
-                                                    getUserData()
                                                 }
                                             }}
                                         >
