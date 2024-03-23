@@ -11,6 +11,7 @@ export interface GlobalCachingContext {
     isProductByIdLoading: boolean;
     isRelatedProductLoading: boolean;
     isTopRatedProductsLoading: boolean;
+    loadingMessage:boolean;
     reviewsCount: number;
     product: IProduct | object;
     topRatedProducts: IProduct[];
@@ -24,6 +25,7 @@ export interface GlobalCachingContext {
     getProductData: (page: string, limit: string, productId: string) => Promise<void>;
     getRelatedProducts: (categoryId: string, productId: string) => Promise<void>;
     getTopRatedProducts: () => Promise<void>;
+    setLoadingMessage:React.Dispatch<React.SetStateAction<boolean>>;
     setOrders: React.Dispatch<React.SetStateAction<any>>;
     setSingleOrderDetails: React.Dispatch<React.SetStateAction<any>>;
     setIsProductByIdLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,7 +53,8 @@ function GlobalCachingProvider({ children }) {
     const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(true)
     const [singleOrderDetails, setSingleOrderDetails] = useState([]);
     const [orders, setOrders] = useState([])
-    const { userToken } = useContext(UserContext)
+    const { userToken } = useContext(UserContext);
+    const [loadingMessage,setLoadingMessage] = useState(true);
 
     const getBrands = async () => {
         try {
@@ -74,8 +77,9 @@ function GlobalCachingProvider({ children }) {
 
     const getCategories = async () => {
         try {
-            const { data } = await GET_Categories("/categories")
-            setCategories(data.categories)
+            const { data } = await GET_Categories("/categories");
+            setCategories(data.categories);
+            setLoadingMessage(false)
         } catch (error) {
             console.log(error)
         }
@@ -119,7 +123,8 @@ function GlobalCachingProvider({ children }) {
     }
 
     useEffect(() => {
-        getCategories()
+        getCategories();
+
     }, [])
 
 
@@ -131,7 +136,8 @@ function GlobalCachingProvider({ children }) {
             categories, product, reviewsCount, isProductByIdLoading,
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
             isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
-            topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails
+            topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,
+            loadingMessage, setLoadingMessage
         }}>
             {children}
         </GlobalCachingContext.Provider>
