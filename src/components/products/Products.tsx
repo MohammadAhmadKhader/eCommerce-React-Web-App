@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import "./products.css"
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import ProductWithRatingsCard from './ProductsComponents/ProductWithRatingsCard'
@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import useDebounce from '../customHooks/useDebounce.tsx'
 import { objectIdSchemaOptional } from '../shared/IdValidation.ts'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
+import { toast } from 'react-toastify';
 
 function Products() {
     const navigate = useNavigate()
@@ -29,10 +30,11 @@ function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState("All Categories");
-    const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
+    const { categories, isCategoriesLoading,loadingMessage } = useContext(GlobalCachingContext)
     const maxLimit = 30;
     const minLimit = 9;
-    const { debounce } = useDebounce()
+    const { debounce } = useDebounce();
+    const initialLoader = useRef(null);
 
     const getLimitValue = () => {
         let limit = searchParams.get("limit");
@@ -78,6 +80,17 @@ function Products() {
 
 
     }, [])
+
+    useEffect(()=>{
+        if(loadingMessage){
+          initialLoader.current = toast.loading(`The project backend is uploaded on render free service 
+          therefore will take 50s - 2mins to boot the backend service on first request`,{
+            position:"top-center"
+          })
+        }else{
+          toast.dismiss(initialLoader.current)
+        }
+      },[loadingMessage])
 
 
     useEffect(() => {

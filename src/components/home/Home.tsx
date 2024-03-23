@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import CarouselSwiper from "../singleProduct/SingleProductPageComponents/CarouselSwiper";
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import MainCarousel from './HomeComponents/MainCarousel';
@@ -10,10 +10,12 @@ import ResponsiveTopCategories from '../responsiveTopCategories/ResponsiveTopCat
 import Skeleton from "../shared/LoadingSkeletons/Skeleton";
 import useAxios from '../customHooks/useAxios';
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
+import { toast } from 'react-toastify';
 
 function Home() {
   const { GET: getRequestNewArrivals, isLoading: isNewArrivalsLoading, setIsLoading: setIsNewArrivalsLoading } = useAxios()
   const [newArrivals, setNewArrivals] = useState([]);
+  const initialLoader = useRef(null)
 
   const getNewArrivals = async () => {
     const { data } = await getRequestNewArrivals("/products?page=1&limit=7&sort=newArrivals_desc")
@@ -21,13 +23,26 @@ function Home() {
     setIsNewArrivalsLoading(false)
     console.log(data.products)
   }
-  const { getBrands, getTopRatedProducts, topRatedProducts, isTopRatedProductsLoading } = useContext(GlobalCachingContext)
+  const { getBrands, getTopRatedProducts, topRatedProducts, isTopRatedProductsLoading,loadingMessage } = useContext(GlobalCachingContext)
 
   useEffect(() => {
     getTopRatedProducts()
     getBrands()
     getNewArrivals();
+    
+
   }, [])
+
+  useEffect(()=>{
+    if(loadingMessage){
+      initialLoader.current = toast.loading(`The project backend is uploaded on render free service 
+      therefore will take 50s - 2mins to boot the backend service on first request`,{
+        position:"top-center"
+      })
+    }else{
+      toast.dismiss(initialLoader.current)
+    }
+  },[loadingMessage])
 
   return (
     <section className='home mb-5'>
