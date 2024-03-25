@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Tooltip from '@mui/material/Tooltip';
+import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
 
 
 const schema = yup.object({
@@ -31,17 +32,19 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
     const { POST } = useAxios()
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext)
-    const [value_, setValue_] = useState<number | null>(0);
+    const {getProductData} = useContext(GlobalCachingContext)
+    const [ratingValue, setRatingValue] = useState<number | null>(0);
     const params = useParams()
 
     const [searchParams, setSearchParams] = useSearchParams()
 
     const {
         handleSubmit,
-        formState: { isValid, errors,isSubmitting },
+        formState: { errors,isSubmitting },
         register,
         setValue,
         trigger,
+        reset,
     } = useForm<addReview>({
         resolver: yupResolver(schema),
     })
@@ -54,13 +57,16 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
             }
             const { data } = await POST("/reviews", {
                 productId: params.productId,
-                userId: import.meta.env.VITE_ADMIN_ID,
+                userId: userData._id,
                 rating: submittedData.rating,
                 comment: submittedData.comment
             }, userToken);
 
             if (data["message"] == "success") {
-                toast.success("Review was added successfully!")
+                toast.success("Review was added successfully!");
+                reset();
+                getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
+                
             }
         } catch (error) {
             console.error(error);
@@ -141,9 +147,9 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                                     <Rating
                                         name="rating"
                                         precision={1}
-                                        value={value_}
+                                        value={ratingValue}
                                         onChange={(event, newValue) => {
-                                            setValue_(newValue);
+                                            setRatingValue(newValue);
                                             setValue("rating", newValue as number)
                                         }}
                                         onTouchMove={() => {

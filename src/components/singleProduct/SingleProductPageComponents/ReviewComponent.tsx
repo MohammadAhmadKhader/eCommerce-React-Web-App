@@ -1,15 +1,15 @@
 import { useContext } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
-import { FaEdit, FaTrash, FaReply } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { Review } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
-
+const sevenDaysInMs = 604800000;
 
 function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "public" }) {
-    const { theme } = useContext(ThemeContext)
-    const { userData } = useContext(UserContext)
+    const { theme } = useContext(ThemeContext);
+    const { userData } = useContext(UserContext);
     return (
         <div className='flex gap-x-4 border border-solid rounded-md p-2 w-full'
             style={{
@@ -20,7 +20,7 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
 
             <div className='flex-shrink-0'>
                 <img className='rounded-full hover:cursor-pointer border border-solid object-cover w-[50px] h-[50px] '
-                    src={mode == "self" ? userData.userImg ? userData.userImg : defaultUserImage : review.user.userImg}
+                    src={mode == "self" ? userData.userImg ? userData.userImg : defaultUserImage : review.user.userImg || defaultUserImage}
                     alt={mode == "self" ? userData.firstName + userData.lastName + "image" : review.user.firstName + review.user.lastName + "image"}
                     style={{
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
@@ -29,9 +29,9 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
             </div>
 
             <div className='w-full'>
-                <div className='flex gap-x-3 font-semibold mb-1.5'>
+                <div className='flex flex-col sm:flex-row gap-x-3 font-semibold mb-1.5'>
                     <h4 className='inline-block text-lg hover:cursor-pointer'>{mode == "self" ? userData.firstName + userData.lastName : review.user.firstName + review.user.lastName}</h4>
-                    <p className='flex items-center px-2 rounded-lg text-sm ms-auto bg-amber-400'>{review.createdAt}</p>
+                    <p className='flex items-center sm:px-2 rounded-lg text-sm sm:ms-auto sm:bg-amber-400'>{new Date(review.createdAt).toLocaleString()}</p>
                 </div>
 
                 <div className='ps-2 relative overflow-hidden'>
@@ -56,18 +56,22 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
                             name="read-only" value={review.rating} precision={0.1} readOnly />
                     </div>
 
-                    <div className='flex gap-x-4 text-sm'>
-                        <button title="Edit" className='opacity-65 hover:opacity-100 duration-300' disabled={true} onClick={()=>{
-                            
-                        }}>
-                            <FaEdit />
-                        </button>
-                        <button title="Delete" className='opacity-65 hover:opacity-100 duration-300' disabled={true} onClick={()=>{
-                            
-                        }}>
-                            <FaTrash />
-                        </button>
-                    </div>
+                    {mode == "public" && userData._id === review.user._id &&
+                        <div className='flex gap-x-4 text-sm'>
+
+                            <button title="Edit" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
+                                disabled={new Date().getTime() > new Date(review.createdAt).getTime()  + sevenDaysInMs? true : false} onClick={() => {
+
+                                }}>
+                                <FaEdit />
+                            </button>
+                            <button title="Delete" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
+                                disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
+
+                                }}>
+                                <FaTrash />
+                            </button>
+                        </div>}
                 </div>
 
             </div>
