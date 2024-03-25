@@ -24,6 +24,7 @@ function UserProvider({ children }) {
       if (userToken) {
         const { data } = await GET("/users", userToken)
         setUserData(data.user);
+        console.log(data)
       }
     } catch (error) {
       console.log(error)
