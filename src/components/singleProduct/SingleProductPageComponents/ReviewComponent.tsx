@@ -8,8 +8,8 @@ const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_au
 const sevenDaysInMs = 604800000;
 
 function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "public" }) {
-    const { theme } = useContext(ThemeContext)
-    const { userData } = useContext(UserContext)
+    const { theme } = useContext(ThemeContext);
+    const { userData } = useContext(UserContext);
     return (
         <div className='flex gap-x-4 border border-solid rounded-md p-2 w-full'
             style={{
@@ -58,16 +58,17 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
 
                     {mode == "public" && userData._id === review.user._id &&
                         <div className='flex gap-x-4 text-sm'>
-                            <button title="Edit" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`} 
-                            disabled={ Number(review.createdAt) > sevenDaysInMs ?  true : false} onClick={() => {
 
-                            }}>
+                            <button title="Edit" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
+                                disabled={new Date().getTime() > new Date(review.createdAt).getTime()  + sevenDaysInMs? true : false} onClick={() => {
+
+                                }}>
                                 <FaEdit />
                             </button>
-                            <button title="Delete" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`} 
-                            disabled={ Number(review.createdAt) > sevenDaysInMs ? true : false} onClick={() => {
+                            <button title="Delete" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
+                                disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
 
-                            }}>
+                                }}>
                                 <FaTrash />
                             </button>
                         </div>}
