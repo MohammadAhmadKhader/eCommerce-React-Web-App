@@ -22,7 +22,7 @@ function SingleOrderDetails() {
                     singleOrderDetails?.orderItems.map((orderItem) => {
                         console.log(singleOrderDetails)
                         return (
-                            <SingleOrder imgUrl={orderItem.thumbnailUrl} price={orderItem.subTotal}
+                            <SingleOrder imgUrl={orderItem.thumbnailUrl} price={orderItem.price}
                                 name={orderItem.name} quantity={orderItem.quantity} key={orderItem._id} />
                         )
                     })

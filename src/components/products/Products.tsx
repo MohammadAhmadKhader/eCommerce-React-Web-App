@@ -30,7 +30,7 @@ function Products() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState("All Categories");
-    const { categories, isCategoriesLoading,loadingMessage } = useContext(GlobalCachingContext)
+    const { categories, isCategoriesLoading, loadingMessage } = useContext(GlobalCachingContext)
     const maxLimit = 30;
     const minLimit = 9;
     const { debounce } = useDebounce();
@@ -81,16 +81,16 @@ function Products() {
 
     }, [])
 
-    useEffect(()=>{
-        if(loadingMessage){
-          initialLoader.current = toast.loading(`The project backend is uploaded on render free service 
-          therefore will take 50s - 2mins to boot the backend service on first request`,{
-            position:"top-center"
-          })
-        }else{
-          toast.dismiss(initialLoader.current)
+    useEffect(() => {
+        if (loadingMessage) {
+            initialLoader.current = toast.loading(`The project backend is uploaded on render free service 
+          therefore will take 50s - 2mins to boot the backend service on first request`, {
+                position: "top-center"
+            })
+        } else {
+            toast.dismiss(initialLoader.current)
         }
-      },[loadingMessage])
+    }, [loadingMessage])
 
 
     useEffect(() => {
@@ -262,13 +262,15 @@ function Products() {
                     }}
                         style={{
                             boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
-                        }}>
+                        }}
+                        className='rounded-xl'
+                    >
                         <Pagination count={Math.ceil(count / parseInt(searchParams.get("limit")))}
                             onChange={(event, value) => {
                                 if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
                                     searchParams.set("page", value.toString())
                                     setSearchParams(searchParams);
-                                  }
+                                }
                             }}
                         />
                     </Stack>

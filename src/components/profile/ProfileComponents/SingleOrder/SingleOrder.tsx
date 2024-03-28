@@ -1,9 +1,4 @@
-interface ISingleOrder {
-    imgUrl: string;
-    name: string;
-    price: number;
-    quantity: number;
-}
+import { ISingleOrder } from "../../../../types/types"
 
 function SingleOrder({ imgUrl, name, price, quantity }: ISingleOrder) {
     console.log(price, quantity)

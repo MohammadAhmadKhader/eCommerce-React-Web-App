@@ -9,7 +9,16 @@ export default function AddressSelector() {
     const { theme } = useContext(ThemeContext)
     const { userData } = useContext(UserContext)
     const [address, setAddress] = useState(null);
-    
+
+    function triggerStorageEvent() {
+        const storageEvent = new Event('localStorageChange', { bubbles: true });
+        window.dispatchEvent(storageEvent);
+      }
+    useEffect(() => {
+        localStorage.setItem("address", JSON.stringify(address));
+        triggerStorageEvent()
+    }, [address])
+
     return (
         <div className='w-full bg-opacity-5 mt-4' style={{
             color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
@@ -31,16 +40,13 @@ export default function AddressSelector() {
                     }
                 }}
                 onChange={(event, newValue) => {
-                    console.log(newValue)
-                    setAddress(userData.addresses[Number(newValue)])
+                    console.log(newValue);
+                    setAddress(userData.addresses[Number(newValue)]);
                 }}
             >
                 {userData.addresses.map((address, index) => {
                     return (
                         <Option key={address._id} value={index}>{address.state}, {address.city}, {address.streetAddress}
-
-
-
                         </Option>
                     )
                 })}

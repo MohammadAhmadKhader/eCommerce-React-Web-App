@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction} from "react"
+import { Dispatch, SetStateAction } from "react"
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -7,12 +7,14 @@ import { FaChevronRight } from 'react-icons/fa';
 import { useContext, useState } from 'react';
 import CheckoutProcessStepper from './CheckoutProcessStepper';
 
-function PaymentMethod({setCheckoutSteps }: { setCheckoutSteps : Dispatch<SetStateAction<number>> }) {
+function PaymentMethod({ setCheckoutSteps }: { setCheckoutSteps: Dispatch<SetStateAction<number>> }) {
     const { theme } = useContext(ThemeContext)
     const [open, setOpen] = useState(false);
+    
     const handleClick = () => {
         setOpen(!open);
     };
+
 
     return (
         <div>
@@ -48,6 +50,7 @@ function PaymentMethod({setCheckoutSteps }: { setCheckoutSteps : Dispatch<SetSta
                 </ListItemButton>
 
                 <Collapse in={open} timeout="auto" unmountOnExit>
+                    
                     <CheckoutProcessStepper setCheckoutSteps={setCheckoutSteps} />
                 </Collapse>
             </List>

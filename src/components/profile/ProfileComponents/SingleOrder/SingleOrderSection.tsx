@@ -30,6 +30,7 @@ function SingleOrderSection() {
     }
   }, [])
 
+  console.log(singleOrderDetails, "singleOrder")
   useEffect(() => {
     console.log(singleOrderDetails)
   }, [singleOrderDetails])
@@ -49,11 +50,11 @@ function SingleOrderSection() {
             borderRadius: "8px",
             transition: "400ms",
           }} disableIndicator>Items Ordered</Tab>
-          <Tab sx={{
+          {singleOrderDetails.status != "Placed" && singleOrderDetails.status != "Cancelled" &&<Tab sx={{
             margin: "5px",
             borderRadius: "8px",
             transition: "400ms",
-          }} disableIndicator>Invoices</Tab>
+          }} disableIndicator>Invoices</Tab>}
         </TabList>
         <TabPanel value={0} className='bg-transparent min-w-[800px]'>
           <SingleOrderDetails />
@@ -80,7 +81,7 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Payment Details</h5>
                 <div>
-                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails}</h6>
+                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails ? singleOrderDetails?.paymentDetails : "No Details"}</h6>
                 </div>
               </div>
 
@@ -99,19 +100,18 @@ function SingleOrderSection() {
             </div>
 
             <div className='text-left lg:text-right'>
-              
-                <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
+
+              { singleOrderDetails && singleOrderDetails.status !== "Cancelled" && singleOrderDetails.status !== "Completed" && <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
                text-white hover:bg-transparent hover:text-color-accent px-8 py-1.5 rounded-md text-sm font-semibold tracking-wide'>
-                  Complete Checkout
-                </Link>
+                Complete Checkout
+              </Link>}
             </div>
           </div>
 
         </TabPanel>
-        <TabPanel value={1} className='bg-transparent'>
-
+        {singleOrderDetails.status !== "Placed" && singleOrderDetails.status !== "Cancelled" && <TabPanel value={1} className='bg-transparent'>
           <SingleOrderInvoices />
-        </TabPanel>
+        </TabPanel>}
       </Tabs>
     </div>
   )
