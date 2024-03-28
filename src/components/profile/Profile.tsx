@@ -5,7 +5,6 @@ import LogoutButton from "./ProfileComponents/LogoutButton";
 import { Link, Outlet } from "react-router-dom";
 import { IoChevronForwardOutline } from "react-icons/io5";
 
-
 function Profile() {
 
   return (

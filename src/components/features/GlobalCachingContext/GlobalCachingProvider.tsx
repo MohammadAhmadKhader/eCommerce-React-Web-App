@@ -11,28 +11,32 @@ export interface GlobalCachingContext {
     isProductByIdLoading: boolean;
     isRelatedProductLoading: boolean;
     isTopRatedProductsLoading: boolean;
-    loadingMessage:boolean;
+    loadingMessage: boolean;
+    isSingleOrderDetailsLoading:boolean;
+    isInvoiceByOrderIdLoading:boolean;
     reviewsCount: number;
     product: IProduct | object;
     topRatedProducts: IProduct[];
     orders: any;
     singleOrderDetails: any;
     categories: any;
+    invoice: any;
     relatedProducts: IProduct[];
     getSingleOrderDetails: (orderId: string) => Promise<void>;
     getBrands: () => Promise<void>;
     getCategories: () => Promise<void>;
+    getInvoiceByOrderId :(orderId:string) => Promise<void>;
     getProductData: (page: string, limit: string, productId: string) => Promise<void>;
     getRelatedProducts: (categoryId: string, productId: string) => Promise<void>;
     getTopRatedProducts: () => Promise<void>;
-    setLoadingMessage:React.Dispatch<React.SetStateAction<boolean>>;
+    setLoadingMessage: React.Dispatch<React.SetStateAction<boolean>>;
     setOrders: React.Dispatch<React.SetStateAction<any>>;
     setSingleOrderDetails: React.Dispatch<React.SetStateAction<any>>;
     setIsProductByIdLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setIsTopRatedProductsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setRelatedProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
     setIsRelatedProductLoading: React.Dispatch<React.SetStateAction<boolean>>;
-
+    setInvoice: React.Dispatch<React.SetStateAction<any>>;
 }
 
 
@@ -48,13 +52,15 @@ function GlobalCachingProvider({ children }) {
     const [product, setProduct] = useState<IProduct | object>({})
     const [relatedProducts, setRelatedProducts] = useState([])
     const { GET: GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
+    const { GET: GET_InvoiceByOrderId, isLoading: isInvoiceByOrderIdLoading, setIsLoading: setIsInvoiceByOrderIdLoading, } = useAxios(true)
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
-    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true)
+    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading} = useAxios(true)
     const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(true)
     const [singleOrderDetails, setSingleOrderDetails] = useState([]);
     const [orders, setOrders] = useState([])
     const { userToken } = useContext(UserContext);
-    const [loadingMessage,setLoadingMessage] = useState(true);
+    const [loadingMessage, setLoadingMessage] = useState(true);
+    const [invoice, setInvoice] = useState({});
 
     const getBrands = async () => {
         try {
@@ -67,10 +73,13 @@ function GlobalCachingProvider({ children }) {
 
     const getSingleOrderDetails = async (orderId: string) => {
         try {
+            setIsSingleOrderDetailsLoading(true);
             const { data } = await GET_SingleOrderDetails(`/orders/singleOrder/${orderId}`, userToken);
-            setSingleOrderDetails(data.order)
+            setSingleOrderDetails(data.order);
         } catch (error) {
             console.log(error);
+        }finally{
+            setIsSingleOrderDetailsLoading(false);
         }
     }
 
@@ -122,6 +131,17 @@ function GlobalCachingProvider({ children }) {
         }
     }
 
+    const getInvoiceByOrderId = async (orderId:string)=>{
+        try{
+            setIsInvoiceByOrderIdLoading(true)
+            const {data} = await GET_InvoiceByOrderId(`/invoices/${orderId}`,userToken);
+            setInvoice(data.invoice);
+        }catch(error){
+            console.log(error)
+        }finally{
+            setIsInvoiceByOrderIdLoading(false)
+        }
+    }
     useEffect(() => {
         getCategories();
 
@@ -137,7 +157,7 @@ function GlobalCachingProvider({ children }) {
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
             isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
             topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,
-            loadingMessage, setLoadingMessage
+            loadingMessage, setLoadingMessage,invoice,setInvoice,isInvoiceByOrderIdLoading,getInvoiceByOrderId ,isSingleOrderDetailsLoading
         }}>
             {children}
         </GlobalCachingContext.Provider>

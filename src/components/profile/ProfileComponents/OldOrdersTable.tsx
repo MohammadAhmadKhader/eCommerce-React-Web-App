@@ -18,10 +18,10 @@ function OldOrdersTable({ orders, count, getOrders }) {
   
   useEffect(() => {
     if (searchParams.get("status") && (searchParams.get("status") == "Processing" ||
-      searchParams.get("status") == "Completed" || searchParams.get("status") == "Cancelled")) {
+      searchParams.get("status") == "Completed" || searchParams.get("status") == "Cancelled" || searchParams.get("status") == "Placed")) {
       debounce(() => {
         getOrders(searchParams.get("status"), searchParams.get("page"), searchParams.get("limit"));
-      }, 400)
+      }, 200)
     }
 
   }, [searchParams])
@@ -42,7 +42,7 @@ function OldOrdersTable({ orders, count, getOrders }) {
             orders.map((orderItem) => {
               return (
                 <MyOrdersItem OrderID={orderItem._id} Date={orderItem.createdAt}
-                  Status={'Paid'} Price={orderItem.grandTotal} key={orderItem._id} />
+                  IsPaid={orderItem?.isPaid || false } Price={orderItem.grandTotal} key={orderItem._id} />
               )
             }) :
             <div className='w-full'>

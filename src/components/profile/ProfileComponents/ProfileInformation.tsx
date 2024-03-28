@@ -11,7 +11,7 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import CircularLoader from '../../shared/CircularLoader';
-import { useBlocker } from 'react-router-dom';
+import { useBlocker, useNavigate } from 'react-router-dom';
 import ProfileModal from './ProfileModal';
 
 
@@ -36,6 +36,7 @@ function ProfileInformation() {
   });
   const { errors, isValid, isDirty, isSubmitting } = formState;
   const inputFileRef = useRef(null);
+  const navigate = useNavigate()
   const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
   const [userImage, setUserImage] = useState(null);
 
@@ -43,8 +44,8 @@ function ProfileInformation() {
     ({ currentLocation, nextLocation }) =>
       isDefaultValues === false && isValid &&
       currentLocation.pathname !== nextLocation.pathname
-  );
 
+  );
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -57,8 +58,6 @@ function ProfileInformation() {
     })
     return () => subscription.unsubscribe()
   }, [watch])
-
-
 
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
     try {
@@ -75,7 +74,7 @@ function ProfileInformation() {
           }
         }
       }
-      console.log(Array.from(formData.entries()))
+      
       const { data } = await PUT(`/users/${userData._id}`, formData, userToken)
       if (data.message == "success") {
         toast.success("Information has been changed successfully");

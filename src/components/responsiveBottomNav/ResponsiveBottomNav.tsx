@@ -30,7 +30,7 @@ function ResponsiveBottomNav() {
                         <>
                             <ResponsiveNavLinkComponent IconComponent={AiFillHome} Text={"Home"} Href="/" />
                             <ResponsiveNavLinkComponent IconComponent={MdOutlineCategory} Text={"Categories"} Href="/products" />
-                            {userData && <ResponsiveNavLinkComponent IconComponent={CgProfile} Text={"Profile"} Href="/profile" />}
+                            {userData && <ResponsiveNavLinkComponent IconComponent={CgProfile} Text={"Profile"} Href="/profile/information" />}
                             {userData && <ResponsiveNavLinkComponent IconComponent={BsCart} Text={"Cart"} Href="/cart" />}
                             {!userData && <ResponsiveNavLinkComponent IconComponent={MdLogin} Text={"Login"} Href="/login" />}
                             {!userData && <ResponsiveNavLinkComponent IconComponent={IoPersonAdd} Text={"Sign up"} Href="/signup" />}

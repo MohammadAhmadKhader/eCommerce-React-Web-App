@@ -87,6 +87,7 @@ export const router = createBrowserRouter([
             {
                 path: "/checkout/:orderId",
                 element: <Checkout />
+
             },
             {
                 path: "/profile",
@@ -128,8 +129,8 @@ export const router = createBrowserRouter([
                 element: <ContactUs />
             },
             {
-                path:"*",
-                element:<NotFound404/>
+                path: "*",
+                element: <NotFound404 />
             }
         ]
     }

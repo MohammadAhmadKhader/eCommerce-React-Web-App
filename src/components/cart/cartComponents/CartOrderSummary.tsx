@@ -8,7 +8,7 @@ import useAxios from '../../customHooks/useAxios'
 import { UserContext } from '../../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
 import { CartContext } from '../../features/CartFeature/CartProvider'
-import Tooltip  from '@mui/joy/Tooltip'
+import Tooltip from '@mui/joy/Tooltip'
 
 function CartOrderSummary() {
   const navigate = useNavigate()
@@ -22,7 +22,7 @@ function CartOrderSummary() {
   const [discount, setDiscount] = useState(10);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const loadingRef = useRef(null);
-  
+
 
   useEffect(() => {
     cartItems.forEach((item) => {
@@ -46,11 +46,11 @@ function CartOrderSummary() {
         navigate(`/checkout/${data.order._id}`);
         toast.success("Order has been created Successfully!");
       }
-
     } catch (error) {
-      toast.dismiss(loadingRef.current)
       console.log(error)
       toast.error("Something Went Wrong Please Try Again Later")
+    } finally {
+      toast.dismiss(loadingRef.current)
     }
   }
   return (
@@ -61,20 +61,20 @@ function CartOrderSummary() {
       <div>
         <OrderCalcs deliveryFee={deliveryFee} discount={discount} subTotal={subTotal} grandTotal={grandTotal} />
         <div className='flex items-center justify-between gap-x-1 md:gap-x-8 mt-12'>
-         <Tooltip title="Under Development">
-          <button title='Place Order'
-            className='duration-300 bg-color-accent rounded-md px-1 md:px-3 py-1.5 w-1/2 text-white hover:bg-transparent 
+          <Tooltip title="Place Order">
+            <button
+              className='duration-300 bg-color-accent rounded-md px-1 md:px-3 py-1.5 w-1/2 text-white hover:bg-transparent 
           hover:text-color-accent border-color-accent border flex items-center justify-center text-sm'
-            disabled
-          onClick={() => {
-              //debounce(() => { createOrder() })
-            }}
-          >
-            <span className='line-clamp-1'>
-              Place Order
-            </span>
 
-          </button></Tooltip>
+              onClick={() => {
+                debounce(() => { createOrder() }, 400)
+              }}
+            >
+              <span className='line-clamp-1'>
+                Place Order
+              </span>
+
+            </button></Tooltip>
 
           <Link to="/products?page=1&limit=9" title='Continue Shopping'
             className='duration-300 text-color-accent border-color-accent border rounded-md px-1 md:px-3

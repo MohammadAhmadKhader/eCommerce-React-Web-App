@@ -209,7 +209,7 @@ export interface IMyOrdersItem {
     OrderID: string;
     Date: string;
     Price: number;
-    Status: "Paid" | "Pending" | "Cancelled";
+    IsPaid: boolean;
 }
 
 export interface ILogoutButton {
@@ -299,6 +299,14 @@ export interface ISingleProductTabs {
     reviewsCount:number;
     reviewsLimit:number;
 }
+
+export interface ISingleOrder {
+    imgUrl: string;
+    name: string;
+    price: number;
+    quantity: number;
+}
+
 
 export type UserData = {
     firstName: string;

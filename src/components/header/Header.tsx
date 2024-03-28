@@ -92,7 +92,7 @@ function Header() {
                   }
                 </div>
               </Link>
-              <Link title="Profile" to="/profile" className="hidden md:block">
+              <Link title="Profile" to="/profile/information" className="hidden md:block">
                 <div className="opacity-70 duration-300 hover:opacity-100">
                   <CgProfile size={25} />
                 </div>

@@ -31,14 +31,15 @@ function MyOrders() {
     }
     const ensureCorrectValueOfStatus = () => {
         if (!searchParams.get("status")) {
-            searchParams.set("status", "Completed");
+            searchParams.set("status", "Placed");
             setSearchParams(searchParams)
         }
         if (searchParams.get("status") &&
             searchParams.get("status") != "Completed" &&
+            searchParams.get("status") != "Placed" &&
             searchParams.get("status") != "Processing" &&
             searchParams.get("status") != "Cancelled") {
-            searchParams.set("status", "Completed");
+            searchParams.set("status", "Placed");
             setSearchParams(searchParams)
         }
     }
@@ -54,8 +55,6 @@ function MyOrders() {
     useEffect(() => {
         ensureCorrectValueOfPagination();
         ensureCorrectValueOfStatus();
-
-
     }, [])
 
     useEffect(() => {
@@ -63,9 +62,8 @@ function MyOrders() {
     }, [userData])
     useEffect(() => {
         ensureCorrectValueOfStatus();
-        ensureCorrectValueOfPagination()
+        ensureCorrectValueOfPagination();
     }, [searchParams])
-
 
     return (
         <div className='overflow-scroll MyOrdersContainer'>
@@ -84,18 +82,25 @@ function MyOrders() {
                     borderRadius: "8px",
                     borderBottom: "0px !important"
                 }}>
-                    <Tab value='Completed'
+                    <Tab value='Placed'
                         sx={{
                             margin: "5px",
                             borderRadius: "8px",
                             transition: "400ms",
-                        }} disableIndicator>Completed</Tab>
+                        }} disableIndicator>Placed</Tab>
                     <Tab value='Processing'
                         sx={{
                             margin: "5px",
                             borderRadius: "8px",
                             transition: "400ms",
                         }} disableIndicator>Processing</Tab>
+                    <Tab value='Completed'
+                        sx={{
+                            margin: "5px",
+                            borderRadius: "8px",
+                            transition: "400ms",
+                        }} disableIndicator>Completed</Tab>
+
                     <Tab value='Cancelled'
                         sx={{
                             margin: "5px",
@@ -103,11 +108,17 @@ function MyOrders() {
                             transition: "400ms",
                         }} disableIndicator>Cancelled</Tab>
                 </TabList>
-                <TabPanel value={"Completed"} className='bg-transparent'>
+                <TabPanel value={"Placed"} className='bg-transparent'>
 
                     <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
+
                 <TabPanel value={"Processing"} className='bg-transparent'>
+
+                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
+                </TabPanel>
+
+                <TabPanel value={"Completed"} className='bg-transparent'>
 
                     <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
