@@ -4,12 +4,35 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Review } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
+import useAxios from '../../customHooks/useAxios';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+import useDebounce from '../../customHooks/useDebounce';
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 const sevenDaysInMs = 604800000;
 
 function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "public" }) {
     const { theme } = useContext(ThemeContext);
-    const { userData } = useContext(UserContext);
+    const { userData, userToken } = useContext(UserContext);
+    const { DELETE } = useAxios();
+    const params = useParams();
+    const {debounce} = useDebounce()
+
+    const deleteReview = async (productId: string, reviewId: string) => {
+        try {
+            const response = await DELETE("/reviews", {
+                productId,
+                reviewId
+            }, userToken)
+
+            if (response.status == 204){
+                toast.success("Review was deleted successfully!")
+            }
+        } catch (error) {
+            toast.error("Something Went Wrong Please Try Again Later!")
+            console.log(error)
+        }
+    }
     return (
         <div className='flex gap-x-4 border border-solid rounded-md p-2 w-full'
             style={{
@@ -60,14 +83,23 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
                         <div className='flex gap-x-4 text-sm'>
 
                             <button title="Edit" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
-                                disabled={new Date().getTime() > new Date(review.createdAt).getTime()  + sevenDaysInMs? true : false} onClick={() => {
-
+                                disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
+                                    if(!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)){
+                                        debounce(()=>{
+                                             console.log("Edit button")
+                                         },300) 
+                                     }
                                 }}>
                                 <FaEdit />
                             </button>
                             <button title="Delete" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
                                 disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
-
+                                    if(!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)){
+                                       debounce(()=>{
+                                            deleteReview(params.productId,review._id)
+                                        },300) 
+                                    }
+                                    
                                 }}>
                                 <FaTrash />
                             </button>

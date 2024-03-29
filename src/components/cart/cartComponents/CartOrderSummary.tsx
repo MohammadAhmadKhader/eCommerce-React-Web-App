@@ -19,14 +19,14 @@ function CartOrderSummary() {
   const { cartItems } = useContext(CartContext);
   const [subTotal, setSubTotal] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
-  const [discount, setDiscount] = useState(10);
+  const [discount, setDiscount] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const loadingRef = useRef(null);
 
 
   useEffect(() => {
     cartItems.forEach((item) => {
-      setSubTotal(prevSubTotal => prevSubTotal + item.cartItem.finalPrice)
+      setSubTotal(prevSubTotal => prevSubTotal + (item.cartItem.finalPrice * item.quantity))
     })
   }, [cartItems])
 

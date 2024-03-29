@@ -52,7 +52,6 @@ function Payment() {
       }
       await OrderCheckingOut(singleOrderDetails._id, address);
       setIsSucceeded(true);
-      await getSingleOrderDetails(params.orderId);
       toast.success("Payment succeeded")
       setIsProcessing(false);
 
