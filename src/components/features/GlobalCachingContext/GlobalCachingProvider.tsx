@@ -55,7 +55,7 @@ function GlobalCachingProvider({ children }) {
     const { GET: GET_InvoiceByOrderId, isLoading: isInvoiceByOrderIdLoading, setIsLoading: setIsInvoiceByOrderIdLoading, } = useAxios(true)
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
     const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading} = useAxios(true)
-    const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(true)
+    const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(false)
     const [singleOrderDetails, setSingleOrderDetails] = useState([]);
     const [orders, setOrders] = useState([])
     const { userToken } = useContext(UserContext);

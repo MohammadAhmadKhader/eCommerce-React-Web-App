@@ -38,7 +38,7 @@ function CartOrderSummary() {
     try {
       loadingRef.current = toast.loading("Your order being placed...")
       const { data } = await POST("/orders", {
-        userId: userData,
+        userId: userData._id,
       }, userToken)
 
       if (data.message == "success") {

@@ -39,6 +39,8 @@ function SingleProductPage() {
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
 
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function setCategoryNameAndId() {
         if (!isCategoriesLoading && !isProductByIdLoading) {
             categories.forEach((category) => {
@@ -94,26 +96,29 @@ function SingleProductPage() {
     }
 
     useEffect(() => {
+        console.log("test1 ")
         if (userData) {
             const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInCart) {
+
                 setIsItemInCart(false)
-            }else{
+            } else {
                 setIsItemInCart(true)
             }
+            console.log("test2 ")
         }
 
         if (userData) {
             const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInWishList) {
                 setIsItemInWishList(false)
-            }else{
+            } else {
                 setIsItemInWishList(true)
             }
         }
         setCategoryNameAndId();
-        
-    }, [userData, product, params.productId])
+        console.log(userData ? (isItemInCart ? true : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? false : true)) : false)
+    }, [userData, product, params.productId, setCategoryNameAndId])
 
 
     useEffect(() => {
@@ -208,14 +213,21 @@ function SingleProductPage() {
                                         },
                                         color: 'var(--stars--color)'
                                     }}
-                                    name="read-only" value={(product as IProduct).avgRating} precision={0.1} readOnly />
+                                    name="read-only" value={Number((product as IProduct).avgRating.toFixed(2))} precision={0.01} readOnly />
 
+                            </div>
+
+                            <div>
+                                <h3 className='text-lg font-semibold tracking-wide ms-1 -mt-6'>
+                                    {Number((product as IProduct).avgRating).toFixed(2)} / 5
+                                </h3>
                             </div>
                             <div className='md:border-b md:pb-3'
                                 style={{
                                     borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                                 }}>
-                                <PriceComponent price={(product as IProduct).price} finalPrice={(product as IProduct).finalPrice} offer={(product as IProduct).offer} customClassesOffer='gap-x-1.5 text-2xl' customClassesOfferFinalPrice='text-4xl font-semibold' />
+                                <PriceComponent price={(product as IProduct).price} finalPrice={(product as IProduct).finalPrice} offer={(product as IProduct).offer}
+                                    customClassesOffer='gap-x-1.5 text-2xl' customClassesOfferFinalPrice='text-4xl font-semibold' customClassesNotOffer='text-4xl font-semibold' />
                             </div>
 
                             <div className='flex flex-col gap-y-4'>
@@ -261,15 +273,15 @@ function SingleProductPage() {
                                 </div>
 
                                 <div className='flex justify-between items-center gap-x-3 sm:gap-x-5'>
-                                    <Tooltip title={userData ? isItemInCart ? "Item already in cart" : undefined : "signing in is required"}>
+                                    <Tooltip title={userData ? isItemInCart ? "Item already in cart" : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? undefined : "Out of stock") : "signing in is required"}>
 
                                         <button className='text-sm font-semibold w-full py-2 rounded-md flex justify-center gap-x-1 sm:gap-x-4 items-center
                                  text-white bg-color-accent hover:bg-transparent hover:text-color-accent border-color-accent border-2 duration-300
                                  disabled:bg-color-accent disabled:opacity-65 disabled:text-white disabled:hover:text-white
                                  '
-                                            disabled={userData ? (isItemInCart ? true : false) : true}
+                                            disabled={userData ? (isItemInCart ? true : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? false : true)) : false}
                                             onClick={() => {
-                                                if (userData && !isItemInCart) {
+                                                if (userData && !isItemInCart && (product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0)) {
                                                     addToCart();
 
                                                 }
