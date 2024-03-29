@@ -22,7 +22,7 @@ function SingleOrderInvoices() {
       toast.dismiss(toastId.current)
       toast.success("File is ready, Click to download");
     }
-  }, [invoice])
+  }, [invoice,isClicked])
   useEffect(()=>{
     if(isClicked &&isInvoiceByOrderIdLoading){
       toastId.current = toast.loading("Preparing");

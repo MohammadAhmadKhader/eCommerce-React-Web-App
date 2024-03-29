@@ -13,10 +13,10 @@ import { Link, useParams } from 'react-router-dom';
 
 function SingleOrderSection() {
   const { theme } = useContext(ThemeContext);
-  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails } = useContext(GlobalCachingContext);
-  const params = useParams()
+  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,setOrders } = useContext(GlobalCachingContext);
+  const params = useParams();
   useEffect(() => {
-    if (orders) {
+    if (orders && !localStorage.getItem("CheckedOut")) {
       const wantedOrder = orders.find((item) => {
         return item._id === params.id
       })
@@ -26,7 +26,10 @@ function SingleOrderSection() {
       } else {
         getSingleOrderDetails(params.id)
       }
-
+    }
+    if(localStorage.getItem("CheckedOut") && localStorage.getItem("CheckedOut") == "true"){
+      localStorage.removeItem("CheckedOut")
+      getSingleOrderDetails(params.id)
     }
   }, [])
 

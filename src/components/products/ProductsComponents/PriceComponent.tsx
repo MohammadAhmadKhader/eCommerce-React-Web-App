@@ -6,7 +6,7 @@ function PriceComponent({ finalPrice, price, offer, customClassesNotOffer, custo
         <div>
             {
                 finalPrice == price ?
-                    <p className={`text-lg ${customClassesNotOffer}`}>
+                    <p className={`${customClassesNotOffer ? "" :"text-lg" } ${customClassesNotOffer}`}>
                         <span>${finalPrice}</span>
                     </p>
                     :

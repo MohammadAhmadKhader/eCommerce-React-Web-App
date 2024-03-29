@@ -85,11 +85,12 @@ function Payment() {
 
     window.addEventListener("localStorageChange", localStorageListener);
     return () => window.removeEventListener("localStorageChange", localStorageListener)
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (succeeded && !isSingleOrderDetailsLoading && singleOrderDetails) {
-      navigate(`/profile/orders?page=1&limit=9&status=Completed`)
+      localStorage.setItem("CheckedOut","true");
+      navigate(`/profile/orders/${params.orderId}`);
     }
   }, [singleOrderDetails, succeeded, isSingleOrderDetailsLoading])
 
