@@ -1,18 +1,17 @@
 import { SetStateAction, Dispatch, useContext } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Review } from '../../../types/types';
+import { IReviewComponent, Review } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import useDebounce from '../../customHooks/useDebounce';
-
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 const sevenDaysInMs = 604800000;
 
-function ReviewComponent({ review, mode, setEditModal = undefined }: { review: Review, mode: "self" | "public", setEditModal: undefined | Dispatch<SetStateAction<boolean>> }) {
+function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewComponent) {
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext);
     const { DELETE } = useAxios();
