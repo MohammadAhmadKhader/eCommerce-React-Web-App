@@ -307,6 +307,12 @@ export interface ISingleOrder {
     quantity: number;
 }
 
+export interface IReviewComponent {
+    setEditModal?: Dispatch<SetStateAction<boolean>>;
+    mode:"self" | "public";
+    review:Review
+}
+
 
 export type UserData = {
     firstName: string;
