@@ -39,7 +39,7 @@ function UserProvider({ children }) {
 
   return (
     <UserContext.Provider value={{ userToken, setUserToken, userData, setUserData, isUserFetchDataLoading, getUserData }}>
-      { children}
+      {children}
     </UserContext.Provider>
   )
 }

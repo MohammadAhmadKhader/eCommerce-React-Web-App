@@ -5,7 +5,7 @@ import { UserContext } from '../../features/UserFeature/UserProvider'
 import { useNavigate } from 'react-router-dom'
 import useAxios from '../../customHooks/useAxios'
 
-function LogoutButton({customClasses,isHidden = true,isCentered = false} : ILogoutButton) {
+function LogoutButton({customClasses,isHidden = true,isCentered = false,size = 22,rebuildClasses=false} : ILogoutButton) {
   const navigate = useNavigate()
   const { setUserData,setUserToken,userData} = useContext(UserContext)
   const {DELETE} = useAxios()
@@ -16,8 +16,8 @@ function LogoutButton({customClasses,isHidden = true,isCentered = false} : ILogo
     })
   }
   return (
-    <button className={`items-center ${ isCentered ? "justify-center" :"justify-between"} font-semibold border border-color-accent
-         px-4 rounded-md py-1 duration-300 hover:text-white hover:bg-color-accent ${ isHidden ? "hidden" :""}  md:flex ${customClasses}`}
+    <button className={`${rebuildClasses ? ``:` items-center ${ isCentered ? "justify-center" :"justify-between"} font-semibold border border-color-accent
+         px-4 rounded-md py-1 duration-300 hover:text-white hover:bg-color-accent ${ isHidden ? "hidden" :""}  md:flex`} ${customClasses}`}
           onClick={()=>{
               setUserData(null);
               setUserToken(null);
@@ -27,7 +27,7 @@ function LogoutButton({customClasses,isHidden = true,isCentered = false} : ILogo
             }} 
          >
           <span>
-            <MdLogout size={22}/>
+            <MdLogout size={size}/>
           </span>
           <span>
             Logout

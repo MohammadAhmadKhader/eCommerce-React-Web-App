@@ -26,7 +26,7 @@ function Login() {
         register,
         handleSubmit,
         trigger,
-        formState: { errors,isSubmitting }
+        formState: { errors, isSubmitting }
     } = useForm<UserSignInDataType>({
         resolver: yupResolver(schema)
     });
@@ -73,10 +73,11 @@ function Login() {
 
                     <Link className='block text-blue-700 underline w-fit text-sm font-semibold mb-5' to="/forgotPassword">Forgot password ?</Link>
                     <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
-                    border-color-accent font-semibold text-sm border
-                     hover:text-white duration-300 px-6 py-1.5 rounded-md'
-                     type='submit' disabled={isSubmitting}
-                     >
+                    border-color-accent font-semibold text-sm border duration-300 px-6 py-1.5 rounded-md
+                     disabled:hover:text-white disabled:hover:bg-color-accent disabled:hover:cursor-default disabled:opacity-75
+                     '
+                        type='submit' disabled={isSubmitting}
+                    >
                         Login
                     </button>
                     <Link className='ms-auto mt-2 block text-blue-700 underline w-fit text-sm font-semibold' to="/signup">Sign Up?</Link>
