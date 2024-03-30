@@ -16,21 +16,20 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 
-
 const schema = yup.object({
     comment: yup.string().min(4).max(256).required(),
     rating: yup.number().oneOf([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).required()
 })
 
-
-function SubmitReview() {
-    const { POST } = useAxios()
+function EditReview({ setIsEditReviewModalOpen,review }) {
+    const { PUT } = useAxios()
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext)
     const [ratingValue, setRatingValue] = useState<number | null>(0);
     const { getProductData } = useContext(GlobalCachingContext);
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
+
     const ratingStarsTheme = createTheme({
         components: {
             MuiRating: {
@@ -62,15 +61,16 @@ function SubmitReview() {
                 toast.error("You must sign in!")
                 return;
             }
-            const { data } = await POST("/reviews", {
-                productId: params.productId,
+            const { data } = await PUT("/reviews", {
+                reviewId: review._id,
                 userId: userData?._id,
                 rating: submittedData.rating,
                 comment: submittedData.comment
             }, userToken);
 
             if (data["message"] == "success") {
-                toast.success("Review was added successfully!");
+                toast.success("Review was Edited successfully!");
+                setIsEditReviewModalOpen(false);
                 reset();
                 setRatingValue(0);
                 getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
@@ -121,7 +121,7 @@ function SubmitReview() {
                     <span>
                         <button type='submit' className='disabled:opacity-60 disabled:hover:text-white disabled:hover:bg-color-accent text-white px-8 py-1 bg-color-accent rounded-lg w-full sm:w-fit duration-300 
                                 border border-color-accent hover:bg-transparent hover:text-color-accent text-sm' disabled={userData || !isSubmitting ? false : true}>
-                            Submit Review
+                            Edit Review
                         </button></span>
                 </Tooltip>
             </div>
@@ -129,4 +129,4 @@ function SubmitReview() {
     )
 }
 
-export default SubmitReview
+export default EditReview

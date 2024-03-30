@@ -80,8 +80,6 @@ body {
   }   
 }
 
-/* Custom Scrollbar */
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 12px; 
@@ -110,4 +108,3 @@ body {
 .bg-color-secondaryTabs{
   background-color: var(--secondary--tabs--color);
 }    
-

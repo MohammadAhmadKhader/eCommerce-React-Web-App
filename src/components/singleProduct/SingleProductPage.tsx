@@ -96,7 +96,6 @@ function SingleProductPage() {
     }
 
     useEffect(() => {
-        console.log("test1 ")
         if (userData) {
             const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInCart) {
@@ -105,7 +104,6 @@ function SingleProductPage() {
             } else {
                 setIsItemInCart(true)
             }
-            console.log("test2 ")
         }
 
         if (userData) {
