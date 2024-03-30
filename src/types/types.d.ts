@@ -216,6 +216,8 @@ export interface ILogoutButton {
     customClasses?:string;
     isHidden?:boolean;
     isCentered?:boolean;
+    size?:number | string;
+    rebuildClasses?:boolean;
 }
 
 export interface IProfileAsideOptions {

@@ -1,11 +1,10 @@
 import WebsiteLogo from "../shared/WebsiteLogo.tsx";
 import SearchComponent from "./headerComponents/SearchComponent.tsx";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ShortWebSiteLogo from "../shared/ShortWebSiteLogo.tsx";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../features/ThemeFeature/ThemeProvider.tsx";
 import { WindowWidthContext } from "../features/WindowWidthFeature/WindowWidthProvider.tsx";
-import HeartIcon from '../shared/HeartIcon.tsx';
 import { CgProfile } from "react-icons/cg";
 import { BsCart } from "react-icons/bs";
 import { UserContext } from "../features/UserFeature/UserProvider.tsx";
@@ -15,9 +14,10 @@ import OneLineSkeleton from "../shared/LoadingSkeletons/OneLineSkeleton.tsx";
 import { GoDotFill } from "react-icons/go";
 import { CartContext } from "../features/CartFeature/CartProvider.tsx";
 import { GlobalCachingContext } from "../features/GlobalCachingContext/GlobalCachingProvider.tsx";
-import { MdDarkMode } from "react-icons/md";
-import { MdLightMode } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
+import { Menu } from "@mui/joy";
+import Drawer from "./headerComponents/Drawer.tsx"
+import { BiDotsVerticalRounded } from "react-icons/bi";
 
 
 
@@ -27,7 +27,7 @@ function Header() {
   const { userData, isUserFetchDataLoading } = useContext(UserContext)
   const { cartItems }: any = useContext(CartContext)
   const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
-
+  const [isOpen,setIsOpen] = useState(false);
 
   return (
 
@@ -41,6 +41,10 @@ function Header() {
 
         <div className="flex items-center justify-between w-full">
           <div className="flex w-fit">
+            <Menu onClick={()=>{
+              setIsOpen(prevState => !prevState);
+            }}/>
+            <Drawer isOpen={isOpen} setIsOpen={setIsOpen}/>
             <h1 className="overflow-hidden flex">
               <Link className="h-12 mr-4" to="/">
                 {windowWidth > 768 ? <WebsiteLogo /> : <ShortWebSiteLogo />}
@@ -76,9 +80,6 @@ function Header() {
           </div> :
           <>
             {userData && <div className="hidden lg:flex items-center ms-4 gap-x-2.5">
-              <Link title="Wishlist" to="/profile/wishlist" className="hidden md:block">
-                <HeartIcon height={25} width={25} />
-              </Link>
               <Link title="Cart" to="/cart" className="hidden md:block">
                 <div className="opacity-70 duration-300 hover:opacity-100 relative">
                   <BsCart size={25} />
@@ -117,26 +118,7 @@ function Header() {
                 </Link>
               </div>
             }
-            <div className="flex items-center ms-3">
-              <button className="rounded-md bg-black" onClick={toggleTheme} style={{
-                backgroundColor: "transparent"
-              }}>
-                {
-                  theme == "dark" ?
-                    <Tooltip title="Switch To Light Mode">
-                      <span>
-                        <MdLightMode size={25} />
-                      </span>
-                    </Tooltip>
-                    :
-                    <Tooltip title="Switch To Dark Mode">
-                      <span>
-                        <MdDarkMode size={25} />
-                      </span>
-                    </Tooltip>
-                }
-              </button>
-            </div>
+
           </>
         }
       </div>

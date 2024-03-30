@@ -5,7 +5,22 @@ import Collapse from '@mui/material/Collapse';
 import { FaChevronRight } from 'react-icons/fa6';
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 
-function ListCollapse({ Title, CustomComponent }: { Title: string, CustomComponent: ComponentType }) {
+export interface IListCollapse { 
+    Title: string,
+     CustomComponent: ComponentType,
+     ChevronSize?: string | number,
+     CustomSxStyles?:object,
+     TitleClasses?:string
+     ,DisableRipple?:boolean,
+     CustomListButtonStyle?:object | undefined 
+}
+
+
+function ListCollapse({ 
+    Title, CustomComponent,ChevronSize = 20,
+    CustomSxStyles={},TitleClasses = "text-2xl py-1",
+    DisableRipple=true,CustomListButtonStyle=undefined 
+    }: IListCollapse) {
     const { theme } = useContext(ThemeContext)
     const [open, setOpen] = useState(false);
     const handleClick = () => {
@@ -14,7 +29,9 @@ function ListCollapse({ Title, CustomComponent }: { Title: string, CustomCompone
     return (
         <>
             <List
-                sx={{}}
+                sx={{
+                    ...CustomSxStyles
+                }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
                 style={{
@@ -23,8 +40,8 @@ function ListCollapse({ Title, CustomComponent }: { Title: string, CustomCompone
                 }}>
 
                 <ListItemButton onClick={handleClick}
-                    disableRipple
-                    sx={{
+                    disableRipple={DisableRipple}
+                    sx={CustomListButtonStyle ? CustomListButtonStyle : {
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                         borderBottomWidth: "1px",
                         borderStyle: "solid",
@@ -34,12 +51,13 @@ function ListCollapse({ Title, CustomComponent }: { Title: string, CustomCompone
                         alignItems: "center",
                         '&:hover': {
                             backgroundColor: 'transparent'
-                        }
+                        },
+                        
                     }}>
 
-                    <h3 className='text-2xl py-1'>{Title}</h3>
+                    <h3 className={`${TitleClasses}`}>{Title}</h3>
                     <div className={`duration-500 ${open ? "rotate-90" : "rotate-0"}`}>
-                        <FaChevronRight size={20} />
+                        <FaChevronRight size={ChevronSize} />
                     </div>
 
                 </ListItemButton>

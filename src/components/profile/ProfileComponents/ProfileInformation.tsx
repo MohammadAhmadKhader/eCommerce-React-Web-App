@@ -36,7 +36,6 @@ function ProfileInformation() {
   });
   const { errors, isValid, isDirty, isSubmitting } = formState;
   const inputFileRef = useRef(null);
-  const navigate = useNavigate()
   const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
   const [userImage, setUserImage] = useState(null);
 
@@ -49,7 +48,6 @@ function ProfileInformation() {
 
   useEffect(() => {
     const subscription = watch((values) => {
-      console.log(values?.birthDate)
       if (values?.birthDate.toString() == "" && values?.email == "" && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
         setIsDefaultValues(true)
       } else {
