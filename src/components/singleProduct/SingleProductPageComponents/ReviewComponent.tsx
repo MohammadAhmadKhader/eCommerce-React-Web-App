@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { SetStateAction, Dispatch, useContext } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Review } from '../../../types/types';
@@ -8,15 +8,17 @@ import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import useDebounce from '../../customHooks/useDebounce';
+
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 const sevenDaysInMs = 604800000;
 
-function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "public" }) {
+function ReviewComponent({ review, mode, setEditModal = undefined }: { review: Review, mode: "self" | "public", setEditModal: undefined | Dispatch<SetStateAction<boolean>> }) {
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext);
     const { DELETE } = useAxios();
     const params = useParams();
-    const {debounce} = useDebounce()
+    const { debounce } = useDebounce();
+    
 
     const deleteReview = async (productId: string, reviewId: string) => {
         try {
@@ -25,7 +27,7 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
                 reviewId
             }, userToken)
 
-            if (response.status == 204){
+            if (response.status == 204) {
                 toast.success("Review was deleted successfully!")
             }
         } catch (error) {
@@ -79,27 +81,27 @@ function ReviewComponent({ review, mode }: { review: Review, mode: "self" | "pub
                             name="read-only" value={review.rating} precision={0.1} readOnly />
                     </div>
 
-                    {mode == "public" && userData._id === review.user._id &&
+                    {mode == "public" && userData?._id === review.user._id &&
                         <div className='flex gap-x-4 text-sm'>
 
                             <button title="Edit" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
                                 disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
-                                    if(!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)){
-                                        debounce(()=>{
-                                             console.log("Edit button")
-                                         },300) 
-                                     }
+                                    if (!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)) {
+                                        if (setEditModal) {
+                                            setEditModal(prevState => !prevState);
+                                        }
+                                    }
                                 }}>
                                 <FaEdit />
                             </button>
                             <button title="Delete" className={`opacity-65 hover:opacity-100 duration-300 hover:cursor-pointe disabled:hover:cursor-default disabled:hover:opacity-65`}
                                 disabled={new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs ? true : false} onClick={() => {
-                                    if(!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)){
-                                       debounce(()=>{
-                                            deleteReview(params.productId,review._id)
-                                        },300) 
+                                    if (!(new Date().getTime() > new Date(review.createdAt).getTime() + sevenDaysInMs)) {
+                                        debounce(() => {
+                                            deleteReview(params.productId, review._id)
+                                        }, 300)
                                     }
-                                    
+
                                 }}>
                                 <FaTrash />
                             </button>
