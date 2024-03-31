@@ -6,17 +6,20 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import useDebounce from '../../customHooks/useDebounce';
+import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 const sevenDaysInMs = 604800000;
 
 function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewComponent) {
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext);
+    const {getProductData} = useContext(GlobalCachingContext);
     const { DELETE } = useAxios();
     const params = useParams();
     const { debounce } = useDebounce();
+    const [searchParams,setSearchParams] = useSearchParams();
     
 
     const deleteReview = async (productId: string, reviewId: string) => {
@@ -27,10 +30,11 @@ function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewCom
             }, userToken)
 
             if (response.status == 204) {
-                toast.success("Review was deleted successfully!")
+                toast.success("Review was deleted successfully!");
+                getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId);
             }
         } catch (error) {
-            toast.error("Something Went Wrong Please Try Again Later!")
+            toast.error("Something Went Wrong Please Try Again Later!");
             console.log(error)
         }
     }
@@ -106,12 +110,7 @@ function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewCom
                             </button>
                         </div>}
                 </div>
-
             </div>
-
-
-
-
         </div>
     )
 }

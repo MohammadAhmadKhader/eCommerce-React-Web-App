@@ -17,12 +17,9 @@ import { GlobalCachingContext } from "../features/GlobalCachingContext/GlobalCac
 import Tooltip from '@mui/material/Tooltip';
 import { Menu } from "@mui/joy";
 import Drawer from "./headerComponents/Drawer.tsx"
-import { BiDotsVerticalRounded } from "react-icons/bi";
-
-
 
 function Header() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const { windowWidth } = useContext(WindowWidthContext)
   const { userData, isUserFetchDataLoading } = useContext(UserContext)
   const { cartItems }: any = useContext(CartContext)
@@ -30,7 +27,6 @@ function Header() {
   const [isOpen,setIsOpen] = useState(false);
 
   return (
-
     <header className="fixed left-0 top-0 z-50 md:static header min-h-14 w-full py-2 border-solid border-b"
       style={{
         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
@@ -38,7 +34,6 @@ function Header() {
       }}>
 
       <div className="flex justify-between mx-3">
-
         <div className="flex items-center justify-between w-full">
           <div className="flex w-fit">
             <Menu onClick={()=>{

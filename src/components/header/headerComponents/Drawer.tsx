@@ -8,13 +8,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
-import { IoMenu, IoPersonAdd } from "react-icons/io5";
+import { IoPersonAdd } from "react-icons/io5";
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import HeartIcon from '../../shared/HeartIcon';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { MdLogin } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
-import ListCollapse from '../../shared/ListCollapse';
 import Preferences from './Preferences';
 import LogoutButton from '../../profile/ProfileComponents/LogoutButton';
 import { Link } from 'react-router-dom';
@@ -29,14 +28,13 @@ import { WindowWidthContext } from '../../features/WindowWidthFeature/WindowWidt
 import OneLineSkeleton from '../../shared/LoadingSkeletons/OneLineSkeleton';
 
 
-export default function TemporaryDrawer({ isOpen, setIsOpen }) {
+export default function MenuDrawer({ isOpen, setIsOpen }) {
     const toggleDrawer = (newOpen: boolean) => () => {
         setIsOpen(newOpen);
     };
     const { theme } = useContext(ThemeContext);
     const { userToken, userData, isUserFetchDataLoading } = useContext(UserContext);
     const [isPreferenceListOpen, setIsPreferenceListOpen] = useState(false);
-    const { windowWidth } = useContext(WindowWidthContext);
 
     const DrawerList = (
         <Box sx={{
@@ -48,8 +46,8 @@ export default function TemporaryDrawer({ isOpen, setIsOpen }) {
         }} role="presentation">
 
             <List className='py-[15px!important]'>
-                <ListItem disablePadding className='flex items-center justify-between ps-4'>
-                    <Link to="/">
+                <ListItem disablePadding className='flex items-center justify-between ps-4' onClick={toggleDrawer(false)}>
+                    <Link to="/" >
                         <ShortWebSiteLogo windowWidth={"100px"} />
                     </Link>
                     <FiChevronLeft size={30}
@@ -62,11 +60,11 @@ export default function TemporaryDrawer({ isOpen, setIsOpen }) {
                 {(userToken != null || userData != null) && !isUserFetchDataLoading && !isUserFetchDataLoading ?
 
                     <>
-                        <ListItemDrawer Title='Profile' IconComponent={CgProfile} To={'/profile/information'} />
-                        <ListItemDrawer Title='Orders' IconComponent={GoChecklist} To={"/profile/orders?status=Completed&page=1&limit=9"} />
-                        <ListItemDrawer Title='Reviews' IconComponent={BiCommentDots} To={"/profile/reviews?page=1&limit=9"} />
+                        <ListItemDrawer Title='Profile' IconComponent={CgProfile} To={'/profile/information'} onClick={toggleDrawer(false)}/>
+                        <ListItemDrawer Title='Orders' IconComponent={GoChecklist} To={"/profile/orders?status=Completed&page=1&limit=9"}  onClick={toggleDrawer(false)}/>
+                        <ListItemDrawer Title='Reviews' IconComponent={BiCommentDots} To={"/profile/reviews?page=1&limit=9"}  onClick={toggleDrawer(false)}/>
 
-                        <ListItem disablePadding
+                        <ListItem disablePadding onClick={toggleDrawer(false)}
                             sx={{
                                 transition: "300ms",
                                 ':hover': {
@@ -74,9 +72,9 @@ export default function TemporaryDrawer({ isOpen, setIsOpen }) {
                                 }
                             }}>
 
-                            <ListItemButton title="wishlist" className='p-5'>
+                            <ListItemButton title="wishlist" className='p-[0!important]'>
                                 <Tooltip className='w-full' title="Wishlist">
-                                    <Link className='flex items-center w-full font-semibold tracking-wide' to="/profile/wishlist">
+                                    <Link className='flex items-center w-full font-semibold tracking-wide px-4 py-2' to="/profile/wishlist">
                                         <HeartIcon customClasses='opacity-[1!important]' height={25} width={25} />
                                         <span className='ms-4'>
                                             Wishlist
@@ -91,10 +89,10 @@ export default function TemporaryDrawer({ isOpen, setIsOpen }) {
                                 ':hover': {
                                     backgroundColor: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
                                 }
-                            }}><ListItemButton>
+                            }}><ListItemButton className='p-[0!important]' onClick={toggleDrawer(false)}>
                                 <Tooltip className='w-full' title="Logout">
                                     <span className='w-full'>
-                                        <LogoutButton size={25} rebuildClasses={true} customClasses={'flex items-center gap-x-4 w-full font-semibold tracking-wide'} />
+                                        <LogoutButton size={25} rebuildClasses={true} customClasses={'flex items-center gap-x-4 w-full font-semibold tracking-wide px-4 py-2'} />
                                     </span>
                                 </Tooltip>
                             </ListItemButton>
@@ -111,8 +109,8 @@ export default function TemporaryDrawer({ isOpen, setIsOpen }) {
                         <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"200px"} />
                         <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"200px"} />
                     </div> : !userData && !userToken && <>
-                        <ListItemDrawer Title='Sign In' IconComponent={MdLogin} To={"/login"} />
-                        <ListItemDrawer Title='Sign Up' IconComponent={IoPersonAdd} To={"/signup"} />
+                        <ListItemDrawer Title='Sign In' IconComponent={MdLogin} To={"/login"} onClick={toggleDrawer(false)}/>
+                        <ListItemDrawer Title='Sign Up' IconComponent={IoPersonAdd} To={"/signup"} onClick={toggleDrawer(false)}/>
                     </>
                 }
 

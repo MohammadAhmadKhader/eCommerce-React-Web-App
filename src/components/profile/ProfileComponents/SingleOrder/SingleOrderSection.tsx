@@ -53,7 +53,7 @@ function SingleOrderSection() {
             borderRadius: "8px",
             transition: "400ms",
           }} disableIndicator>Items Ordered</Tab>
-          {singleOrderDetails.status != "Placed" && singleOrderDetails.status != "Cancelled" &&<Tab sx={{
+          {singleOrderDetails.status === "Completed" &&<Tab sx={{
             margin: "5px",
             borderRadius: "8px",
             transition: "400ms",
@@ -112,7 +112,7 @@ function SingleOrderSection() {
           </div>
 
         </TabPanel>
-        {singleOrderDetails.status !== "Placed" && singleOrderDetails.status !== "Cancelled" && <TabPanel value={1} className='bg-transparent'>
+        {singleOrderDetails.status === "Completed" && <TabPanel value={1} className='bg-transparent'>
           <SingleOrderInvoices />
         </TabPanel>}
       </Tabs>
