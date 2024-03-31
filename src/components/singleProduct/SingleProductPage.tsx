@@ -21,6 +21,7 @@ import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCac
 import { BsCart } from 'react-icons/bs';
 import { objectIdSchemaRequired } from '../shared/IdValidation';
 import { CartContext } from '../features/CartFeature/CartProvider';
+import useDebounce from '../customHooks/useDebounce';
 
 
 function SingleProductPage() {
@@ -38,6 +39,7 @@ function SingleProductPage() {
     const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
+    const { debounce } = useDebounce()
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,7 +117,6 @@ function SingleProductPage() {
             }
         }
         setCategoryNameAndId();
-        console.log(userData ? (isItemInCart ? true : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? false : true)) : false)
     }, [userData, product, params.productId, setCategoryNameAndId])
 
 
@@ -124,17 +125,15 @@ function SingleProductPage() {
         if (error) {
             navigate("/")
         }
-        if (!searchParams.get("page") || !searchParams.get("page")) {
+        if (!searchParams.get("page") || !searchParams.get("limit")) {
             searchParams.set("page", "1");
             searchParams.set("limit", "9");
-            setSearchParams(searchParams)
-        } else {
-            getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
+            console.log("Test 1")
+            setSearchParams(searchParams);
         }
 
         setCategoryNameAndId();
-    }, [])
-
+    }, []);
 
     useEffect(() => {
         if ((Number(searchParams.get("limit")) ? Number(searchParams.get("limit")) : 30) > maxLimit) {
@@ -146,11 +145,10 @@ function SingleProductPage() {
             searchParams.set("limit", minLimit.toString())
             setSearchParams(searchParams)
         }
-        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId)
-
-
+        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
+        
         setCategoryNameAndId()
-    }, [searchParams, params.productId])
+    }, [searchParams, params.productId]);
     return (
         <section className='px-3 md:px-5 single-product-page'>
             <div className='px-4 flex items-center gap-x-4 text-color-accent font-semibold my-5'>

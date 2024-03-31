@@ -133,27 +133,22 @@ function Products() {
             limit: searchParams.get("limit") || 1,
             category: searchParams.get("category") ? searchParams.get("category") : undefined,
         }
+        const sortedParams = Object.keys(params).sort();
+        const sortedObj = {};
+        sortedParams.forEach(key => {
+            sortedObj[key] = params[key];
+            if(key === "brand"){
+                sortedObj[key].sort()
+            }
+        });
 
         let linkPath = "";
-        for (const value in params) {
-            if (params[value]?.length > 0) {
-                linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(params[value]) : params[value]) + "&";
+        for (const value in sortedObj) {
+            if (sortedObj[value]?.length > 0) {
+                linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(sortedObj[value]) : sortedObj[value]) + "&";
             }
         }
-        //* test sorting params
-        //const sortedParams = Object.keys(params).sort();
-        // const sortedObj = {};
-        // sortedParams.forEach(key => {
-        //     sortedObj[key] = params[key];
-        // });
-
-        // let linkPath = "";
-        // for (const value in sortedParams) {
-        //     if (sortedParams[value]?.length > 0) {
-        //         linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(sortedParams[value]) : sortedParams[value]) + "&";
-        //     }
-        // }
-
+        
         if (!isCategoriesLoading) {
             categories.forEach((category) => {
                 if (category._id == searchParams.get("category")) {

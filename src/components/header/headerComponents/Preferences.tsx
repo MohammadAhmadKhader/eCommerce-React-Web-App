@@ -8,8 +8,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 function Preferences() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     return (
-        <div className="flex items-center min-w-max mx-3 font-semibold tracking-wide">
-            <ListItemButton disableGutters className="rounded-md " onClick={toggleTheme}>
+        <div className="flex items-center min-w-max mx-2 font-semibold tracking-wide">
+            <ListItemButton disableGutters className="rounded-[12px!important] px-[4px!important]" onClick={toggleTheme}>
                 {
                     theme == "dark" ?
                         <Tooltip title="Switch To Light Mode">

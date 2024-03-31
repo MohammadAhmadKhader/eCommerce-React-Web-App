@@ -47,7 +47,7 @@ function GlobalCachingProvider({ children }) {
     const { GET: GET_Brands, isLoading: isBrandsLoading } = useAxios(true)
     const [categories, setCategories] = useState([])
     const { GET: GET_Categories, isLoading: isCategoriesLoading } = useAxios();
-    const { GET: GET_ProductById, isLoading: isProductByIdLoading, setIsLoading: setIsProductByIdLoading } = useAxios(true)
+    const { GET: GET_ProductById, isLoading: isProductByIdLoading, setIsLoading: setIsProductByIdLoading } = useAxios(false)
     const [reviewsCount, setReviewsCount] = useState(9);
     const [product, setProduct] = useState<IProduct | object>({})
     const [relatedProducts, setRelatedProducts] = useState([])
@@ -99,7 +99,7 @@ function GlobalCachingProvider({ children }) {
             const { data } = await GET_ProductById(`/products/${productId}?page=${page}&limit=${limit}`);
             setProduct(data.product);
             setReviewsCount(data.count);
-            console.log(data);
+            console.log("sent product")
         } catch (error) {
             console.log(error);
         } finally {
