@@ -34,7 +34,7 @@ function Home() {
 
   useEffect(()=>{
     if(loadingMessage){
-      initialLoader.current = toast.loading(`The project backend is uploaded on render free service 
+      initialLoader.current = toast.loading(`The project backend is deployed on render free service 
       therefore will take 50s - 2mins to boot the backend service on first request`,{
         position:"top-center"
       })
