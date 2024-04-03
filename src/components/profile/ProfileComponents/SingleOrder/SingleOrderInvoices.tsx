@@ -3,31 +3,32 @@ import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 import OrderCalcs from "../../../cart/cartComponents/OrderCalcs";
 import { LuDownload } from "react-icons/lu";
 import { GlobalCachingContext } from "../../../features/GlobalCachingContext/GlobalCachingProvider";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CircularLoader from "../../../shared/CircularLoader";
 import { toast } from "react-toastify";
+import OneLineSkeleton from "../../../shared/LoadingSkeletons/OneLineSkeleton";
 
 function SingleOrderInvoices() {
   const { theme } = useContext(ThemeContext);
-  const { singleOrderDetails, getInvoiceByOrderId, invoice, isInvoiceByOrderIdLoading,getSingleOrderDetails } = useContext(GlobalCachingContext);
+  const { singleOrderDetails, getInvoiceByOrderId, invoice, isInvoiceByOrderIdLoading, getSingleOrderDetails, isSingleOrderDetailsLoading } = useContext(GlobalCachingContext);
   const [isClicked, setIsClicked] = useState(false);
   const toastId = useRef(null);
   const params = useParams()
 
-  useEffect(()=>{
+  useEffect(() => {
     getSingleOrderDetails(params.id);
-  },[])
+  }, [])
   useEffect(() => {
     if (invoice && invoice.pdfLink && isClicked) {
       toast.dismiss(toastId.current)
       toast.success("File is ready, Click to download");
     }
-  }, [invoice,isClicked])
-  useEffect(()=>{
-    if(isClicked &&isInvoiceByOrderIdLoading){
+  }, [invoice, isClicked])
+  useEffect(() => {
+    if (isClicked && isInvoiceByOrderIdLoading) {
       toastId.current = toast.loading("Preparing");
     }
-  },[isClicked])
+  }, [isClicked])
 
   return (
     <div>
@@ -41,7 +42,7 @@ function SingleOrderInvoices() {
         </div>
       </div>
       <div className="text-gray-400 font-semibold my-4">
-        {singleOrderDetails?.orderItems?.length} Item(s)
+        {singleOrderDetails?.orderItems?.length || 0} Item(s)
       </div>
       <table className="w-full text-left">
         <thead>
@@ -54,7 +55,7 @@ function SingleOrderInvoices() {
           </tr>
         </thead>
         <tbody>
-          {singleOrderDetails.orderItems?.map((orderItem, index) => {
+          {!isSingleOrderDetailsLoading ? singleOrderDetails.orderItems?.map((orderItem, index) => {
 
             return (
               <tr key={orderItem._id + index}>
@@ -63,7 +64,20 @@ function SingleOrderInvoices() {
                 <td className="py-1.5 text-sm font-semibold">{orderItem.quantity}</td>
               </tr>
             )
-          })}
+          }) : <>
+            <tr>
+              <td className="py-1.5 text-sm font-semibold px-2">
+                <OneLineSkeleton forceMinHeight={"30px"} />
+              </td>
+              <td className="py-1.5 text-sm font-semibold px-2">
+                <OneLineSkeleton forceMinHeight={"30px"} />
+              </td>
+              <td className="py-1.5 text-sm font-semibold px-2">
+                <OneLineSkeleton forceMinHeight={"30px"} />
+              </td>
+            </tr>
+
+          </>}
 
         </tbody>
       </table>
