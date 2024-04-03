@@ -17,7 +17,7 @@ function LogoutButton({customClasses,isHidden = true,isCentered = false,size = 2
   }
   return (
     <button className={`${rebuildClasses ? ``:` items-center ${ isCentered ? "justify-center" :"justify-between"} font-semibold border border-color-accent
-         px-4 rounded-md py-1 duration-300 hover:text-white hover:bg-color-accent ${ isHidden ? "hidden" :""}  md:flex`} ${customClasses}`}
+         px-4 rounded-md py-1 text-color-accent duration-300 hover:text-white hover:bg-color-accent ${ isHidden ? "hidden" :""}  md:flex`} ${customClasses}`}
           onClick={()=>{
               setUserData(null);
               setUserToken(null);

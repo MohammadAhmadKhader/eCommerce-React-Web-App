@@ -10,7 +10,7 @@ function CartTable() {
     const { theme } = useContext(ThemeContext)
     const { cartItems, isCartLoading }: any = useContext(CartContext)
     return (
-        <div className='overflow-x-scroll cart-table-container'>
+        <div className='overflow-x-scroll md:overflow-auto cart-table-container'>
             <table className='mt-5 w-full' style={{
                 minWidth: "660px"
             }}>

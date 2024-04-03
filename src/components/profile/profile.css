@@ -1,9 +1,11 @@
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   color: transparent;
-  background: none;
+  background: none ;
   z-index: 1;
 }
+
+
 .profile a.active{
   position: relative;
   color: var(--accent-color);

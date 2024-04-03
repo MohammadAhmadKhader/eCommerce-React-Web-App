@@ -99,7 +99,6 @@ function GlobalCachingProvider({ children }) {
             const { data } = await GET_ProductById(`/products/${productId}?page=${page}&limit=${limit}`);
             setProduct(data.product);
             setReviewsCount(data.count);
-            console.log("sent product")
         } catch (error) {
             console.log(error);
         } finally {

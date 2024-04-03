@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import CarouselSwiper from "../singleProduct/SingleProductPageComponents/CarouselSwiper";
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import MainCarousel from './HomeComponents/MainCarousel';
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from 'react-router-dom';

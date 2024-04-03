@@ -72,7 +72,7 @@ function ProfileInformation() {
           }
         }
       }
-      
+
       const { data } = await PUT(`/users/${userData._id}`, formData, userToken)
       if (data.message == "success") {
         toast.success("Information has been changed successfully");

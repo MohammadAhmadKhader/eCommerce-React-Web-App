@@ -5,8 +5,6 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import { IoPersonAdd } from "react-icons/io5";
 import { UserContext } from '../../features/UserFeature/UserProvider';
@@ -24,18 +22,18 @@ import Collapse from '@mui/material/Collapse';
 import ListItemDrawer from './ListItemDrawer';
 import ShortWebSiteLogo from '../../shared/ShortWebSiteLogo';
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { WindowWidthContext } from '../../features/WindowWidthFeature/WindowWidthProvider';
 import OneLineSkeleton from '../../shared/LoadingSkeletons/OneLineSkeleton';
+import { FaRegMessage } from "react-icons/fa6";
 
 
 export default function MenuDrawer({ isOpen, setIsOpen }) {
     const toggleDrawer = (newOpen: boolean) => () => {
         setIsOpen(newOpen);
     };
+
     const { theme } = useContext(ThemeContext);
     const { userToken, userData, isUserFetchDataLoading } = useContext(UserContext);
     const [isPreferenceListOpen, setIsPreferenceListOpen] = useState(false);
-
     const DrawerList = (
         <Box sx={{
             minHeight: "100%",
@@ -60,9 +58,9 @@ export default function MenuDrawer({ isOpen, setIsOpen }) {
                 {(userToken != null || userData != null) && !isUserFetchDataLoading && !isUserFetchDataLoading ?
 
                     <>
-                        <ListItemDrawer Title='Profile' IconComponent={CgProfile} To={'/profile/information'} onClick={toggleDrawer(false)}/>
-                        <ListItemDrawer Title='Orders' IconComponent={GoChecklist} To={"/profile/orders?status=Completed&page=1&limit=9"}  onClick={toggleDrawer(false)}/>
-                        <ListItemDrawer Title='Reviews' IconComponent={BiCommentDots} To={"/profile/reviews?page=1&limit=9"}  onClick={toggleDrawer(false)}/>
+                        <ListItemDrawer Title='Profile' IconComponent={CgProfile} To={'/profile/information'} onClick={toggleDrawer(false)} />
+                        <ListItemDrawer Title='Orders' IconComponent={GoChecklist} To={"/profile/orders?status=Completed&page=1&limit=9"} onClick={toggleDrawer(false)} />
+                        <ListItemDrawer Title='Reviews' IconComponent={BiCommentDots} To={"/profile/reviews?page=1&limit=9"} onClick={toggleDrawer(false)} />
 
                         <ListItem disablePadding onClick={toggleDrawer(false)}
                             sx={{
@@ -109,8 +107,8 @@ export default function MenuDrawer({ isOpen, setIsOpen }) {
                         <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"200px"} />
                         <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"200px"} />
                     </div> : !userData && !userToken && <>
-                        <ListItemDrawer Title='Sign In' IconComponent={MdLogin} To={"/login"} onClick={toggleDrawer(false)}/>
-                        <ListItemDrawer Title='Sign Up' IconComponent={IoPersonAdd} To={"/signup"} onClick={toggleDrawer(false)}/>
+                        <ListItemDrawer Title='Sign In' IconComponent={MdLogin} To={"/login"} onClick={toggleDrawer(false)} />
+                        <ListItemDrawer Title='Sign Up' IconComponent={IoPersonAdd} To={"/signup"} onClick={toggleDrawer(false)} />
                     </>
                 }
 
@@ -141,7 +139,7 @@ export default function MenuDrawer({ isOpen, setIsOpen }) {
     return (
         <div className='flex items-center justify-center'>
             <button className='mx-2' onClick={toggleDrawer(true)}>
-                <BiDotsVerticalRounded size={30} className='-ms-2.5' />
+                <BiDotsVerticalRounded size={30} className='-ms-2.5 duration-[400ms] hover:scale-125 hover:text-color-accent' />
             </button>
             <Drawer open={isOpen} onClose={toggleDrawer(false)}>
                 {DrawerList}
