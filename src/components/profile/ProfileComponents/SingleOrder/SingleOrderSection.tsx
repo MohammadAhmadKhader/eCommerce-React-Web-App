@@ -9,11 +9,12 @@ import SingleOrderInvoices from './SingleOrderInvoices';
 import OrderCalcs from '../../../cart/cartComponents/OrderCalcs';
 import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
 import { Link, useParams } from 'react-router-dom';
+import CircularLoader from '../../../shared/CircularLoader';
 
 
 function SingleOrderSection() {
   const { theme } = useContext(ThemeContext);
-  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails, setOrders } = useContext(GlobalCachingContext);
+  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails, setOrders,isSingleOrderDetailsLoading } = useContext(GlobalCachingContext);
   const params = useParams();
   useEffect(() => {
     if (orders && !localStorage.getItem("CheckedOut")) {
@@ -38,7 +39,7 @@ function SingleOrderSection() {
     console.log(singleOrderDetails)
   }, [singleOrderDetails])
   return (
-    <div className='overflow-x-scroll md:overflow-auto MyOrdersContainer'>
+    <div className='overflow-x-scroll md:overflow-auto MyOrdersContainer flex flex-col flex-wrap px-2'>
       <Tabs className='MyOrders Tabs rounded-lg min-w-[600px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={0} style={{
         backgroundColor: "transparent",
         color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
@@ -75,7 +76,7 @@ function SingleOrderSection() {
                 }}>Order Details</h5>
                 <div className='min-w-72'>
                   {singleOrderDetails ? <OrderCalcs deliveryFee={singleOrderDetails.deliveryFee} discount={singleOrderDetails.discount}
-                    grandTotal={singleOrderDetails.grandTotal} subTotal={singleOrderDetails.subTotal} /> : <div>loading</div>}
+                    grandTotal={singleOrderDetails.grandTotal} subTotal={singleOrderDetails.subTotal} /> : <CircularLoader minHeight={"160px"} />}
                 </div>
               </div>
 
@@ -84,7 +85,7 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Payment Details</h5>
                 <div>
-                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails ? singleOrderDetails?.paymentDetails : "No Details"}</h6>
+                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails ? singleOrderDetails?.paymentDetails : "No Details" }</h6>
                 </div>
               </div>
 
@@ -92,19 +93,19 @@ function SingleOrderSection() {
                 <h5 className='mt-5 opacity-70 font-semibold' style={{
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Address Details</h5>
-                <div>
-                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.country || "Palestine"}</p>
+                {!isSingleOrderDetailsLoading ? <div>
+                  <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.country}</p>
                   <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.state}</p>
                   <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.city}</p>
                   <p className='tracking-wider font-semibold'>{singleOrderDetails?.address?.streetAddress}</p>
-                </div>
+                </div> : <CircularLoader minHeight={"160px"} />}
               </div>
 
             </div>
 
             <div className='text-left lg:text-right'>
 
-              {singleOrderDetails && singleOrderDetails.status !== "Cancelled" && singleOrderDetails.status !== "Completed" && <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
+              {!isSingleOrderDetailsLoading && singleOrderDetails?.status !== "Cancelled" && singleOrderDetails?.status !== "Completed" && <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
                text-white hover:bg-transparent hover:text-color-accent px-8 py-1.5 rounded-md text-sm font-semibold tracking-wide'>
                 Complete Checkout
               </Link>}

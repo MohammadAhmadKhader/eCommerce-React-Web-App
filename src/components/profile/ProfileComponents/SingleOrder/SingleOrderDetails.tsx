@@ -1,11 +1,12 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { ThemeContext } from '../../../features/ThemeFeature/ThemeProvider';
 import SingleOrder from './SingleOrder';
 import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
+import CircularLoader from '../../../shared/CircularLoader';
 
 function SingleOrderDetails() {
     const { theme } = useContext(ThemeContext);
-    const { singleOrderDetails } = useContext(GlobalCachingContext);
+    const { singleOrderDetails, isSingleOrderDetailsLoading } = useContext(GlobalCachingContext);
     return (
         <div>
             <div>
@@ -18,7 +19,7 @@ function SingleOrderDetails() {
                 </div>
             </div>
             <div className='flex flex-col gap-y-2'>
-                {singleOrderDetails?.orderItems?.length > 0 ?
+                {!isSingleOrderDetailsLoading && singleOrderDetails?.orderItems?.length > 0 ?
                     singleOrderDetails?.orderItems.map((orderItem) => {
                         console.log(singleOrderDetails)
                         return (
@@ -26,10 +27,8 @@ function SingleOrderDetails() {
                                 name={orderItem.name} quantity={orderItem.quantity} key={orderItem._id} />
                         )
                     })
-
-                    : <div>No data</div>
+                    : <CircularLoader minHeight={"250px"} />
                 }
-
             </div>
         </div>
     )
