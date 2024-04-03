@@ -66,8 +66,8 @@ function MyOrders() {
     }, [searchParams])
 
     return (
-        <div className='overflow-scroll MyOrdersContainer'>
-            <Tabs className='MyOrders Tabs rounded-lg min-w-[700px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={searchParams.get("status") || "Completed"}
+        <div className='overflow-x-scroll md:overflow-auto'>
+            <Tabs className='MyOrders Tabs rounded-lg min-w-[700px] min-h-[500px]' aria-label="Orders tabs" defaultValue={searchParams.get("status") || "Completed"}
                 onChange={(event, newValue) => {
                     searchParams.set("status", `${newValue}`);
                     searchParams.set("page", "1")

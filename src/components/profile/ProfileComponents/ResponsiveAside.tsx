@@ -51,7 +51,10 @@ function ResponsiveAside() {
                         backgroundColor: theme === "dark" ? "var(--dark--bg--color)" : "var(--light--bg--color)",
                         color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)"
                     }}>
-                        <ProfileAsideOptions CustomComponent={LogoutButton} />
+
+                        <div onClick={()=>{setLayout(undefined)}}>
+                            <ProfileAsideOptions CustomComponent={LogoutButton} />
+                        </div>
                     </List>
                 </ModalDialog>
             </Modal>

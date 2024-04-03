@@ -10,12 +10,13 @@ import Stack from '@mui/material/Stack';
 import useDebounce from '../../customHooks/useDebounce';
 
 
+
 function OldOrdersTable({ orders, count, getOrders }) {
   const { theme } = useContext(ThemeContext);
   const { isUserFetchDataLoading } = useContext(UserContext);
   const { debounce } = useDebounce()
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   useEffect(() => {
     if (searchParams.get("status") && (searchParams.get("status") == "Processing" ||
       searchParams.get("status") == "Completed" || searchParams.get("status") == "Cancelled" || searchParams.get("status") == "Placed")) {
@@ -28,7 +29,7 @@ function OldOrdersTable({ orders, count, getOrders }) {
 
   return (
     <div>
-      <div className='grid grid-cols-10 py-2 border-b opacity-70 font-semibold text-left w-full px-6 gap-x-5' style={{
+      <div className='grid grid-cols-10 py-2 border-b opacity-70 font-semibold text-left w-full px-6 gap-x-5 ' style={{
         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
       }}>
         <h4 className='col-span-3'>Order ID</h4>
@@ -42,7 +43,7 @@ function OldOrdersTable({ orders, count, getOrders }) {
             orders.map((orderItem) => {
               return (
                 <MyOrdersItem OrderID={orderItem._id} Date={orderItem.createdAt}
-                  IsPaid={orderItem?.isPaid || false } Price={orderItem.grandTotal} key={orderItem._id} />
+                  IsPaid={orderItem?.isPaid || false} Price={orderItem.grandTotal} key={orderItem._id} />
               )
             }) :
             <div className='w-full'>

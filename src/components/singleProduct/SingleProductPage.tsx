@@ -275,7 +275,7 @@ function SingleProductPage() {
                                  text-white bg-color-accent hover:bg-transparent hover:text-color-accent border-color-accent border-2 duration-300
                                  disabled:bg-color-accent disabled:opacity-65 disabled:text-white disabled:hover:text-white
                                  '
-                                            disabled={userData ? (isItemInCart ? true : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? false : true)) : false}
+                                            disabled={userData ? (isItemInCart ? true : ((product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0) ? false : true)) : true}
                                             onClick={() => {
                                                 if (userData && !isItemInCart && (product && (product as IProduct)?.quantity && (product as IProduct)?.quantity != 0)) {
                                                     addToCart();

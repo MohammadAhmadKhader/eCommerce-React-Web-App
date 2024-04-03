@@ -13,7 +13,7 @@ import { Link, useParams } from 'react-router-dom';
 
 function SingleOrderSection() {
   const { theme } = useContext(ThemeContext);
-  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,setOrders } = useContext(GlobalCachingContext);
+  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails, setOrders } = useContext(GlobalCachingContext);
   const params = useParams();
   useEffect(() => {
     if (orders && !localStorage.getItem("CheckedOut")) {
@@ -27,7 +27,7 @@ function SingleOrderSection() {
         getSingleOrderDetails(params.id)
       }
     }
-    if(localStorage.getItem("CheckedOut") && localStorage.getItem("CheckedOut") == "true"){
+    if (localStorage.getItem("CheckedOut") && localStorage.getItem("CheckedOut") == "true") {
       localStorage.removeItem("CheckedOut")
       getSingleOrderDetails(params.id)
     }
@@ -38,7 +38,7 @@ function SingleOrderSection() {
     console.log(singleOrderDetails)
   }, [singleOrderDetails])
   return (
-    <div className='overflow-scroll MyOrdersContainer'>
+    <div className='overflow-x-scroll md:overflow-auto MyOrdersContainer'>
       <Tabs className='MyOrders Tabs rounded-lg min-w-[600px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={0} style={{
         backgroundColor: "transparent",
         color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
@@ -53,7 +53,7 @@ function SingleOrderSection() {
             borderRadius: "8px",
             transition: "400ms",
           }} disableIndicator>Items Ordered</Tab>
-          {singleOrderDetails.status === "Completed" &&<Tab sx={{
+          {singleOrderDetails.status === "Completed" && <Tab sx={{
             margin: "5px",
             borderRadius: "8px",
             transition: "400ms",
@@ -104,7 +104,7 @@ function SingleOrderSection() {
 
             <div className='text-left lg:text-right'>
 
-              { singleOrderDetails && singleOrderDetails.status !== "Cancelled" && singleOrderDetails.status !== "Completed" && <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
+              {singleOrderDetails && singleOrderDetails.status !== "Cancelled" && singleOrderDetails.status !== "Completed" && <Link to={`/checkout/${singleOrderDetails?._id}`} className='bg-color-accent duration-300 border border-color-accent
                text-white hover:bg-transparent hover:text-color-accent px-8 py-1.5 rounded-md text-sm font-semibold tracking-wide'>
                 Complete Checkout
               </Link>}

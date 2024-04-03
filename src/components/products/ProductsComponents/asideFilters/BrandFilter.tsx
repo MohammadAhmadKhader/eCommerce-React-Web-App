@@ -1,18 +1,12 @@
 import { useSearchParams } from 'react-router-dom';
 import CheckboxInput from './CheckboxInput';
-import { useEffect, useState } from 'react';
-import useAxios from '../../../customHooks/useAxios';
+import { useContext, useEffect } from 'react';
 import OneLineSkeleton from '../../../shared/LoadingSkeletons/OneLineSkeleton';
+import { GlobalCachingContext } from '../../../features/GlobalCachingContext/GlobalCachingProvider';
 
 
 const BrandForm = () => {
-    const { GET, isLoading } = useAxios()
-
-    const [brands, setBrands] = useState([])
-    const getBrands = async () => {
-        const { data } = await GET("/brands")
-        setBrands(data.brands)
-    }
+    const {brands,isBrandsLoading,getBrands} =useContext(GlobalCachingContext);
     useEffect(() => {
         getBrands()
     }, [])
@@ -43,7 +37,7 @@ const BrandForm = () => {
 
     return (
         <div className='flex flex-col justify-center'>
-            {isLoading ?
+            {isBrandsLoading ?
                 <div className='flex flex-col gap-5'>
                     <OneLineSkeleton />
                     <OneLineSkeleton />

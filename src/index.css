@@ -35,6 +35,8 @@
 
   scrollbar-width: thin;
   scrollbar-color: rgba(74,131,246,0.65) #f1f1f1;
+  scroll-behavior: smooth;
+  
   --stars--color:rgb(254,191,0);
   
   background-color: var(--bg-color);
@@ -83,10 +85,12 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 12px; 
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background-color: var(--light--bg--color);
   box-shadow:0px 0px 8px 1px black inset;
+  height: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background-color:rgba(29,155,240,0.65);
@@ -98,6 +102,7 @@ body {
 ::-webkit-scrollbar-corner {
   background-color: transparent;
 }
+
 
 .stars-color{
   color:var(--stars--color)

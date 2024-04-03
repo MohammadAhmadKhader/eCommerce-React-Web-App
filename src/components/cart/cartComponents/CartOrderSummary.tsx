@@ -75,14 +75,14 @@ function CartOrderSummary() {
               </span>
 
             </button></Tooltip>
-
-          <Link to="/products?page=1&limit=9" title='Continue Shopping'
+            <Tooltip title="Continue Shopping">
+          <Link to="/products?page=1&limit=9"
             className='duration-300 text-color-accent border-color-accent border rounded-md px-1 md:px-3
            py-1.5 w-1/2 hover:text-white hover:bg-color-accent flex items-center justify-center text-sm'>
             <span className='line-clamp-1'>
               Continue Shopping
             </span>
-          </Link>
+          </Link></Tooltip>
         </div>
       </div>
 
