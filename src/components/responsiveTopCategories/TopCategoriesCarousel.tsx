@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Link } from 'react-router-dom';
+import CircularLoader from '../shared/CircularLoader';
 
 interface SwiperCarousel {
     Iterable: Array<any>;
@@ -14,11 +15,10 @@ interface SwiperCarousel {
 
 function SwiperCarousel({ Iterable }: SwiperCarousel) {
     return (
-        <Swiper
+        <>{Iterable.length > 0 ? <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={0}
             slidesPerView={5}
-
             pagination={{ clickable: true }}
             breakpoints={{
                 0: {
@@ -49,7 +49,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
                     </SwiperSlide>
                 )
             })}
-        </Swiper>
+        </Swiper> : <CircularLoader minHeight={"200px"} />}</>
     );
 }
 
