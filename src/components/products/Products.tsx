@@ -17,6 +17,7 @@ import useDebounce from '../customHooks/useDebounce.tsx'
 import { objectIdSchemaOptional } from '../shared/IdValidation.ts'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
 import { toast } from 'react-toastify';
+import PaginationComponent from '../shared/PaginationComponent.tsx';
 
 function Products() {
     const navigate = useNavigate()
@@ -263,25 +264,7 @@ function Products() {
                         }
                     </div>
 
-                    <Stack spacing={2} sx={{
-                        bgcolor: theme === "dark" ? "var(--light--bgCard--color)" : "var(--dark--bgCard--color)",
-                        maxWidth: "fit-content",
-                        marginBlock: "10px",
-                    }}
-                        style={{
-                            boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
-                        }}
-                        className='rounded-xl'
-                    >
-                        <Pagination count={Math.ceil(count / parseInt(searchParams.get("limit")))}
-                            onChange={(event, value) => {
-                                if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
-                                    searchParams.set("page", value.toString())
-                                    setSearchParams(searchParams);
-                                }
-                            }}
-                        />
-                    </Stack>
+                    <PaginationComponent count={count} />
                 </div>
             </div>
         </section>
