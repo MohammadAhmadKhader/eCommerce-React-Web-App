@@ -5,7 +5,7 @@ import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import "./MyOrders.css"
-import OldOrdersTable from './OldOrdersTable';
+import OrdersTable from './OrdersTable';
 import { useSearchParams } from 'react-router-dom';
 import useAxios from '../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
@@ -110,21 +110,21 @@ function MyOrders() {
                 </TabList>
                 <TabPanel value={"Placed"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
+                    <OrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
 
                 <TabPanel value={"Processing"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
+                    <OrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
 
                 <TabPanel value={"Completed"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
+                    <OrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
                 <TabPanel value={"Cancelled"} className='bg-transparent'>
 
-                    <OldOrdersTable orders={orders} count={count} getOrders={getOrders} />
+                    <OrdersTable orders={orders} count={count} getOrders={getOrders} />
                 </TabPanel>
             </Tabs>
         </div>

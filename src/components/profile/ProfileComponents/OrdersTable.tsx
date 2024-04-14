@@ -1,14 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import MyOrdersItem from './MyOrdersItem';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import CircularLoader from '../../shared/CircularLoader';
-import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import useDebounce from '../../customHooks/useDebounce';
-
+import PaginationComponent from '../../shared/PaginationComponent';
 
 
 function OldOrdersTable({ orders, count, getOrders }) {
@@ -54,27 +51,8 @@ function OldOrdersTable({ orders, count, getOrders }) {
               </div>
             </div> : <CircularLoader minHeight={500} />
         }
-        {orders?.length > 0 && <Stack className='bg-color-accent rounded-md mx-auto mt-auto' spacing={2} sx={{
-          bgcolor: theme === "dark" ? "var(--light--bgCard--color)" : "var(--dark--bgCard--color)",
-          maxWidth: "fit-content",
-          marginBlock: "10px",
-        }}
-          style={{
-            boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
-            backgroundColor: "var(--accent-color)",
-
-          }}>
-          <Pagination
-            count={Math.ceil(count / parseInt(searchParams.get("limit")))}
-            onChange={(event, value) => {
-              if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
-                searchParams.set("page", value.toString())
-                setSearchParams(searchParams);
-              }
-
-            }}
-          />
-        </Stack>}
+        {orders?.length > 0 && <PaginationComponent customClasses='bg-color-accent rounded-md mx-auto mt-auto' count={count} />
+        }
       </div>
 
     </div>
