@@ -7,13 +7,11 @@ import useAxios from '../../customHooks/useAxios'
 
 function LogoutButton({customClasses,isHidden = true,isCentered = false,size = 22,rebuildClasses=false} : ILogoutButton) {
   const navigate = useNavigate()
-  const { setUserData,setUserToken,userData} = useContext(UserContext)
+  const { setUserData,setUserToken,userToken} = useContext(UserContext)
   const {DELETE} = useAxios()
 
-  const logout = async(userId)=>{
-    await DELETE("/users/logout",{
-      userId,
-    })
+  const logout = async()=>{
+    await DELETE("/users/logout",{},userToken)
   }
   return (
     <button className={`${rebuildClasses ? ``:` items-center ${ isCentered ? "justify-center" :"justify-between"} font-semibold border border-color-accent
@@ -22,7 +20,7 @@ function LogoutButton({customClasses,isHidden = true,isCentered = false,size = 2
               setUserData(null);
               setUserToken(null);
               localStorage.removeItem("userTokenGeekOut")
-              logout(userData._id)
+              logout()
               navigate("/")
             }} 
          >
