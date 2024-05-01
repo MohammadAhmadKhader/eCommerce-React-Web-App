@@ -31,7 +31,6 @@ function Checkout() {
     try {
       const { data } = await POST_createPaymentIntent("/orders/stripe/createPaymentIntent", {
         orderId: singleOrderDetails._id,
-        customerId: userData._id
       }, userToken);
       console.log(data)
       setClientSecret(data.clientSecret);

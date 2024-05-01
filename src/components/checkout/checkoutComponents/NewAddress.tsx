@@ -26,7 +26,7 @@ const schema = yup
 
 function NewAddress() {
     const { theme } = useContext(ThemeContext)
-    const {userData,userToken} = useContext(UserContext)
+    const {userToken} = useContext(UserContext)
     const [open, setOpen] = useState(false);
     const {POST} = useAxios()
     const handleClick = () => {
@@ -52,7 +52,6 @@ function NewAddress() {
                 mobileNumber:submittedData.mobileNumber,
                 pinCode:submittedData.pinCode,
                 state:submittedData.state,
-                userId:userData._id
             },userToken)
             console.log(data)
             if(data.message =="success"){

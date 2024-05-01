@@ -9,13 +9,10 @@ function ResetPasswordProtectingRoute({ children }: { children: ReactNode }) {
   const { GET } = useAxios()
   const verifyResetPasswordToken = async (token: string) => {
     try {
-      console.log(token)
       const { data } = await GET(`/users/verifyResetPasswordToken/${token}`)
-      if (!data["message"]) {
+      if (data["message"] != "success") {
         navigate("/");
-        console.log("first")
       }
-      console.log(data)
     } catch (error) {
       navigate("/")
       console.log(error)

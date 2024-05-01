@@ -1,8 +1,6 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
-import { MdOutlineCancel } from "react-icons/md";
-import { IWishlistItem } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import useDebounce from '../../customHooks/useDebounce';
@@ -12,16 +10,12 @@ import Tooltip from '@mui/material/Tooltip';
 function MyWishListItem({ imgUrl, name, productId, wishListId }) {
     const { theme } = useContext(ThemeContext)
     const { DELETE } = useAxios();
-    const { userData, userToken, getUserData } = useContext(UserContext)
+    const { userToken, getUserData } = useContext(UserContext)
     const { debounce } = useDebounce()
 
     const removeFromWishList = async () => {
         try {
-            console.log(userData._id, wishListId)
-            const response = await DELETE(`/wishlists`, {
-                userId: userData._id,
-                wishlistItemId: wishListId
-            }, userToken);
+            const response = await DELETE(`/wishlists/${wishListId}`, {}, userToken);
             console.log(response)
             if (response.status == 202) {
                 toast.success("Product was removed from wishlist");

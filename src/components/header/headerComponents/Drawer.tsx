@@ -23,7 +23,6 @@ import ListItemDrawer from './ListItemDrawer';
 import ShortWebSiteLogo from '../../shared/ShortWebSiteLogo';
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import OneLineSkeleton from '../../shared/LoadingSkeletons/OneLineSkeleton';
-import { FaRegMessage } from "react-icons/fa6";
 
 
 export default function MenuDrawer({ isOpen, setIsOpen }) {

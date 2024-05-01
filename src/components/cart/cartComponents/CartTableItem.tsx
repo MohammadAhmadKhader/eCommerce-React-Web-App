@@ -29,10 +29,7 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
     }, [userData])
     const deleteItemFromCart = async (cartItemId: string) => {
         try {
-            const response = await DELETE("/carts/deleteCartItem", {
-                userId: userData._id,
-                cartItemId: cartItemId
-            }, userToken)
+            const response = await DELETE(`/carts/${cartItemId}`, {}, userToken)
             if (response.status == 204) {
                 toast.loading("Updating cart items", {
                     position: "top-center",
@@ -49,7 +46,6 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
     const addItemToWishList = async (productId: string) => {
         try {
             const { data } = await POST("/wishlists", {
-                userId: userData._id,
                 productId: productId
             }, userToken)
 
