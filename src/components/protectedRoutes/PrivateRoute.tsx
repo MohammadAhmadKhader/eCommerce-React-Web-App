@@ -8,7 +8,6 @@ function PrivateRoute({children} : {children : ReactNode}) {
         return <Navigate to="/"/>
     }
 
-
     return children
 }
 

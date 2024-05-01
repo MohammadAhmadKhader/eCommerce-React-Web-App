@@ -15,7 +15,7 @@ function CartOrderSummary() {
   const { debounce } = useDebounce()
   const { POST } = useAxios()
   const { theme } = useContext(ThemeContext)
-  const { userToken, userData, getUserData } = useContext(UserContext)
+  const { userToken, getUserData } = useContext(UserContext)
   const { cartItems } = useContext(CartContext);
   const [subTotal, setSubTotal] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
@@ -37,9 +37,7 @@ function CartOrderSummary() {
   const createOrder = async () => {
     try {
       loadingRef.current = toast.loading("Your order being placed...")
-      const { data } = await POST("/orders", {
-        userId: userData._id,
-      }, userToken)
+      const { data } = await POST("/orders", {}, userToken)
 
       if (data.message == "success") {
         getUserData()

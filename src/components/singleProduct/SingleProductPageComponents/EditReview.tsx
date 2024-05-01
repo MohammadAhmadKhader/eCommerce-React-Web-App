@@ -61,9 +61,7 @@ function EditReview({ setIsEditReviewModalOpen,review }) {
                 toast.error("You must sign in!")
                 return;
             }
-            const { data } = await PUT("/reviews", {
-                reviewId: review._id,
-                userId: userData?._id,
+            const { data } = await PUT(`/reviews/${review._id}`, {
                 rating: submittedData.rating,
                 comment: submittedData.comment
             }, userToken);

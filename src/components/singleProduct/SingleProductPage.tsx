@@ -59,7 +59,6 @@ function SingleProductPage() {
     const addToCart = async () => {
         try {
             const { data } = await POST("/carts", {
-                userId: userData._id,
                 quantity: quantity,
                 productId: (product as IProduct)._id
             }, userToken)
@@ -81,7 +80,6 @@ function SingleProductPage() {
     const addToWishList = async () => {
         try {
             const { data } = await POST(`/wishlists`, {
-                userId: userData._id,
                 productId: params.productId
             }, userToken);
 

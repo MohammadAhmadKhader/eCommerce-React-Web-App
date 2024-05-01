@@ -21,7 +21,7 @@ function MyOrders() {
     const getOrders = async (status: string, page: string, limit: string) => {
         try {
             if (userData) {
-                const { data } = await GET(`/orders/${userData._id}?status=${status}&page=${page}&limit=${limit}`, userToken);
+                const { data } = await GET(`/orders?status=${status}&page=${page}&limit=${limit}`, userToken);
                 setCount(data.count)
                 setOrders(data.orders);
             }

@@ -48,7 +48,7 @@ function ProfileInformation() {
 
   useEffect(() => {
     const subscription = watch((values) => {
-      if (values?.birthDate.toString() == "" && values?.email == "" && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
+      if (values?.birthDate as unknown as string == "" && values?.email == "" && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
         setIsDefaultValues(true)
       } else {
         setIsDefaultValues(false)
@@ -66,18 +66,20 @@ function ProfileInformation() {
       for (const key in submittedData) {
         if (submittedData[key as keyof UserData] != undefined && submittedData[key as keyof UserData] != "") {
           if (key !== "userImg") {
-            { formData.append(key, submittedData[key]) }
+            formData.append(key, submittedData[key])
           } else {
             formData.append("userImg", userImage)
           }
         }
       }
 
-      const { data } = await PUT(`/users/${userData._id}`, formData, userToken)
+      const { data } = await PUT(`/users/userInformation`, formData, userToken)
+      console.log(data)
       if (data.message == "success") {
         toast.success("Information has been changed successfully");
         reset();
         getUserData();
+        setIsDefaultValues(true)
       }
     } catch (error) {
       toast.error("Something Went Wrong Please Try Again Later")

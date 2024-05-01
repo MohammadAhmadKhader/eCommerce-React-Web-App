@@ -24,11 +24,7 @@ function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewCom
 
     const deleteReview = async (productId: string, reviewId: string) => {
         try {
-            const response = await DELETE("/reviews", {
-                productId,
-                reviewId
-            }, userToken)
-
+            const response = await DELETE(`/reviews/${productId}/${reviewId}`, {}, userToken)
             if (response.status == 204) {
                 toast.success("Review was deleted successfully!");
                 getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", productId);

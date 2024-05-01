@@ -64,7 +64,6 @@ function SubmitReview() {
             }
             const { data } = await POST("/reviews", {
                 productId: params.productId,
-                userId: userData?._id,
                 rating: submittedData.rating,
                 comment: submittedData.comment
             }, userToken);

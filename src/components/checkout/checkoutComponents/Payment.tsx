@@ -63,9 +63,8 @@ function Payment() {
 
   const OrderCheckingOut = async (orderId: string, address: any) => {
     try {
-      const { data } = await POST_OrderCheckingOut("/orders/stripe/OrderCheckingOut", {
+      const { data } = await POST_OrderCheckingOut("/orders/stripe/orderCheckingOut", {
         orderId,
-        customerId: userData._id,
         address
       }, userToken)
       console.log(data);
