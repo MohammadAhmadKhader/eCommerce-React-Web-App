@@ -14,7 +14,7 @@ import { IoChevronForwardOutline } from "react-icons/io5";
 import useAxios from '../customHooks/useAxios.tsx'
 import { useNavigate } from 'react-router-dom'
 import useDebounce from '../customHooks/useDebounce.tsx'
-import { objectIdSchemaOptional } from '../shared/IdValidation.ts'
+import { objectIdSchemaOptional } from '../../schemas/IdValidation.ts'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
 import { toast } from 'react-toastify';
 import PaginationComponent from '../shared/PaginationComponent.tsx';
@@ -137,7 +137,7 @@ function Products() {
         const sortedObj = {};
         sortedParams.forEach(key => {
             sortedObj[key] = params[key];
-            if(key === "brand"){
+            if (key === "brand") {
                 sortedObj[key].sort()
             }
         });
@@ -148,7 +148,7 @@ function Products() {
                 linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(sortedObj[value]) : sortedObj[value]) + "&";
             }
         }
-        
+
         if (!isCategoriesLoading) {
             categories.forEach((category) => {
                 if (category._id == searchParams.get("category")) {

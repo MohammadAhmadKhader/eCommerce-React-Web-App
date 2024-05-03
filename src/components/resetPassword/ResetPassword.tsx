@@ -1,20 +1,15 @@
 import Input from '../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ResetPasswordForm } from '../../types/types'
 import useAxios from '../customHooks/useAxios'
 import { toast } from 'react-toastify'
-import useDebounce from '../customHooks/useDebounce'
+import { resetUserPasswordSchema } from '../../schemas/userSchemas'
 
-const schema = yup
-    .object({
-        newPassword: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-        confirmedNewPassword: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-    })
+
 function ResetPassword() {
     // Debouncing mechanism against spam
     const navigate = useNavigate()
@@ -29,7 +24,7 @@ function ResetPassword() {
         reset,
         formState: { errors ,isSubmitting}
     } = useForm<ResetPasswordForm>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(resetUserPasswordSchema),
     });
 
     const onSubmit: SubmitHandler<ResetPasswordForm> = async (submittedData) => {

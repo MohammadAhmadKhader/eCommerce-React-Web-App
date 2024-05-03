@@ -4,26 +4,15 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FaChevronDown } from "react-icons/fa6";
 import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "joi";
-import { tlds } from '@hapi/tlds';
 import { UserData } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import CircularLoader from '../../shared/CircularLoader';
-import { useBlocker, useNavigate } from 'react-router-dom';
+import { useBlocker} from 'react-router-dom';
 import ProfileModal from './ProfileModal';
+import { userInformationSchema } from '../../../schemas/userSchemas';
 
-
-const schema = Joi.object({
-  firstName: Joi.string().min(4).max(32).allow(""),
-  lastName: Joi.string().min(4).max(32).allow(""),
-  email: Joi.string().email({ tlds: { allow: tlds } }).min(7).max(64).allow(""),
-  mobileNumber: Joi.string().min(7).max(20).allow(""),
-  userImg: Joi.any(),
-  // minimum is before 80 years from now and max is before 5 years from now
-  birthDate: Joi.date().max(new Date(Date.now() - 157680000000)).min(new Date(Date.now() - 2522880000000)).allow(""),
-})
 
 function ProfileInformation() {
   const { theme } = useContext(ThemeContext)
@@ -32,7 +21,7 @@ function ProfileInformation() {
   const { PUT } = useAxios()
   const { register, handleSubmit, formState, reset, watch, getValues } = useForm<UserData>({
     mode: "onChange",
-    resolver: joiResolver(schema),
+    resolver: joiResolver(userInformationSchema),
   });
   const { errors, isValid, isDirty, isSubmitting } = formState;
   const inputFileRef = useRef(null);
@@ -74,7 +63,7 @@ function ProfileInformation() {
       }
 
       const { data } = await PUT(`/users/userInformation`, formData, userToken)
-      console.log(data)
+      
       if (data.message == "success") {
         toast.success("Information has been changed successfully");
         reset();

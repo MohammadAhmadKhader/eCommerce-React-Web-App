@@ -7,22 +7,13 @@ import { FaChevronRight } from 'react-icons/fa';
 import Input from '../../shared/Input';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from "yup"
 import { Address } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
+import { addressSchema } from '../../../schemas/addressSchema';
 
 
-const schema = yup
-    .object({
-        street: yup.string().min(4, "Minimum characters allowed is 4").max(64, "Max characters allowed is 64").required(),
-        fullName: yup.string().min(4, "Minimum characters allowed is 4").max(32, "Max characters allowed is 32").required(),
-        state: yup.string().min(4, "Minimum characters allowed is 4").max(32, "Max characters allowed is 32").required(),
-        city: yup.string().min(3, "Minimum characters allowed is 3").max(32, "Max characters allowed is 64").required(),
-        mobileNumber: yup.string().min(6, "Minimum characters allowed is 4").max(15, "Max characters allowed is 64").required(),
-        pinCode: yup.string().min(2, "Minimum characters allowed is 2").max(12, "Max characters allowed is 64").required(),
-    })
 
 function NewAddress() {
     const { theme } = useContext(ThemeContext)
@@ -40,7 +31,7 @@ function NewAddress() {
         handleSubmit,
         formState: { errors },
     } = useForm<Address>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(addressSchema)
     });
 
     const createNewAddress: SubmitHandler<Address> = async (submittedData) => {

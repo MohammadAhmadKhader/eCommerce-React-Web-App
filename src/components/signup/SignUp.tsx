@@ -9,15 +9,8 @@ import { UserSigUpDataType } from '../../types/types';
 import useAxios from '../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../features/UserFeature/UserProvider';
+import { userSignUpSchema } from '../../schemas/userSchemas';
 
-const schema = yup
-  .object({
-    email: yup.string().email().min(5, "Minimum characters allowed is 5").max(64, "Max characters allowed is 64").required(),
-    firstName: yup.string().min(4, "Minimum characters allowed is 4").max(32, "Max characters allowed is 32").required(),
-    lastName: yup.string().min(4, "Minimum characters allowed is 4").max(32, "Max characters allowed is 32").required(),
-    password: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-  })
-  .required()
 
 function SignUp() {
   const { theme } = useContext(ThemeContext)
@@ -28,7 +21,7 @@ function SignUp() {
     handleSubmit,
     formState: { errors,isSubmitting },
   } = useForm<UserSigUpDataType>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(userSignUpSchema)
   });
   const {POST} = useAxios()
   const navigate = useNavigate()
