@@ -1,7 +1,6 @@
 import Input from '../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 import { useContext } from 'react'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import { Link, useNavigate } from 'react-router-dom'
@@ -9,12 +8,8 @@ import { UserSignInDataType } from '../../types/types'
 import useAxios from '../customHooks/useAxios'
 import { UserContext } from '../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
+import { userSignInSchema } from '../../schemas/userSchemas'
 
-const schema = yup
-    .object({
-        email: yup.string().email().min(5, "Minimum characters allowed is 5").max(64, "Max characters allowed is 64").required(),
-        password: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-    })
 
 function Login() {
     const navigate = useNavigate()
@@ -28,7 +23,7 @@ function Login() {
         trigger,
         formState: { errors, isSubmitting }
     } = useForm<UserSignInDataType>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(userSignInSchema)
     });
 
     const onSubmit: SubmitHandler<UserSignInDataType> = async (submittedData) => {

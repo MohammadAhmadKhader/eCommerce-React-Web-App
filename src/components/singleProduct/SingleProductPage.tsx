@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import Tooltip from '@mui/material/Tooltip';
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
 import { BsCart } from 'react-icons/bs';
-import { objectIdSchemaRequired } from '../shared/IdValidation';
+import { objectIdSchemaRequired } from '../../schemas/IdValidation';
 import { CartContext } from '../features/CartFeature/CartProvider';
 import useDebounce from '../customHooks/useDebounce';
 
@@ -144,7 +144,7 @@ function SingleProductPage() {
             setSearchParams(searchParams)
         }
         getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
-        
+
         setCategoryNameAndId()
     }, [searchParams, params.productId]);
     return (

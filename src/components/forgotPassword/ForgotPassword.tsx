@@ -1,18 +1,14 @@
 import Input from '../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 import { useContext } from 'react'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import { useNavigate } from 'react-router-dom'
 import useAxios from '../customHooks/useAxios'
 import { toast } from 'react-toastify'
 import { UserForgotPassword } from '../../types/types'
+import { forgotPasswordSchema } from '../../schemas/userSchemas'
 
-const schema = yup
-    .object({
-        email: yup.string().email().min(5, "Minimum characters allowed is 5").max(64, "Max characters allowed is 64").required(),
-    })
 function ForgotPassword() {
     const navigate = useNavigate()
     const { POST } = useAxios()
@@ -24,7 +20,7 @@ function ForgotPassword() {
         trigger,
         formState: { errors,isSubmitting }
     } = useForm<UserForgotPassword>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(forgotPasswordSchema)
     });
 
     const onSubmit: SubmitHandler<UserForgotPassword> = async (submittedData) => {

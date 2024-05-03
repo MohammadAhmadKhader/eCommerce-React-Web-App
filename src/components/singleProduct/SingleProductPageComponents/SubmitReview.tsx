@@ -3,7 +3,6 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import Rating from '@mui/material/Rating';
 import "./singleProductTabs.css"
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup';
 import { addReview } from '../../../types/types';
 import useAxios from '../../customHooks/useAxios';
@@ -15,13 +14,7 @@ import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-
-
-const schema = yup.object({
-    comment: yup.string().min(4).max(256).required(),
-    rating: yup.number().oneOf([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).required()
-})
-
+import { addReviewSchema } from '../../../schemas/reviewSchemas';
 
 function SubmitReview() {
     const { POST } = useAxios()
@@ -53,7 +46,7 @@ function SubmitReview() {
         trigger,
         reset,
     } = useForm<addReview>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(addReviewSchema),
     })
 
     const onSubmit: SubmitHandler<addReview> = async (submittedData) => {

@@ -1,21 +1,13 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import Input from '../shared/Input'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 import { IChangePasswordForm, UserChangePassword } from '../../types/types';
 import { UserContext } from '../features/UserFeature/UserProvider';
 import useAxios from '../customHooks/useAxios';
 import { toast } from 'react-toastify';
-
-const schema = yup
-    .object({
-        currentPassword: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-        newPassword: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-        confirmNewPassword: yup.string().oneOf([yup.ref('newPassword')], 'Passwords must match')
-            .min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),
-    })
+import { changedPasswordSchema } from '../../schemas/userSchemas';
 
 function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePasswordForm) {
     const { theme } = useContext(ThemeContext);
@@ -34,7 +26,7 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
             confirmNewPassword: ""
         },
 
-        resolver: yupResolver(schema),
+        resolver: yupResolver(changedPasswordSchema),
     });
 
 
