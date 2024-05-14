@@ -1,14 +1,14 @@
-import Input from '../shared/Input'
+import Input from '../../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useContext } from 'react'
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
+import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserSignInDataType } from '../../types/types'
-import useAxios from '../customHooks/useAxios'
-import { UserContext } from '../features/UserFeature/UserProvider'
+import { UserSignInDataType } from '../../../types/types'
+import useAxios from '../../../customHooks/useAxios'
+import { UserContext } from '../../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
-import { userSignInSchema } from '../../schemas/userSchemas'
+import { userSignInSchema } from '../../../schemas/userSchemas'
 
 
 function Login() {

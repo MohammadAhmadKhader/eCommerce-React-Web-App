@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { IProduct } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../UserFeature/UserProvider';
 
 export interface GlobalCachingContext {
@@ -12,8 +12,8 @@ export interface GlobalCachingContext {
     isRelatedProductLoading: boolean;
     isTopRatedProductsLoading: boolean;
     loadingMessage: boolean;
-    isSingleOrderDetailsLoading:boolean;
-    isInvoiceByOrderIdLoading:boolean;
+    isSingleOrderDetailsLoading: boolean;
+    isInvoiceByOrderIdLoading: boolean;
     reviewsCount: number;
     product: IProduct | object;
     topRatedProducts: IProduct[];
@@ -25,7 +25,7 @@ export interface GlobalCachingContext {
     getSingleOrderDetails: (orderId: string) => Promise<void>;
     getBrands: () => Promise<void>;
     getCategories: () => Promise<void>;
-    getInvoiceByOrderId :(orderId:string) => Promise<void>;
+    getInvoiceByOrderId: (orderId: string) => Promise<void>;
     getProductData: (page: string, limit: string, productId: string) => Promise<void>;
     getRelatedProducts: (categoryId: string, productId: string) => Promise<void>;
     getTopRatedProducts: () => Promise<void>;
@@ -51,10 +51,10 @@ function GlobalCachingProvider({ children }) {
     const [reviewsCount, setReviewsCount] = useState(9);
     const [product, setProduct] = useState<IProduct | object>({})
     const [relatedProducts, setRelatedProducts] = useState([])
-    const { GET: GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true)
-    const { GET: GET_InvoiceByOrderId, isLoading: isInvoiceByOrderIdLoading, setIsLoading: setIsInvoiceByOrderIdLoading, } = useAxios(true)
+    const { GET: GET_RelatedProducts, isLoading: isRelatedProductLoading, setIsLoading: setIsRelatedProductLoading } = useAxios(true);
+    const { GET: GET_InvoiceByOrderId, isLoading: isInvoiceByOrderIdLoading, setIsLoading: setIsInvoiceByOrderIdLoading, } = useAxios(true);
     const [topRatedProducts, setTopRatedProducts] = useState<IProduct[] | []>([]);
-    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading} = useAxios(true)
+    const { GET: GET_TopRatedProducts, isLoading: isTopRatedProductsLoading, setIsLoading: setIsTopRatedProductsLoading } = useAxios(true);
     const { GET: GET_SingleOrderDetails, isLoading: isSingleOrderDetailsLoading, setIsLoading: setIsSingleOrderDetailsLoading } = useAxios(false)
     const [singleOrderDetails, setSingleOrderDetails] = useState([]);
     const [orders, setOrders] = useState([])
@@ -78,7 +78,7 @@ function GlobalCachingProvider({ children }) {
             setSingleOrderDetails(data.order);
         } catch (error) {
             console.log(error);
-        }finally{
+        } finally {
             setIsSingleOrderDetailsLoading(false);
         }
     }
@@ -130,14 +130,14 @@ function GlobalCachingProvider({ children }) {
         }
     }
 
-    const getInvoiceByOrderId = async (orderId:string)=>{
-        try{
+    const getInvoiceByOrderId = async (orderId: string) => {
+        try {
             setIsInvoiceByOrderIdLoading(true)
-            const {data} = await GET_InvoiceByOrderId(`/invoices/${orderId}`,userToken);
+            const { data } = await GET_InvoiceByOrderId(`/invoices/${orderId}`, userToken);
             setInvoice(data.invoice);
-        }catch(error){
+        } catch (error) {
             console.log(error)
-        }finally{
+        } finally {
             setIsInvoiceByOrderIdLoading(false)
         }
     }
@@ -156,7 +156,7 @@ function GlobalCachingProvider({ children }) {
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
             isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
             topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,
-            loadingMessage, setLoadingMessage,invoice,setInvoice,isInvoiceByOrderIdLoading,getInvoiceByOrderId ,isSingleOrderDetailsLoading
+            loadingMessage, setLoadingMessage, invoice, setInvoice, isInvoiceByOrderIdLoading, getInvoiceByOrderId, isSingleOrderDetailsLoading
         }}>
             {children}
         </GlobalCachingContext.Provider>

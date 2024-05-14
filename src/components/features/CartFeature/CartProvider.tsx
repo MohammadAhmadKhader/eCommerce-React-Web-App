@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { CartItems } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../UserFeature/UserProvider';
 
 export interface CartContext {

@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { UserContext } from '../../features/UserFeature/UserProvider';
-import useAxios from '../../customHooks/useAxios';
-import useDebounce from '../../customHooks/useDebounce';
+import useAxios from '../../../customHooks/useAxios';
+import useDebounce from '../../../customHooks/useDebounce';
 import { toast } from 'react-toastify';
 import Tooltip from '@mui/material/Tooltip';
 

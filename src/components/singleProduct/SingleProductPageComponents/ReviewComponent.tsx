@@ -4,23 +4,23 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { IReviewComponent, Review } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Rating from '@mui/material/Rating';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from 'react-router-dom';
-import useDebounce from '../../customHooks/useDebounce';
+import useDebounce from '../../../customHooks/useDebounce';
 import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
 const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 const sevenDaysInMs = 604800000;
 
-function ReviewComponent({ review, mode, setEditModal = undefined } : IReviewComponent) {
+function ReviewComponent({ review, mode, setEditModal = undefined }: IReviewComponent) {
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext);
-    const {getProductData} = useContext(GlobalCachingContext);
+    const { getProductData } = useContext(GlobalCachingContext);
     const { DELETE } = useAxios();
     const params = useParams();
     const { debounce } = useDebounce();
-    const [searchParams,setSearchParams] = useSearchParams();
-    
+    const [searchParams, setSearchParams] = useSearchParams();
+
 
     const deleteReview = async (productId: string, reviewId: string) => {
         try {

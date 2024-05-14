@@ -5,13 +5,13 @@ import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { IChangePasswordForm, UserChangePassword } from '../../types/types';
 import { UserContext } from '../features/UserFeature/UserProvider';
-import useAxios from '../customHooks/useAxios';
+import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { changedPasswordSchema } from '../../schemas/userSchemas';
 
 function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePasswordForm) {
     const { theme } = useContext(ThemeContext);
-    const { userData, userToken,setUserToken } = useContext(UserContext);
+    const { userData, userToken, setUserToken } = useContext(UserContext);
     const { PUT } = useAxios();
     const {
         register,
@@ -41,7 +41,7 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
             console.log(data)
             if (data.message == "success") {
                 setUserToken(data.token);
-                localStorage.setItem("userTokenGeekOut",data.token)
+                localStorage.setItem("userTokenGeekOut", data.token)
                 toast.success("Your password has been changed successfully!");
                 reset()
             }

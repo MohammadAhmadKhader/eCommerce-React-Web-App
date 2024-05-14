@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import useAxios from '../customHooks/useAxios'
+import useAxios from '../../customHooks/useAxios'
 
 
 function ResetPasswordProtectingRoute({ children }: { children: ReactNode }) {

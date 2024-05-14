@@ -1,6 +1,6 @@
 
 import { useForm } from "react-hook-form"
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { useContext, useEffect, useState } from 'react';
 import { useElements, useStripe, PaymentElement, AddressElement, AffirmMessageElement } from "@stripe/react-stripe-js"
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
@@ -87,7 +87,7 @@ function Payment() {
 
   useEffect(() => {
     if (succeeded && !isSingleOrderDetailsLoading && singleOrderDetails) {
-      localStorage.setItem("CheckedOut","true");
+      localStorage.setItem("CheckedOut", "true");
       navigate(`/profile/orders/${params.orderId}`);
     }
   }, [singleOrderDetails, succeeded, isSingleOrderDetailsLoading])

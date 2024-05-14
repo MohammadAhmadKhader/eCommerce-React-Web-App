@@ -4,7 +4,7 @@ import MyOrdersItem from './MyOrdersItem';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import CircularLoader from '../../shared/CircularLoader';
-import useDebounce from '../../customHooks/useDebounce';
+import useDebounce from '../../../customHooks/useDebounce';
 import PaginationComponent from '../../shared/PaginationComponent';
 
 

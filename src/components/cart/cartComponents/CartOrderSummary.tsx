@@ -3,8 +3,8 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import OrderCalcs from './OrderCalcs'
 import { Link, useNavigate } from 'react-router-dom'
-import useDebounce from '../../customHooks/useDebounce'
-import useAxios from '../../customHooks/useAxios'
+import useDebounce from '../../../customHooks/useDebounce'
+import useAxios from '../../../customHooks/useAxios'
 import { UserContext } from '../../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
 import { CartContext } from '../../features/CartFeature/CartProvider'
@@ -73,14 +73,14 @@ function CartOrderSummary() {
               </span>
 
             </button></Tooltip>
-            <Tooltip title="Continue Shopping">
-          <Link to="/products?page=1&limit=9"
-            className='duration-300 text-color-accent border-color-accent border rounded-md px-1 md:px-3
+          <Tooltip title="Continue Shopping">
+            <Link to="/products?page=1&limit=9"
+              className='duration-300 text-color-accent border-color-accent border rounded-md px-1 md:px-3
            py-1.5 w-1/2 hover:text-white hover:bg-color-accent flex items-center justify-center text-sm'>
-            <span className='line-clamp-1'>
-              Continue Shopping
-            </span>
-          </Link></Tooltip>
+              <span className='line-clamp-1'>
+                Continue Shopping
+              </span>
+            </Link></Tooltip>
         </div>
       </div>
 

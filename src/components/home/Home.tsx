@@ -7,7 +7,7 @@ import Brands from '../brands/Brands';
 import HandPickedCollections from '../handPickedCollections/HandPickedCollections';
 import ResponsiveTopCategories from '../responsiveTopCategories/ResponsiveTopCategories';
 import Skeleton from "../shared/LoadingSkeletons/Skeleton";
-import useAxios from '../customHooks/useAxios';
+import useAxios from '../../customHooks/useAxios';
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider';
 import { toast } from 'react-toastify';
 
@@ -22,26 +22,26 @@ function Home() {
     setIsNewArrivalsLoading(false)
     console.log(data.products)
   }
-  const { getBrands, getTopRatedProducts, topRatedProducts, isTopRatedProductsLoading,loadingMessage } = useContext(GlobalCachingContext)
+  const { getBrands, getTopRatedProducts, topRatedProducts, isTopRatedProductsLoading, loadingMessage } = useContext(GlobalCachingContext)
 
   useEffect(() => {
     getTopRatedProducts()
     getBrands()
     getNewArrivals();
-    
+
 
   }, [])
 
-  useEffect(()=>{
-    if(loadingMessage){
+  useEffect(() => {
+    if (loadingMessage) {
       initialLoader.current = toast.loading(`The project backend is deployed on render free service 
-      therefore will take 50s - 2mins to boot the backend service on first request`,{
-        position:"top-center"
+      therefore will take 50s - 2mins to boot the backend service on first request`, {
+        position: "top-center"
       })
-    }else{
+    } else {
       toast.dismiss(initialLoader.current)
     }
-  },[loadingMessage])
+  }, [loadingMessage])
 
   return (
     <section className='home mb-5'>

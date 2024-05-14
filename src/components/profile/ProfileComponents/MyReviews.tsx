@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import { useContext, useEffect, useState } from 'react';
 import "./MyReviews.css"
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import CircularLoader from '../../shared/CircularLoader';

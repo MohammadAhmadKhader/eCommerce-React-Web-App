@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { User } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 export interface UserContext {
   userToken: string | null;
   setUserToken: React.Dispatch<React.SetStateAction<string | null>>;

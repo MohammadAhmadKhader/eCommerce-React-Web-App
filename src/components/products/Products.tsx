@@ -1,19 +1,16 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import "./products.css"
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import ProductWithRatingsCard from './ProductsComponents/ProductWithRatingsCard'
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import { Link, useBlocker, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import FiltersComponent from './ProductsComponents/FiltersComponent.tsx'
 import SortComponent from './ProductsComponents/SortComponent.tsx'
 import ResponsiveSortFilterControl from './ProductsComponents/ResponsiveSortFilterControl.tsx'
 import { WindowWidthContext } from '../features/WindowWidthFeature/WindowWidthProvider.tsx'
 import ProductsPageSkeleton from '../shared/LoadingSkeletons/ProductsPageSkeleton.tsx'
 import { IoChevronForwardOutline } from "react-icons/io5";
-import useAxios from '../customHooks/useAxios.tsx'
+import useAxios from '../../customHooks/useAxios.tsx'
 import { useNavigate } from 'react-router-dom'
-import useDebounce from '../customHooks/useDebounce.tsx'
+import useDebounce from '../../customHooks/useDebounce.tsx'
 import { objectIdSchemaOptional } from '../../schemas/IdValidation.ts'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
 import { toast } from 'react-toastify';
