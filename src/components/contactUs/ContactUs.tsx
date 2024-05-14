@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ContactUsMessage } from '../../types/types';
-import useAxios from '../customHooks/useAxios';
+import useAxios from '../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { contactUsSchema } from '../../schemas/contactUsSchema';
 

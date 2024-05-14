@@ -8,7 +8,7 @@ import Input from '../../shared/Input';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Address } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
 import { addressSchema } from '../../../schemas/addressSchema';
@@ -17,9 +17,9 @@ import { addressSchema } from '../../../schemas/addressSchema';
 
 function NewAddress() {
     const { theme } = useContext(ThemeContext)
-    const {userToken} = useContext(UserContext)
+    const { userToken } = useContext(UserContext)
     const [open, setOpen] = useState(false);
-    const {POST} = useAxios()
+    const { POST } = useAxios()
     const handleClick = () => {
         setOpen(!open);
     };
@@ -35,20 +35,20 @@ function NewAddress() {
     });
 
     const createNewAddress: SubmitHandler<Address> = async (submittedData) => {
-        try{
-            const {data} = await POST("/addresses",{
-                streetAddress:submittedData.street,
-                city:submittedData.city,
-                fullName:submittedData.fullName,
-                mobileNumber:submittedData.mobileNumber,
-                pinCode:submittedData.pinCode,
-                state:submittedData.state,
-            },userToken)
+        try {
+            const { data } = await POST("/addresses", {
+                streetAddress: submittedData.street,
+                city: submittedData.city,
+                fullName: submittedData.fullName,
+                mobileNumber: submittedData.mobileNumber,
+                pinCode: submittedData.pinCode,
+                state: submittedData.state,
+            }, userToken)
             console.log(data)
-            if(data.message =="success"){
+            if (data.message == "success") {
                 toast.success("New address has been created");
             }
-        }catch(error){
+        } catch (error) {
             toast.error("Something Went Wrong Please Try Again Later")
             console.log(error);
         }

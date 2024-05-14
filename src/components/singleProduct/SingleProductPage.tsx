@@ -9,7 +9,7 @@ import { VscHeart } from "react-icons/vsc";
 import PriceComponent from '../products/ProductsComponents/PriceComponent';
 import { Link, useParams, useNavigate, useSearchParams, useBlocker } from 'react-router-dom';
 import { IoChevronForwardOutline } from 'react-icons/io5';
-import useAxios from '../customHooks/useAxios';
+import useAxios from '../../customHooks/useAxios';
 import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton';
 import DetailsSkeleton from '../shared/LoadingSkeletons/DetailsSkeleton';
 import { IProduct } from '../../types/types';
@@ -21,7 +21,7 @@ import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCac
 import { BsCart } from 'react-icons/bs';
 import { objectIdSchemaRequired } from '../../schemas/IdValidation';
 import { CartContext } from '../features/CartFeature/CartProvider';
-import useDebounce from '../customHooks/useDebounce';
+import useDebounce from '../../customHooks/useDebounce';
 
 
 function SingleProductPage() {

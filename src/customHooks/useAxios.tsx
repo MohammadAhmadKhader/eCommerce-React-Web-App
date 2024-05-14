@@ -1,27 +1,27 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { ISendAxiosRequest } from "../../types/types";
+import { ISendAxiosRequest } from "../types/types";
 
-export default function useAxios(enableCache: boolean = false,reCacheEvery : number = 0) {
+export default function useAxios(enableCache: boolean = false, reCacheEvery: number = 0) {
     const apiLink = import.meta.env.VITE_API_LINK as string
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cache, setCache] = useState<{ [key: string]: AxiosResponse }>({})
 
-    useEffect(()=>{
+    useEffect(() => {
         let cachingInterval;
-        if(reCacheEvery){
-            cachingInterval = setInterval(()=>{
+        if (reCacheEvery) {
+            cachingInterval = setInterval(() => {
                 setCache({})
-            },reCacheEvery)
+            }, reCacheEvery)
         }
 
-        return ()=>{
-            if(reCacheEvery){
+        return () => {
+            if (reCacheEvery) {
                 clearInterval(cachingInterval)
             }
         }
-    },[])
+    }, [])
     const sendAxiosRequest = async ({ path, method, body = {}, token = undefined }: ISendAxiosRequest): Promise<AxiosResponse> => {
         try {
             if (enableCache && method === "GET" && cache[path]) {
@@ -37,7 +37,7 @@ export default function useAxios(enableCache: boolean = false,reCacheEvery : num
                 },
                 data: body || undefined
             }
-            
+
             const response = await axios(config);
             setData(response.data)
 

@@ -1,40 +1,40 @@
 import React, { useContext } from 'react'
-import Input from '../shared/Input'
+import Input from '../../shared/Input'
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider';
+import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { UserSigUpDataType } from '../../types/types';
-import useAxios from '../customHooks/useAxios';
+import { UserSigUpDataType } from '../../../types/types';
+import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
-import { UserContext } from '../features/UserFeature/UserProvider';
-import { userSignUpSchema } from '../../schemas/userSchemas';
+import { UserContext } from '../../features/UserFeature/UserProvider';
+import { userSignUpSchema } from '../../../schemas/userSchemas';
 
 
 function SignUp() {
   const { theme } = useContext(ThemeContext)
-  
+
   const {
     register,
     trigger,
     handleSubmit,
-    formState: { errors,isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<UserSigUpDataType>({
     resolver: yupResolver(userSignUpSchema)
   });
-  const {POST} = useAxios()
+  const { POST } = useAxios()
   const navigate = useNavigate()
-  const {setUserData,setUserToken} = useContext(UserContext)
+  const { setUserData, setUserToken } = useContext(UserContext)
 
 
-  const onSubmit: SubmitHandler<UserSigUpDataType> = async(submittedData) => {
-    try{
-      const {data} = await POST("/users/signup",{
-        firstName:submittedData.firstName,
-        lastName:submittedData.lastName,
-        email:submittedData.email,
-        password:submittedData.password
+  const onSubmit: SubmitHandler<UserSigUpDataType> = async (submittedData) => {
+    try {
+      const { data } = await POST("/users/signup", {
+        firstName: submittedData.firstName,
+        lastName: submittedData.lastName,
+        email: submittedData.email,
+        password: submittedData.password
       })
 
       if (data["message"] == "success") {
@@ -83,9 +83,9 @@ function SignUp() {
           <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
                     border-color-accent font-semibold text-sm border
                      hover:text-white duration-300 px-6 py-1.5 rounded-md' type='submit'
-                     disabled={isSubmitting}
-                     >
-                 Sign Up
+            disabled={isSubmitting}
+          >
+            Sign Up
           </button>
 
           <Link className='ms-auto mt-2 block text-blue-700 underline w-fit' to="/login">Sign In?</Link>

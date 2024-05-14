@@ -23,6 +23,7 @@ import ListItemDrawer from './ListItemDrawer';
 import ShortWebSiteLogo from '../../shared/ShortWebSiteLogo';
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import OneLineSkeleton from '../../shared/LoadingSkeletons/OneLineSkeleton';
+import { RxDashboard } from "react-icons/rx";
 
 
 export default function MenuDrawer({ isOpen, setIsOpen }) {
@@ -108,6 +109,13 @@ export default function MenuDrawer({ isOpen, setIsOpen }) {
                     </div> : !userData && !userToken && <>
                         <ListItemDrawer Title='Sign In' IconComponent={MdLogin} To={"/login"} onClick={toggleDrawer(false)} />
                         <ListItemDrawer Title='Sign Up' IconComponent={IoPersonAdd} To={"/signup"} onClick={toggleDrawer(false)} />
+                    </>
+                }
+                {(userToken == null || userData == null || isUserFetchDataLoading) && isUserFetchDataLoading ?
+                    <div className="flex flex-col justify-center items-center gap-y-4 mt-4">
+                        <OneLineSkeleton forceMinHeight={"20px"} forceMinWidth={"200px"} />
+                    </div> : userData && userToken && userData.role === "admin" && <>
+                        <ListItemDrawer Title='Dashboard' IconComponent={RxDashboard} To={"/dashboard"} onClick={toggleDrawer(false)} />
                     </>
                 }
 

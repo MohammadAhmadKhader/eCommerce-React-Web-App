@@ -1,13 +1,13 @@
-import Input from '../shared/Input'
+import Input from '../../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useContext, useEffect, useState } from 'react'
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
+import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ResetPasswordForm } from '../../types/types'
-import useAxios from '../customHooks/useAxios'
+import { ResetPasswordForm } from '../../../types/types'
+import useAxios from '../../../customHooks/useAxios'
 import { toast } from 'react-toastify'
-import { resetUserPasswordSchema } from '../../schemas/userSchemas'
+import { resetUserPasswordSchema } from '../../../schemas/userSchemas'
 
 
 function ResetPassword() {
@@ -22,7 +22,7 @@ function ResetPassword() {
         handleSubmit,
         trigger,
         reset,
-        formState: { errors ,isSubmitting}
+        formState: { errors, isSubmitting }
     } = useForm<ResetPasswordForm>({
         resolver: yupResolver(resetUserPasswordSchema),
     });

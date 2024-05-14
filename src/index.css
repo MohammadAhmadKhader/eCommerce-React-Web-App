@@ -16,6 +16,7 @@
   --light--accent--color:rgb(74,131,246);
   --light--text--color:rgb(0,0,0);
   --light--border--color:rgb(0,0,0,0.1);
+  --light--tableBorder--color:0,0,0;
   --light--boxShadow: 0px 0px 29px -20px rgba(0,0,0,1);
   --light--boxShadowCard:0px 0px 6px 1px rgba(233,233,233,1);
   --light--outline--color:rgba(0,0,0,0.8);
@@ -26,7 +27,8 @@
   --dark--bg--color:rgb(18,18,18);
   --dark--accent--color:rgb(255, 193, 7);
   --dark--text--color:rgb(255,255,255);
-  --dark--border--color:rgba(255,255,255,0.1);
+  --dark--border--color:rgba(49, 48, 48, 0.1);
+  --dark--tableBorder--color:49, 48, 48;
   --dark--boxShadow:0px 0px 29px -20px rgba(255,255,255,1);
   --dark--boxShadowCard:0px 0px 6px 1px rgba(22,22,22,1);
   --dark--outline--color:rgba(255,255,255,0.8);

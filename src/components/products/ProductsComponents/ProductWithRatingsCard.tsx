@@ -7,8 +7,8 @@ import { IProductWithRatingsCardProps } from '../../../types/types';
 import Rating from '@mui/material/Rating';
 import Tooltip from '@mui/material/Tooltip';
 import { UserContext } from '../../features/UserFeature/UserProvider';
-import useAxios from '../../customHooks/useAxios';
-import useDebounce from '../../customHooks/useDebounce';
+import useAxios from '../../../customHooks/useAxios';
+import useDebounce from '../../../customHooks/useDebounce';
 import { toast } from 'react-toastify';
 
 

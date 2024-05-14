@@ -6,10 +6,10 @@ import { FaChevronDown } from "react-icons/fa6";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { UserData } from '../../../types/types';
 import { UserContext } from '../../features/UserFeature/UserProvider';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import CircularLoader from '../../shared/CircularLoader';
-import { useBlocker} from 'react-router-dom';
+import { useBlocker } from 'react-router-dom';
 import ProfileModal from './ProfileModal';
 import { userInformationSchema } from '../../../schemas/userSchemas';
 
@@ -63,7 +63,7 @@ function ProfileInformation() {
       }
 
       const { data } = await PUT(`/users/userInformation`, formData, userToken)
-      
+
       if (data.message == "success") {
         toast.success("Information has been changed successfully");
         reset();

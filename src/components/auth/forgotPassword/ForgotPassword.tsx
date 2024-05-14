@@ -1,13 +1,13 @@
-import Input from '../shared/Input'
+import Input from '../../shared/Input'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useContext } from 'react'
-import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
+import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { useNavigate } from 'react-router-dom'
-import useAxios from '../customHooks/useAxios'
+import useAxios from '../../../customHooks/useAxios'
 import { toast } from 'react-toastify'
-import { UserForgotPassword } from '../../types/types'
-import { forgotPasswordSchema } from '../../schemas/userSchemas'
+import { UserForgotPassword } from '../../../types/types'
+import { forgotPasswordSchema } from '../../../schemas/userSchemas'
 
 function ForgotPassword() {
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ function ForgotPassword() {
         register,
         handleSubmit,
         trigger,
-        formState: { errors,isSubmitting }
+        formState: { errors, isSubmitting }
     } = useForm<UserForgotPassword>({
         resolver: yupResolver(forgotPasswordSchema)
     });
@@ -29,7 +29,7 @@ function ForgotPassword() {
             const { data } = await POST("/users/forgotPassword", {
                 email: submittedData.email,
             })
-            if(data["message"]=="success"){
+            if (data["message"] == "success") {
                 toast.success("A Message has been sent to your email");
                 navigate("/")
             }
@@ -56,8 +56,8 @@ function ForgotPassword() {
                     <button className='bg-color-accent text-white hover:bg-transparent hover:text-color-accent
                     border-color-accent font-semibold text-sm border 
                      hover:text-white duration-300 px-6 py-1.5 rounded-md disabled:hover:bg-color-accent disabled:hover:text-white'
-                     type='submit' disabled={isSubmitting}
-                     >
+                        type='submit' disabled={isSubmitting}
+                    >
                         Send
                     </button>
                 </form></div>

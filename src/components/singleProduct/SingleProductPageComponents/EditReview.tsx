@@ -5,7 +5,7 @@ import "./singleProductTabs.css"
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { addReview } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Tooltip from '@mui/material/Tooltip';
@@ -16,7 +16,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { editReviewSchema } from '../../../schemas/reviewSchemas';
 
-function EditReview({ setIsEditReviewModalOpen,review }) {
+function EditReview({ setIsEditReviewModalOpen, review }) {
     const { PUT } = useAxios()
     const { theme } = useContext(ThemeContext);
     const { userData, userToken } = useContext(UserContext)

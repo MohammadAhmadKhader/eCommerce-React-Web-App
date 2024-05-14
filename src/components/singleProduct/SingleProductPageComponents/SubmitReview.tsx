@@ -5,7 +5,7 @@ import "./singleProductTabs.css"
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { addReview } from '../../../types/types';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import Tooltip from '@mui/material/Tooltip';

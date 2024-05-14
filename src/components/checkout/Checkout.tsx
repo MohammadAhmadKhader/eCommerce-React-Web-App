@@ -11,7 +11,7 @@ import ListCollapse from '../shared/ListCollapse'
 import Payment from './checkoutComponents/Payment'
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import useAxios from '../customHooks/useAxios'
+import useAxios from '../../customHooks/useAxios'
 import CircularLoader from '../shared/CircularLoader'
 import { ThemeContext } from '../features/ThemeFeature/ThemeProvider'
 import { UserContext } from '../features/UserFeature/UserProvider'
@@ -32,7 +32,7 @@ function Checkout() {
       const { data } = await POST_createPaymentIntent("/orders/stripe/createPaymentIntent", {
         orderId: singleOrderDetails._id,
       }, userToken);
-      
+
       setClientSecret(data.clientSecret);
       return data.clientSecret
     } catch (error) {

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import MyWishListItem from './MyWishListItem';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import CircularLoader from '../../shared/CircularLoader';
 const emptyWishList = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/StaticAssets/ebck3buaoerk2dhnjfcg"

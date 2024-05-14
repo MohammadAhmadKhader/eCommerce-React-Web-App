@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import SearchIcon from "../headerComponents/SearchIcon";
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
-import useDebounce from '../../customHooks/useDebounce';
-import useAxios from '../../customHooks/useAxios';
+import useDebounce from '../../../customHooks/useDebounce';
+import useAxios from '../../../customHooks/useAxios';
 import { Link } from 'react-router-dom';
 import CircularLoader from '../../shared/CircularLoader';
 

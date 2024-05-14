@@ -7,7 +7,7 @@ import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import "./MyOrders.css"
 import OrdersTable from './OrdersTable';
 import { useSearchParams } from 'react-router-dom';
-import useAxios from '../../customHooks/useAxios';
+import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
 

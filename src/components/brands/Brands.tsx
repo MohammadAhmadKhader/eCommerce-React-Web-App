@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import useAxios from '../customHooks/useAxios'
+import useAxios from '../../customHooks/useAxios'
 import ImageSkeleton from '../shared/LoadingSkeletons/ImageSkeleton'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider'
 
 function Brands() {
     const { brands, isBrandsLoading } = useContext(GlobalCachingContext)
-    
+
     return (
         <section className='px-4 mt-5 mb-20 w-full'>
             <h2 className='text-xl font-semibold md:text-2xl lg:text-3xl md:font-bold mb-5'>Shop By Brands</h2>

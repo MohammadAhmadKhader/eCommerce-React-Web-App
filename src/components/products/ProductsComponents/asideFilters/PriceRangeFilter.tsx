@@ -4,7 +4,7 @@ import Slider from '@mui/joy/Slider';
 import { useSearchParams } from "react-router-dom";
 import { WindowWidthContext } from "../../../features/WindowWidthFeature/WindowWidthProvider";
 import { ThemeProvider, extendTheme } from '@mui/joy/styles';
-import useDebounce from "../../../customHooks/useDebounce";
+import useDebounce from "../../../../customHooks/useDebounce";
 import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 
 const PriceRangeFilter = () => {
