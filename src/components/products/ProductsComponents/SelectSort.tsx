@@ -24,7 +24,7 @@ export default function SelectSort() {
       searchParams.set("sort",selectedValue)
       setSearchParams(searchParams)
     }
-  }, [selectedValue])
+  }, [selectedValue]);
   return (
     <Select value={selectedValue ? selectedValue : undefined} onChange={handleChange}
       className='flex xl:w-auto'

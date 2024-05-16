@@ -1,7 +1,13 @@
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { Tooltip, styled } from '@mui/joy';
-import { Dispatch, FormEvent, SetStateAction } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
+import useAxios from '../../../customHooks/useAxios';
+import { UserContext } from '../../../components/features/UserFeature/UserProvider';
+import { toast } from 'react-toastify';
+import ButtonLoader from '../dashboardShared/ButtonLoader';
+import { IInputImageUpload, IPayloadUploadImage } from '../../../types/types';
+import { useSearchParams } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -15,32 +21,47 @@ const VisuallyHiddenInput = styled('input')`
   width: 1px;
 `;
 
-interface IInputImageUpload {
-    image: File | null;
-    inputImageValue: string;
-    setImage: Dispatch<SetStateAction<any>>;
-    setInputImageValue: Dispatch<SetStateAction<string>>;
-}
-const handleUpload = (e: FormEvent, image: any) => {
-    try {
-        const formData = new FormData();
-        if (image) {
-            formData.append("image", image)
-        } else {
-            throw new Error("Image does not exist")
+export default function InputImageUpload({ 
+    previewImage, setPreviewImage, inputValue, setInputValue, 
+    fileImage, setFileImage, productId, imageId,getAllProducts }: IInputImageUpload) {
+    const [searchParams,setSearchParams]= useSearchParams()
+    const { PATCH } = useAxios();
+    const { userToken } = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const handleUpload = async (event: FormEvent, userToken: string,
+        payload: IPayloadUploadImage = { productId: undefined, imageId: undefined, fileImage }) => {
+        try {
+
+            event.preventDefault();
+            setIsLoading(true)
+            const formData = new FormData();
+            if (fileImage) {
+                formData.append("image", fileImage);
+                formData.append("imageId", payload.imageId);
+            } else {
+                throw new Error("Image does not exist")
+            }
+            const { data } = await PATCH(`/products/image/${payload.productId}`, formData, userToken);
+            if (data.message === "success") {
+                toast.success("Product image was changed");
+                setPreviewImage(null);
+                setInputValue(undefined);
+                getAllProducts(searchParams.get("page"),searchParams.get("limit"))
+            }
+        } catch (error) {
+            toast.error(error);
+            console.log(error)
+        } finally {
+            setIsLoading(false)
         }
-    } catch (error) {
-        console.log(error)
     }
-
-}
-
-
-
-export default function InputImageUpload({ image, setImage, inputImageValue, setInputImageValue }: IInputImageUpload) {
     return (
-        <form encType='multipart/form-data' className='flex flex-col gap-y-2' onSubmit={(e) => { handleUpload(e, image) }}>
+        <form encType='multipart/form-data' className='flex flex-col gap-y-2'
+            onSubmit={(e) => {
+                handleUpload(e, userToken, { fileImage: fileImage, imageId: imageId, productId: productId });
+            }}>
             <Button
+                disabled={isLoading}
                 component="label"
                 role={'img'}
                 tabIndex={-1}
@@ -78,24 +99,28 @@ export default function InputImageUpload({ image, setImage, inputImageValue, set
                 }}
             >
                 Change Image
-                <VisuallyHiddenInput value={inputImageValue} type="file" name='image' onChange={(e: any) => {
+                <VisuallyHiddenInput value={inputValue} type="file" name='image' onChange={(e: any) => {
                     const reader = new FileReader();
-                    setInputImageValue(e?.target?.value);
+                    setInputValue(e?.target?.value); // name includes fakePath//imageName
+                    setFileImage(e.target.files[0]);
 
                     reader.addEventListener("loadend", (file) => {
-                        setImage((file.target.result))
+                        setPreviewImage(file?.target?.result);
 
                     });
                     reader.readAsDataURL(e.target.files[0]);
                 }}
                 />
             </Button>
-            <Tooltip title={(image || inputImageValue) ? undefined : "Upload image"}>
+            <Tooltip title={(previewImage || inputValue) ? undefined : "Upload image"}>
                 <button type='submit'
                     className='bg-amber-500 rounded-md hover:bg-amber-600 hover:disabled:bg-amber-500 disabled:opacity-75 duration-300 py-1 text-base tracking-wide font-semibold text-white'
-                    disabled={(image || inputImageValue) ? false : true}
+                    disabled={(previewImage || inputValue) ? false : true}
                 >
-                    Submit
+                    <span className='flex items-center justify-center gap-x-1.5'>
+                        <span>Submit</span>
+                        {isLoading && <ButtonLoader />}
+                    </span>
                 </button>
             </Tooltip>
         </form>

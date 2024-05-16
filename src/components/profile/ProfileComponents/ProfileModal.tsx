@@ -12,8 +12,8 @@ export default function ProfileModal({ blocker }) {
     }}>
       <Modal
         hideBackdrop
-        aria-labelledby="modal-title"
-        aria-describedby="modal-desc"
+        aria-labelledby="profile modal"
+        aria-describedby="warning message about user information change"
         open={true}
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}
       >

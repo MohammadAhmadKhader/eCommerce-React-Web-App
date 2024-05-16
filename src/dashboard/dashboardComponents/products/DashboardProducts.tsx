@@ -6,7 +6,7 @@ import { IProduct } from '../../../types/types';
 import { useSearchParams } from 'react-router-dom';
 
 function DashboardProducts() {
-  const { GET, isLoading, setIsLoading } = useAxios(true);
+  const { GET, isLoading, setIsLoading } = useAxios();
   const [products, setProducts] = useState<IProduct[] | []>([]);
   const [count, setCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,7 +29,7 @@ function DashboardProducts() {
   return (
     <TableLayout count={count} title={"Products"}>
       <div className='my-5'>
-        <ProductsTable count={count} products={products} isLoading={isLoading} />
+        <ProductsTable count={count} products={products} isLoading={isLoading} getAllProducts={getAllProducts} />
       </div>
     </TableLayout>
 

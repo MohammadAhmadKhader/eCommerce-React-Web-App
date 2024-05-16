@@ -2,6 +2,15 @@ import Joi from "joi"
 import { tlds } from '@hapi/tlds';
 import * as yup from "yup"
 
+export const createUserSchema = Joi.object({
+    email: Joi.string().email({ tlds: { allow: tlds } }).min(5).max(64).required(),
+    firstName: Joi.string().min(4).max(32).required(),
+    lastName: Joi.string().min(4).max(32).required(),
+    password: Joi.string().min(6).max(24).required(),
+    role: Joi.string().valid("user","admin"),
+    userImg:Joi.any(),
+}).required()
+
 export const userSignInSchema = yup.object({
     email: yup.string().email().min(5, "Minimum characters allowed is 5").max(64, "Max characters allowed is 64").required(),
     password: yup.string().min(6, "You must have at least 6 characters").max(24, "Max allowed is 24").required(),

@@ -16,14 +16,6 @@ import CategoriesNav from "./dashboardComponents/categories/CategoriesNav";
 import { MdOutlineCategory } from "react-icons/md";
 import { SiBrandfolder } from "react-icons/si";
 
-
-function Test() {
-    return (
-        <div>
-            To Be Cont
-        </div>
-    )
-}
 function DashboardSidebar() {
     const { theme } = useContext(ThemeContext);
 

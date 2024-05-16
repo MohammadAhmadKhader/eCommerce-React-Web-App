@@ -1,40 +1,69 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { IProduct } from '../../../types/types'
 import EditButton from '../dashboardShared/EditButton';
 import DeleteButton from '../dashboardShared/DeleteButton';
 import TableProductsPriceComponent from './TableProductsPriceComponent';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { GlobalCachingContext } from '../../../components/features/GlobalCachingContext/GlobalCachingProvider';
 import { FaChevronUp } from 'react-icons/fa6';
-import InputImageUpload from './InputImageUpload';
 import ProductImage from './ProductImage';
+import EditModal from '../dashboardShared/EditModal';
+import EditProduct from './EditProduct';
+import useAxios from '../../../customHooks/useAxios';
+import { toast } from 'react-toastify';
+import { UserContext } from '../../../components/features/UserFeature/UserProvider';
+import PatchImagesToProduct from './PatchImagesToProducts';
 
 export interface IProductTableData {
     product: IProduct;
-    count: number;
     index: number;
+    itemsNumber: number;
+    categoriesMapper: object;
+    getAllProducts: (page: string, limit: string) => any
 }
 
-function ProductsTableData({ product, count, index }: IProductTableData) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [itemsNumber, setItemsNumber] = useState(0);
-    const { categories } = useContext(GlobalCachingContext);
-    const [categoriesMapper, setCategoriesMapper] = useState({});
-    const navigate = useNavigate()
+function ProductsTableData({ product, index, itemsNumber, categoriesMapper, getAllProducts }: IProductTableData) {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [isPatchImagesModalOpen, setIsPatchImagesModalOpen] = useState<boolean>(false);
+    const [isDeleteProductProcessing, setIsDeleteProductProcessing] = useState<boolean>(false);
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    useEffect(() => {
-        setItemsNumber((Number(searchParams.get("page") || 1) * Number(searchParams.get("limit") || 9) - Number(searchParams.get("limit") || 9)))
-        categories?.forEach((category) => {
-            categoriesMapper[category?._id] = category?.name;
-        });
+    const { DELETE } = useAxios()
+    const navigate = useNavigate();
+    const { userToken } = useContext(UserContext);
 
-    }, [count, searchParams, categories]);
+    const deleteProduct = async (product, userToken) => {
+        try {
+            if (confirm(`Are you sure you want to delete product with name : '${product?.name}'`)) {
+                setIsDeleteProductProcessing(true);
+                const { status, data } = await DELETE(`/products/${product?._id}`, {}, userToken);
+                console.log(status, data)
+                if (status === 200) {
+                    toast.success(`Product with name ${product?.name} was deleted`);
+                    setIsDeleteProductProcessing(false);
+                    getAllProducts(searchParams.get("page"), searchParams.get("limit"))
+                }
+            }
+        } catch (error) {
+            toast.error(error)
+            console.log(error)
+        } finally {
+            setIsDeleteProductProcessing(true)
+        }
+    }
+
     return (
-        <React.Fragment>
+        <>
+            <EditModal title='Edit Product' isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} DialogContentSx={{ paddingRight: "6px" }}>
+                <EditProduct product={product} setIsEditModelOpen={setIsEditModalOpen} />
+            </EditModal>
+
+            <EditModal title='Add images' isOpen={isPatchImagesModalOpen} setIsOpen={setIsPatchImagesModalOpen} >
+                <PatchImagesToProduct product={product} setIsPatchImagesModelOpen={setIsPatchImagesModalOpen} />
+            </EditModal>
             <tr key={product?._id}>
                 <td style={{ textAlign: "center" }}>
-                    <button className='rounded-md flex justify-center items-center bg-color-accent duration-300 hover:bg-sky-800 p-1'
+                    <button className='rounded-md flex justify-center items-center bg-color-accent duration-300 hover:bg-sky-800 p-1 text-white'
                         onClick={() => setIsOpen((prevState) => !prevState)}
                     >
                         <FaChevronUp size={12} className={`duration-300 ${isOpen ? "rotate-180" : ""}`} />
@@ -58,16 +87,28 @@ function ProductsTableData({ product, count, index }: IProductTableData) {
                     </div>
                 </td>
                 <td>
-                    <div className='flex gap-x-2 justify-center items-center tracking-wide font-semibold'>
-                        <button className='px-2 py-1 rounded-md border border-color-accent bg-color-accent duration-500 hover:bg-sky-800 hover:border-sky-800 text-white'
-                            onClick={() => {
-                                navigate(`/products/${product?._id}?page=1&limit=9`)
-                            }}
-                        >
-                            View
-                        </button>
-                        <EditButton mode='both' onClick={() => { console.log("Clicked on Edit") }} />
-                        <DeleteButton mode='both' onClick={() => { console.log("Clicked on Delete") }} />
+                    <div className='flex gap-2 justify-center items-center tracking-wide font-semibold'>
+                        <div className='flex flex-col w-full gap-y-2'>
+                            <button className='w-full px-2 py-1 rounded-md border border-color-accent bg-color-accent
+                             duration-500 hover:bg-sky-800 hover:border-sky-800 text-white'
+                                onClick={() => {
+                                    navigate(`/products/${product?._id}?page=1&limit=9`)
+                                }}
+                            >
+                                View
+                            </button>
+
+                            <EditButton className='w-full' mode='both' onClick={() => setIsEditModalOpen(true)} />
+                        </div>
+                        <div className='flex flex-col w-full gap-y-2'>
+                            <DeleteButton className='w-full' mode='both' onClick={() => { deleteProduct(product, userToken) }}
+                                disabled={isDeleteProductProcessing} isLoading={isDeleteProductProcessing}
+                            />
+                            <EditButton className='w-full bg-purple-500 font-semibold hover:bg-purple-700'
+                                onClick={() => setIsPatchImagesModalOpen(true)} customWord="Add Images" mode="word" />
+                        </div>
+
+
                     </div>
                 </td>
             </tr>
@@ -79,7 +120,7 @@ function ProductsTableData({ product, count, index }: IProductTableData) {
                             <div className='grid grid-cols-12 gap-x-2 rounded-lg'>
                                 {product.images.map((imageObj) => {
                                     return (
-                                        <ProductImage imageObj={imageObj} product={product} key={imageObj?._id} />
+                                        <ProductImage imageObj={imageObj} product={product} key={imageObj?._id} getAllProducts={getAllProducts} />
                                     )
                                 })}
                             </div>
@@ -87,7 +128,7 @@ function ProductsTableData({ product, count, index }: IProductTableData) {
                     )}
                 </td>
             </tr>
-        </React.Fragment>
+        </>
     )
 }
 

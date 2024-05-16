@@ -11,7 +11,7 @@ function DashboardUsers() {
     const [users, setUsers] = useState<User[] | []>([]);
     const [count, setCount] = useState(0);
     const [searchParams, setSearchParams] = useSearchParams();
-    const { GET, isLoading, setIsLoading } = useAxios(true);
+    const { GET, isLoading, setIsLoading } = useAxios();
 
     useEffect(() => {
         getAllUsers(searchParams.get("page"), searchParams.get("limit"));
@@ -31,7 +31,7 @@ function DashboardUsers() {
     return (
         <TableLayout count={count} title='Users'>
             <div className='my-5'>
-                <UsersTable users={users} isLoading={isLoading} count={count} />
+                <UsersTable users={users} isLoading={isLoading} count={count} getAllUsers={getAllUsers} />
             </div>
         </TableLayout>
     )
