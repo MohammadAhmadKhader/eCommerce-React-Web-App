@@ -257,6 +257,8 @@ export interface IInputProps {
     minDate?: string | number | undefined;
     maxDate?: string | number | undefined;
     trigger?: UseFormTrigger<T>;
+    className?:string;
+    defaultValue?:any;
     register: UseFormRegister<T>;
 }
 
@@ -380,4 +382,112 @@ export type ResetPasswordForm = {
 
 export type UserForgotPassword = {
     email?:string;
+}
+
+export type CreateCategoryDto = {
+    name:string;
+    image:any
+}
+export type UpdateCategoryDto = {
+    name?:string;
+    image?:any
+}
+
+export type CreateBrandDto = {
+    brandName:string;
+    brandLogo:any
+}
+export type UpdateBrandDto = {
+    brandName?:string;
+    brandLogo?:any
+}
+
+export type CreateProductDto = {
+    name:string;
+    price:number;
+    finalPrice:number;
+    offer:number;
+    brand:string;
+    categoryId:string;
+    description:string;
+    quantity:number;
+    image:File;
+}
+export type UpdateProductDto = {
+    name?:string;
+    description?:string;
+    price?:number;
+    finalPrice?:number;
+    offer?:number;
+    brand?:string;
+    categoryId?:string;
+    quantity?:number;
+}
+
+export type CreateUserDto = {
+    email:string;
+    password:string;
+    firstName:string;
+    lastName:string;
+    mobileNumber:string;
+    userImg:string;
+    birthdate:Date;
+    role:"user" | "admin";
+    image:File;
+}
+
+export type UpdateUserDto = {
+    email?:string;
+    password?:string;
+    firstName?:string;
+    lastName?:string;
+    mobileNumber?:string;
+    userImg?:string;
+    birthdate?:Date;
+    role?:"user" | "admin";
+    image?:File;
+}
+
+export interface IProduct {
+    _id:string;
+    name: string;
+    description: string;
+    price: number;
+    offer:number;
+    categoryId:string;
+    finalPrice: number;
+    quantity: number;
+    reviews: {
+        _id:string;
+        comment: string;
+        userId: string;
+        rating: number;
+        createdAt: Date | string;
+        updatedAt: Date | string;
+    }[];
+    images: {
+        _id:string;
+        imageUrl: string;
+        thumbnailUrl: string;
+    }[];
+    brand: string;
+}
+
+export interface IInputImageUpload {
+    productId: string;
+    imageId: string;
+    previewImage: string | ArrayBuffer;
+    inputValue: string;
+    fileImage: File | null;
+    setFileImage: Dispatch<SetStateAction<File | null>>
+    setPreviewImage: Dispatch<SetStateAction<string | ArrayBuffer>>;
+    setInputValue: Dispatch<SetStateAction<string>>;
+    getAllProducts:(page:string,limit:string)=>any
+}
+
+
+export interface IPayloadUploadImage {
+    productId: string;
+    imageId: string;
+    fileImage: File | null
 }

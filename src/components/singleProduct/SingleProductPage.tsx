@@ -207,7 +207,7 @@ function SingleProductPage() {
                                         },
                                         color: 'var(--stars--color)'
                                     }}
-                                    name="read-only" value={Number((product as IProduct).avgRating.toFixed(2))} precision={0.01} readOnly />
+                                    name="read-only" value={Number((product as IProduct)?.avgRating?.toFixed(2)) || 0} precision={0.01} readOnly />
 
                             </div>
 

@@ -37,7 +37,8 @@ function ProfileInformation() {
 
   useEffect(() => {
     const subscription = watch((values) => {
-      if (values?.birthDate as unknown as string == "" && values?.email == "" && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
+      if (values?.birthDate as unknown as string == "" && values?.email == "" 
+      && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
         setIsDefaultValues(true)
       } else {
         setIsDefaultValues(false)

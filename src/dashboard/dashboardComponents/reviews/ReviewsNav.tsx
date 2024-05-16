@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 function ReviewsNav() {
   return (
     <nav>
-        <Link to={"/dashboard/reviews"}>
-            Reviews
-        </Link>
+      <Link className='font-semibold' to={"/dashboard/reviews?page=1&limit=20"}>
+        Reviews
+      </Link>
     </nav>
   )
 }

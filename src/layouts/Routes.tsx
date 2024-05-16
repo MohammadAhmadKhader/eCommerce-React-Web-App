@@ -32,6 +32,11 @@ import DashboardReviews from '../dashboard/dashboardComponents/reviews/Dashboard
 import DashboardInvoices from '../dashboard/dashboardComponents/invoices/DashboardInvoices';
 import DashboardBrands from '../dashboard/dashboardComponents/brands/DashboardBrands';
 import DashboardCategories from '../dashboard/dashboardComponents/categories/DashboardCategories';
+import CreateCategory from '../dashboard/dashboardComponents/categories/CreateCategory';
+import CreateBrand from '../dashboard/dashboardComponents/brands/CreateBrand';
+import CreateUser from '../dashboard/dashboardComponents/users/CreateUser';
+import CreateProduct from '../dashboard/dashboardComponents/products/CreateProduct';
+import PatchImagesToProduct from '../dashboard/dashboardComponents/products/PatchImagesToProducts';
 
 
 export const router = createBrowserRouter([
@@ -148,8 +153,16 @@ export const router = createBrowserRouter([
                         element: <DashboardProducts />
                     },
                     {
+                        path: "products/create",
+                        element: <CreateProduct />
+                    },
+                    {
                         path: "users",
                         element: <DashboardUsers />
+                    },
+                    {
+                        path: "users/create",
+                        element: <CreateUser />
                     },
                     {
                         path: "orders",
@@ -168,8 +181,15 @@ export const router = createBrowserRouter([
                         element: <DashboardBrands />
                     },
                     {
+                        path: "brands/create",
+                        element: <CreateBrand />
+                    },
+                    {
                         path: "categories",
-                        element: <DashboardCategories />
+                        element: <DashboardCategories />,
+                    }, {
+                        path: "categories/create",
+                        element: <CreateCategory />,
                     }
                 ]
             }

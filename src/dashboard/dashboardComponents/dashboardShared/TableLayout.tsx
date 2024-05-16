@@ -10,8 +10,8 @@ function TableLayout({children,count,title}:{children:ReactNode;count:number;tit
     const isSmallScreen = useMediaQuery(MuiTheme.breakpoints.down('md'));
     useEffect(() => {
         if (!searchParams.get("limit") || !searchParams.get("page")) {
-            searchParams.set("limit", "9");
             searchParams.set("page", "1");
+            searchParams.set("limit", "9");
             setSearchParams(searchParams)
         }
     }, []);
