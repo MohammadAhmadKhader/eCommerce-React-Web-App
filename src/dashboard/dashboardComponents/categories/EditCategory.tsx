@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext } from 'react'
+import { Dispatch, SetStateAction, useContext, useState } from 'react'
 import EditButton from '../dashboardShared/EditButton'
 import { toast } from 'react-toastify';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -20,7 +20,8 @@ function EditCategory({ category,setIsEditModelOpen } : IEditCategory) {
         mode: "onChange",
         resolver: joiResolver(updateCategorySchema),
     });
-    const { isSubmitting, isLoading, isValid, errors } = formState
+    const { isSubmitting, isLoading, isValid, errors } = formState;
+    const [filesNames,setFilesNames] = useState<string[]>([])
     const { userToken } = useContext(UserContext);
     const { PUT } = useAxios();
 
@@ -59,7 +60,7 @@ function EditCategory({ category,setIsEditModelOpen } : IEditCategory) {
                 />
                 <div style={{ marginBottom: "30px" }}>
                     <UploadImageInput reactFormHookSetValue={setValue} text='Upload category image'
-                        name="image" style={{ width: "100%", marginBottom: "2px" }} showImageName={true} />
+                        name="image" style={{ width: "100%", marginBottom: "2px" }} showImageName={true} filesNames={filesNames} setFilesNames={setFilesNames} />
                 </div>
             </div>
             <EditButton customWord='Edit Category' mode='word' className='font-semibold w-full mt-2' disabled={(isSubmitting || isLoading || !isValid)} isLoading={isSubmitting || isLoading} />
