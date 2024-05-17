@@ -22,19 +22,19 @@ function CategoriesTable({ categories, isLoading, count }: { categories: any[]; 
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        setItemsNumber(getCorrectItemsNumber(searchParams.get("page"),searchParams.get("limit")))
+        setItemsNumber(getCorrectItemsNumber(searchParams.get("page"), searchParams.get("limit")))
     }, [count, searchParams, categories]);
 
     return (
         <>
             <TableWidthScrolling >
-                <CustomTable minWidth={1000}>
+                <CustomTable minWidth={600}>
                     <thead>
                         <tr>
-                            <td style={{ ...commonStylesTableHeaders }}>Number</td>
+                            <td style={{ ...commonStylesTableHeaders, width: "90px" }}>Number</td>
                             <td style={{ ...commonStylesTableHeaders }}>Name</td>
                             <td style={{ ...commonStylesTableHeaders }}>Image</td>
-                            <td style={{ ...commonStylesTableHeaders }}>Actions</td>
+                            <td style={{ ...commonStylesTableHeaders, width: "200px" }}>Actions</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,7 +42,7 @@ function CategoriesTable({ categories, isLoading, count }: { categories: any[]; 
                             categories?.map((category, index) => {
                                 return (
                                     <CategoriesTableData itemsNumber={itemsNumber}
-                                     key={category?._id} index={index} category={category} /> 
+                                        key={category?._id} index={index} category={category} />
                                 )
                             })
                         }

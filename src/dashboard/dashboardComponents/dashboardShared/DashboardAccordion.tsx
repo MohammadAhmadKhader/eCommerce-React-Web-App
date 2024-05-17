@@ -1,4 +1,4 @@
-import { useState, FC, useContext } from 'react';
+import { useState, FC, useContext, Children, ReactNode } from 'react';
 import Accordion from '@mui/joy/Accordion';
 import AccordionSummary from '@mui/joy/AccordionSummary';
 import { AccordionDetails } from '@mui/joy';
@@ -8,12 +8,13 @@ import { BiHome } from 'react-icons/bi';
 import { useTheme, useMediaQuery } from '@mui/material';
 
 export interface IDashboardAccordion {
-    Title: string, AccordionComponent: FC;
+    Title: string;
     Icon: FC | typeof BiHome;
-    IconSize?: number | string
+    IconSize?: number | string;
+    children:ReactNode;
 }
 
-function DashboardAccordion({ Title, AccordionComponent, Icon, IconSize = 22 }: IDashboardAccordion) {
+function DashboardAccordion({children, Title, Icon, IconSize = 22 }: IDashboardAccordion) {
     const [index, setIndex] = useState<number | null>(0);
     const { theme } = useContext(ThemeContext);
 
@@ -47,7 +48,7 @@ function DashboardAccordion({ Title, AccordionComponent, Icon, IconSize = 22 }: 
                         className: "justify-center"
                     },
                 }}
-                indicator={<div className='hidden md:block'><KeyboardArrowDown sx={{
+                indicator={<div className='block'><KeyboardArrowDown sx={{
                     color: theme === "light" ? "var(--light--text--color)" : "var(--dark--text--color)",
                 }} /></div>}
 
@@ -57,16 +58,16 @@ function DashboardAccordion({ Title, AccordionComponent, Icon, IconSize = 22 }: 
                     color: theme === "light" ? "var(--light--text--color)" : "var(--dark--text--color)"
                 }}>
                     <Icon size={IconSize} />
-                    <h3 className='hidden md:block'>{Title}</h3>
+                    <h3 className='block py-0.5'>{Title}</h3>
                 </div>
             </AccordionSummary>
 
-            <div className='hidden md:block'>
+            <div className='block'>
                 <AccordionDetails>
                     <div style={{
                         color: theme === "light" ? "var(--light--text--color)" : "var(--dark--text--color)"
                     }}>
-                        <AccordionComponent />
+                        {children}
                     </div>
                 </AccordionDetails>
             </div>

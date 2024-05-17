@@ -250,8 +250,8 @@ function Products() {
                         {isLoading ? <ProductsPageSkeleton /> :
                             products?.length > 0 ? products?.map((prod) => {
                                 return (
-                                    <ProductWithRatingsCard name={prod.name} finalPrice={prod.finalPrice} price={prod.price} _id={prod._id}
-                                        brand={prod.brand} avgRating={prod.avgRating} offer={prod.offer} key={prod._id} imageUrl={prod.images[0].imageUrl} ratingNumbers={prod.ratingNumbers} quantity={prod.quantity} />
+                                    <ProductWithRatingsCard name={prod?.name} finalPrice={prod?.finalPrice} price={prod?.price} _id={prod?._id}
+                                        brand={prod?.brand} avgRating={prod?.avgRating} offer={prod?.offer} key={prod._id} imageUrl={prod?.images[0]?.imageUrl} ratingNumbers={prod.ratingNumbers} quantity={prod.quantity} />
                                 )
 
                             }) : <div className='min-w-56'>

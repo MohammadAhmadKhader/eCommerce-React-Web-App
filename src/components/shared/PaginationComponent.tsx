@@ -5,7 +5,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function PaginationComponent({ count, customClasses,siblingCount=1 }: { count: number, customClasses?: string,siblingCount?:number }) {
+function PaginationComponent({ count, customClasses, siblingCount = 1 }: { count: number, customClasses?: string, siblingCount?: number }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const { theme } = useContext(ThemeContext);
 
@@ -43,6 +43,7 @@ function PaginationComponent({ count, customClasses,siblingCount=1 }: { count: n
                         }
                     }}
                     siblingCount={siblingCount}
+                    defaultPage={Number(searchParams.get("page")) || 1}
 
                 /></ThemeProvider>
         </Stack>

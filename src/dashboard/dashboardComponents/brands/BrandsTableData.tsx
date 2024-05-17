@@ -39,7 +39,7 @@ function BrandsTableData({ brand, index, itemsNumber }) {
     return (
         <>
             <tr>
-                <td style={{ ...commonStylesTableData }}>{itemsNumber + index + 1}</td>
+                <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
                 <td style={{ ...commonStylesTableData }}>{brand?.name}</td>
                 <td>
                     <div className="rounded-md w-32 h-32 my-2 bg-gray-100 flex justify-center items-center mx-auto">

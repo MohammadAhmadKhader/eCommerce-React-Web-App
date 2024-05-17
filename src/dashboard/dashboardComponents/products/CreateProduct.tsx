@@ -21,7 +21,7 @@ function CreateProduct() {
 
     const { POST } = useAxios();
     const { userToken } = useContext(UserContext);
-    const [filesNames,setFilesNames] = useState<string[]>([]);
+    const [filesNames, setFilesNames] = useState<string[]>([]);
     const { categories, brands, getBrands } = useContext(GlobalCachingContext);
 
     const submitHandler: SubmitHandler<CreateProductDto> = async (submittedData) => {
@@ -35,13 +35,13 @@ function CreateProduct() {
 
                 formData.append(key, value);
             }
-    
+
             const { data } = await POST("/products", formData, userToken);
             if (data?.message === "success") {
                 toast.success("Product was created");
                 setFilesNames([]);
                 reset();
-                setValue("image",undefined);
+                setValue("image", undefined);
             }
         } catch (error) {
             toast.error(error);
@@ -51,9 +51,9 @@ function CreateProduct() {
     useEffect(() => {
         getBrands();
     }, [])
-    
+
     return (
-        <div className='min-h-screen flex justify-center items-center'>
+        <div className='min-h-screen flex justify-center items-center px-1 my-3 '>
             <form onSubmit={handleSubmit(submitHandler)} className='max-w-[800px] w-full mb-40 border rounded-xl p-5 border-color-accent' style={{ borderColor: "rgba(29,155,240,0.3)" }}>
                 <div>
                     <Input name='name' placeholder='product name...' id='name'
@@ -92,8 +92,8 @@ function CreateProduct() {
                     </div>
                 </div>
 
-                <CreateButton className='my-2 w-full' disabled={isSubmitting || isLoading} 
-                type='submit' isLoading={isSubmitting || isLoading} />
+                <CreateButton className='my-2 w-full' disabled={isSubmitting || isLoading}
+                    type='submit' isLoading={isSubmitting || isLoading} />
             </form>
         </div>
     )
