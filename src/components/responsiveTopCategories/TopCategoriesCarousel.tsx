@@ -36,7 +36,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
 
             {Iterable?.map((category) => {
                 return (
-                    <SwiperSlide key={category.id}>
+                    <SwiperSlide key={category._id}>
                         <Link to={`/products?page=1&limit=9&category=${category._id}`} className='flex flex-col items-center aspect-square text-center'>
                             <div className='bg-gray-100 rounded-md flex items-center justify-center p-3 size-20'>
                                 <img src={category.imageUrl} alt={category.name}

@@ -16,6 +16,7 @@ function Home() {
   const [newArrivals, setNewArrivals] = useState([]);
   const initialLoader = useRef(null)
 
+
   const getNewArrivals = async () => {
     const { data } = await getRequestNewArrivals("/products?page=1&limit=7&sort=newArrivals_desc")
     setNewArrivals(data.products)

@@ -19,7 +19,7 @@ function DashboardUsers() {
 
     const getAllUsers = async (page, limit) => {
         try {
-            const { data } = await GET(`/users/dashboard?page=${page}&limit=${limit}`, userToken);
+            const { data } = await GET(`/dashboard/users?page=${page}&limit=${limit}`, userToken);
 
             setUsers(data.users);
             setCount(data.count);

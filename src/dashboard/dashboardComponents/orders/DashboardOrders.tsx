@@ -15,7 +15,7 @@ function DashboardOrders() {
   const getAllOrders = async (page, limit) => {
 
     try {
-      const { data } = await GET(`/orders/dashboard?page=${page}&limit=${limit}&subTotal_lte=1000`, userToken);
+      const { data } = await GET(`/dashboard/orders?page=${page}&limit=${limit}&subTotal_lte=1000`, userToken);
       console.log(data)
       setOrders(data.orders);
       setCount(data.count);

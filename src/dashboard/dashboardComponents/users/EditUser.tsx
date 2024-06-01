@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import UploadImageInput from '../dashboardShared/UploadImageInput'
-import CreateButton from '../dashboardShared/CreateButton'
 import Input from '../../../components/shared/Input'
 import { joiResolver } from '@hookform/resolvers/joi';
 import { createProductSchema } from '../../../schemas/productSchema';
@@ -34,7 +33,7 @@ function EditUser() {
                 formData.append(key, value);
             }
 
-            const { data } = await POST("/users/dashboard", formData, userToken);
+            const { data } = await POST("/dashboard/users", formData, userToken);
 
             if (data?.message === "success") {
                 toast.success("User was created");

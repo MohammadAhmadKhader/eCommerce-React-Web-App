@@ -10,11 +10,11 @@ const fileSchema = Joi.object({
 })
 
 export const createCategorySchema = Joi.object({
-    name: Joi.string().min(2).max(64).required(),
+    name: Joi.string().trim().min(2).max(64).required(),
     image:Joi.any().required()
 }).required()
 
 export const updateCategorySchema = Joi.object({
-    name: Joi.string().min(2).max(64),
+    name: Joi.string().trim().min(2).max(64),
     image:Joi.any()
 }).min(1).required()

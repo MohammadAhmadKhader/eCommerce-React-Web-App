@@ -7,7 +7,6 @@ import { useContext, useEffect, useState } from 'react';
 import { getCorrectItemsNumber } from '../dashboardShared/helperFunctions';
 import { useSearchParams } from 'react-router-dom';
 import { GlobalCachingContext } from '../../../components/features/GlobalCachingContext/GlobalCachingProvider';
-console.log("fiewfwewefwfrst")
 
 function ProductsTable({ products, isLoading, count, getAllProducts }: { products: IProduct[]; isLoading: boolean; count: number; getAllProducts: (page: string, limit: string) => any }) {
     const commonStylesTableHeaders = { fontSize: "16px", fontWeight: 600 };

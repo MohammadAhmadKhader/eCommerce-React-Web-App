@@ -35,7 +35,7 @@ function CreateUser() {
 
                 formData.append(key, value);
             }
-            const { data } = await POST("/users/dashboard", formData, userToken);
+            const { data } = await POST("/dashboard/users", formData, userToken);
 
             if (data?.message === "success") {
                 toast.success("User was created");
