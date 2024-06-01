@@ -31,7 +31,7 @@ function UserTableData({ user, itemsNumber, index, getAllUsers }: IUserTableData
       if (confirm(`Are you sure you want to delete user with email ${user?.email}?`)) {
         setIsDeleting(true);
 
-        const response = await DELETE(`/users/dashboard/${user?._id}`, {}, userToken);
+        const response = await DELETE(`/dashboard/users/${user?._id}`, {}, userToken);
         if (response.status === 204) {
           toast.success(`User with email ${user?.email} was deleted`);
           getAllUsers(searchParams.get("page"),searchParams.get("limit"));

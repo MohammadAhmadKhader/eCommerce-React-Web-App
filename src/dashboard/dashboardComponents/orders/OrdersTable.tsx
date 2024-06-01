@@ -21,9 +21,9 @@ function OrdersTable({ orders, isLoading, count }: { orders: any[]; isLoading: b
                     <tr>
                         <td style={{ width: "30px" }}></td>
                         <td style={{ ...commonStylesTableHeaders, width: "80px", textAlign: "center" }}>Number</td>
-                        <td style={{ ...commonStylesTableHeaders, width: "240px", textAlign: "center" }}>Order ID</td>
-                        <td style={{ ...commonStylesTableHeaders, width: "120px", textAlign: "center" }}>SubTotal</td>
-                        <td style={{ ...commonStylesTableHeaders, width: "120px", textAlign: "center" }}>GrandTotal</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "220px", textAlign: "center" }}>Order ID</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "100px", textAlign: "center" }}>SubTotal</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "100px", textAlign: "center" }}>GrandTotal</td>
                         <td style={{ ...commonStylesTableHeaders, width: "80px", textAlign: "center" }}>Status</td>
                         <td style={{ ...commonStylesTableHeaders, width: "140px", textAlign: "center" }}>Initiated At</td>
                         <td style={{ ...commonStylesTableHeaders, width: "190px", textAlign: "center" }}>Metadata</td>

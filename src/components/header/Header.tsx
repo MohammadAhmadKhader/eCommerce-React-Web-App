@@ -24,7 +24,7 @@ function Header() {
   const { userData, isUserFetchDataLoading } = useContext(UserContext)
   const { cartItems }: any = useContext(CartContext)
   const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
-  const [isOpen,setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="fixed left-0 top-0 z-50 md:static header min-h-14 w-full py-2 border-solid border-b"
@@ -36,10 +36,10 @@ function Header() {
       <div className="flex justify-between mx-3">
         <div className="flex items-center justify-between w-full">
           <div className="flex w-fit">
-            <Menu onClick={()=>{
+            <Menu onClick={() => {
               setIsOpen(prevState => !prevState);
-            }}/>
-            <Drawer isOpen={isOpen} setIsOpen={setIsOpen}/>
+            }} />
+            <Drawer isOpen={isOpen} setIsOpen={setIsOpen} />
             <h1 className="overflow-hidden flex">
               <Link className="h-12 mr-4" to="/">
                 {windowWidth > 768 ? <WebsiteLogo /> : <ShortWebSiteLogo />}
@@ -79,9 +79,10 @@ function Header() {
                 <div className="opacity-70 duration-300 hover:opacity-100 relative">
                   <BsCart size={25} />
 
-                  {cartItems?.length > 0 && <div className="absolute -right-1 -top-3">
-                    <GoDotFill color="red" size={30} />
-                    <span className="absolute right-[12px] top-[5px] text-[11px] font-semibold text-white">
+                  {cartItems?.length > 0 && <div className="absolute -right-1 -top-3.5">
+                    <GoDotFill color="red" size={31} />
+                    <span className="absolute top-1/2 left-1/2 -translate-x-1/2 
+                     -translate-y-1/2 text-[11px] font-bold text-white">
                       {cartItems.length}
                     </span>
                   </div>
@@ -117,7 +118,7 @@ function Header() {
           </>
         }
       </div>
-      
+
     </header>
   )
 }

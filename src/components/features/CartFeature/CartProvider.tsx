@@ -24,7 +24,6 @@ function CartProvider({ children }) {
                 const { data } = await GET(`/carts/${userData._id}`, userToken)
                 setCartItems(data.cart);
                 setIsCartLoading(false)
-                console.log(data.cart)
             }
         } catch (error) {
             console.log(error)

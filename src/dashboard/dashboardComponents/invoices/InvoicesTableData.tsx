@@ -31,10 +31,10 @@ function InvoicesTableData({ invoice, count, index }: IInvoiceTableData) {
                 </td>
                 <td className='text-center text-[15px] tracking-wide font-semibold'>#{itemsNumber + index + 1}</td>
                 <td className='text-[15px] tracking-wide font-semibold text-center'>
-                    {invoice?.subTotal}
+                    {invoice?.subTotal}$
                 </td>
                 <td className='text-[15px] tracking-wide font-semibold text-center'>
-                    {invoice?.grandTotal}
+                    {invoice?.grandTotal}$
                 </td>
                 <td className='text-[14px] tracking-wider font-semibold text-center'>
                     #{invoice?.orderId}

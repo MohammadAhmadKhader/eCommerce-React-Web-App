@@ -1,15 +1,13 @@
-import DeleteButton from '../dashboardShared/DeleteButton';
 import CustomTable from '../dashboardShared/CustomTable';
 import { User } from '../../../types/types';
 import TableLoading from '../../../components/shared/TableLoading';
 import TableWidthScrolling from '../dashboardShared/TableWidthScrolling';
 import { useSearchParams } from 'react-router-dom';
 import { CSSProperties, useEffect, useState } from 'react';
-import { getCorrectDate, getCorrectItemsNumber } from '../dashboardShared/helperFunctions';
+import {  getCorrectItemsNumber } from '../dashboardShared/helperFunctions';
 import UserTableData from './UserTableData';
 
 const commonTableHeadersStyles: CSSProperties = { color: "inherit", backgroundColor: "inherit", textAlign: "center", fontWeight: 600 }
-const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
 
 function UsersTable({ users, isLoading, count,getAllUsers }: { users: User[]; isLoading: boolean, count: number,getAllUsers:(page:string,limit:string)=>any }) {
     const [searchParams, setSearchParams] = useSearchParams();

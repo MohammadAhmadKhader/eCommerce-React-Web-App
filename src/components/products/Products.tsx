@@ -15,6 +15,8 @@ import { objectIdSchemaOptional } from '../../schemas/IdValidation.ts'
 import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCachingProvider.tsx'
 import { toast } from 'react-toastify';
 import PaginationComponent from '../shared/PaginationComponent.tsx';
+import useEnsureCorrectPagination from '../../customHooks/useEnsureCorrectPagination.tsx'
+import { getLinkPath } from '../../utils/helperFunctions.ts'
 
 function Products() {
     const navigate = useNavigate()
@@ -25,26 +27,31 @@ function Products() {
     const { setIsLoading, GET, isLoading } = useAxios()
     const [count, setCount] = useState(9);
     const [searchParams, setSearchParams] = useSearchParams();
+    const { ensureCorrectPagination, minLimit, maxLimit } = useEnsureCorrectPagination()
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState("All Categories");
     const { categories, isCategoriesLoading, loadingMessage } = useContext(GlobalCachingContext)
-    const maxLimit = 30;
-    const minLimit = 9;
+
     const { debounce } = useDebounce();
     const initialLoader = useRef(null);
 
     const getLimitValue = () => {
         let limit = searchParams.get("limit");
-        if (parseInt(searchParams.get("limit")) > maxLimit) {
-            limit = maxLimit.toString()
-        }
-        if (parseInt(searchParams.get("limit")) < minLimit) {
-            limit = minLimit.toString()
-        }
         if (parseInt(searchParams.get("limit")) > count) {
             limit = count.toString()
         }
         return limit
+    }
+
+    function setCategoryName(categories : any){
+        categories.forEach((category) => {
+            if (category._id == searchParams.get("category")) {
+                setCategory(category.name)
+            }
+            if (!searchParams.get("category")) {
+                setCategory("All Categories")
+            }
+        })
     }
     const getData = async (params) => {
         try {
@@ -53,7 +60,7 @@ function Products() {
             setProducts(data.products)
             console.log(data.products)
             setCount(data.count);
-            console.log("SENT")
+
         } catch (error) {
             console.log(error)
         } finally {
@@ -69,13 +76,7 @@ function Products() {
             }
         }
 
-        if (!searchParams.get("limit") || !searchParams.get("page")) {
-            searchParams.set("limit", "9");
-            searchParams.set("page", "1");
-            setSearchParams(searchParams)
-        }
-
-
+        ensureCorrectPagination()
     }, [])
 
     useEffect(() => {
@@ -89,27 +90,14 @@ function Products() {
         }
     }, [loadingMessage])
 
-
     useEffect(() => {
-        if (parseInt(searchParams.get("limit")) > maxLimit) {
-            searchParams.set("limit", maxLimit.toString())
-            setSearchParams(searchParams)
-        }
-        if (parseInt(searchParams.get("limit")) < minLimit) {
-            searchParams.set("limit", minLimit.toString())
-            setSearchParams(searchParams)
-        }
         if (searchParams.get("category")) {
             const { error } = objectIdSchemaOptional.validate({ categoryId: searchParams.get("category") })
             if (error) {
                 navigate("/")
             }
         }
-        if (!searchParams.get("limit") || !searchParams.get("page")) {
-            searchParams.set("limit", "9");
-            searchParams.set("page", "1");
-            setSearchParams(searchParams)
-        }
+        ensureCorrectPagination()
 
         const brands = searchParams.getAll("brands");
         const sort = searchParams.get("sort");
@@ -117,7 +105,6 @@ function Products() {
         const available = searchParams.get("available");
         const price_lte = searchParams.get("price_lte");
         const price_gte = searchParams.get("price_gte");
-
 
         const params = {
             brand: brands ? brands : "",
@@ -130,34 +117,12 @@ function Products() {
             limit: searchParams.get("limit") || 1,
             category: searchParams.get("category") ? searchParams.get("category") : undefined,
         }
-        const sortedParams = Object.keys(params).sort();
-        const sortedObj = {};
-        sortedParams.forEach(key => {
-            sortedObj[key] = params[key];
-            if (key === "brand") {
-                sortedObj[key].sort()
-            }
-        });
 
-        let linkPath = "";
-        for (const value in sortedObj) {
-            if (sortedObj[value]?.length > 0) {
-                linkPath = linkPath + value + "=" + (value == "brand" ? JSON.stringify(sortedObj[value]) : sortedObj[value]) + "&";
-            }
-        }
-
+        const linkPath = getLinkPath(params);
         if (!isCategoriesLoading) {
-            categories.forEach((category) => {
-                if (category._id == searchParams.get("category")) {
-                    setCategory(category.name)
-                }
-                if (!searchParams.get("category")) {
-                    setCategory("All Categories")
-                }
-            })
+           setCategoryName(categories);
         }
 
-        linkPath = linkPath.slice(0, -1)
         debounce(() => { getData(linkPath) }, 500)
     }, [searchParams])
 
@@ -250,8 +215,8 @@ function Products() {
                         {isLoading ? <ProductsPageSkeleton /> :
                             products?.length > 0 ? products?.map((prod) => {
                                 return (
-                                    <ProductWithRatingsCard name={prod.name} finalPrice={prod.finalPrice} price={prod.price} _id={prod._id}
-                                        brand={prod.brand} avgRating={prod.avgRating} offer={prod.offer} key={prod._id} imageUrl={prod.images[0].imageUrl} ratingNumbers={prod.ratingNumbers} quantity={prod.quantity} />
+                                    <ProductWithRatingsCard name={prod?.name} finalPrice={prod?.finalPrice} price={prod?.price} _id={prod?._id} 
+                                        brand={prod?.brand} avgRating={prod?.avgRating} offer={prod?.offer} key={prod._id} imageUrl={prod?.images[0]?.imageUrl} ratingNumbers={prod.ratingNumbers} quantity={prod.quantity} />
                                 )
 
                             }) : <div className='min-w-56'>

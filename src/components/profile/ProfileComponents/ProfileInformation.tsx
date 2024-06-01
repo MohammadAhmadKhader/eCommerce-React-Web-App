@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { InputHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
 import Input from '../../shared/Input'
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -14,15 +14,17 @@ import ProfileModal from './ProfileModal';
 import { userInformationSchema } from '../../../schemas/userSchemas';
 
 
+
 function ProfileInformation() {
   const { theme } = useContext(ThemeContext)
   const { userData, userToken, isUserFetchDataLoading, getUserData } = useContext(UserContext)
   const [isDefaultValues, setIsDefaultValues] = useState(true);
   const { PUT } = useAxios()
-  const { register, handleSubmit, formState, reset, watch, getValues } = useForm<UserData>({
+  const { register, handleSubmit, formState, reset, watch, getValues, setValue } = useForm<UserData>({
     mode: "onChange",
     resolver: joiResolver(userInformationSchema),
   });
+  const [fileReader, setFileReader] = useState<FileReader | null>(null)
   const { errors, isValid, isDirty, isSubmitting } = formState;
   const inputFileRef = useRef(null);
   const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
@@ -37,20 +39,50 @@ function ProfileInformation() {
 
   useEffect(() => {
     const subscription = watch((values) => {
-      if (values?.birthDate as unknown as string == "" && values?.email == "" 
-      && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == undefined) {
+      if (values?.birthDate as unknown as string == "" && values?.email == ""
+        && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == null) {
         setIsDefaultValues(true)
       } else {
         setIsDefaultValues(false)
       }
     })
     return () => subscription.unsubscribe()
-  }, [watch])
+  }, [watch]);
 
+  useEffect(() => {
+    setValue("userImg", userImage);
+
+    if (userImage instanceof File) {
+      fileReader.readAsDataURL(userImage);
+
+      fileReader.onloadend = (result) => {
+        setUserImage(result?.target?.result)
+      }
+    }
+
+  }, [userImage])
+
+  useEffect(() => {
+    const fileReader = new FileReader();
+    setFileReader(fileReader);
+
+  }, [])
+
+
+  const userImageHandler = (uploadedImage: string, userImage: string, defaultImage: string, isDeleted) => {
+    if (typeof uploadedImage === "string" && uploadedImage.substring(0, 4) === "data") {
+      return uploadedImage;
+    }
+    if (userImage && !isDeleted) {
+      return userImage
+    }
+    return defaultImage
+  }
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
     try {
       const formData = new FormData()
       if (userImage != null) {
+
         formData.append("userImg", userImage)
       }
       for (const key in submittedData) {
@@ -94,34 +126,43 @@ function ProfileInformation() {
           <div className='flex-shrink-0 sm:max-w-96 flex justify-center sm:justify-between flex-col sm:flex-row'>
             <div className='flex-shrink-0'>
               <img className='rounded-full m-auto mb-5 sm:m-0 object-cover w-[80px] h-[80px]'
-                src={userData.userImg || defaultUserImage}
+                src={userImageHandler(userImage, userData.userImg, defaultUserImage, userImage === "deleteImg")}
                 alt="User Img" onLoad={(e) => {
                   const Img = e.currentTarget
                   Img.classList.remove("blur-sm")
                 }} />
             </div>
-            <div className='flex items-end gap-x-3.5 justify-center sm:justify-normal'>
-              <button className='px-10 py-1 border h-fit duration-300 rounded-md
+            <div className='flex flex-col justify-center'>
+              <div className='flex items-end gap-x-3.5 justify-center sm:justify-normal'>
+
+
+                <button className='px-10 py-1 border h-fit duration-300 rounded-md  font-semibold
                text-white border-color-accent hover:text-color-accent hover:bg-transparent bg-color-accent'
-                onClick={() => {
-                  inputFileRef.current.click()
-                }} type='button'
-              >
-                Upload
-                <input {...register("userImg")} accept="image/*" ref={inputFileRef} type='file' className='hidden' id="userImg" onChange={(event) => {
-                  const file = event.target.files[0];
-                  setUserImage(file)
-                  console.log(file)
-                }} />
-              </button>
-              <button className='px-10 py-1 border h-fit duration-300 rounded-md
-               text-red-600 border-red-600 hover bg-transparent hover:text-white hover:bg-red-600'
-                type='button' onClick={() => {
-                  setUserImage("deleteImg")
-                }}
-              >
-                Delete
-              </button>
+                  onClick={() => {
+                    inputFileRef.current.click()
+                  }} type='button'
+                >
+                  Upload
+                  <input {...register("userImg")} accept="image/*" ref={inputFileRef} type='file' className='hidden'
+                    id="userImg" onChange={(event) => {
+                      const file = event.target.files[0];
+                      setUserImage(file);
+                    }} />
+                </button>
+
+                <button className='px-10 py-1 border h-fit duration-300 rounded-md font-semibold
+               text-red-600 border-red-600 hover bg-transparent hover:text-white hover:bg-red-600 
+               hover:disabled:bg-inherit hover:disabled:text-red-600'
+                  disabled={userImage === "deleteImg" ? true : false}
+                  type='button' onClick={() => {
+                    setUserImage("deleteImg");
+                    setValue<"userImg" | any>("userImg","deleteImg");
+                    inputFileRef.current.value = null;
+                  }}
+                >
+                  Delete
+                </button></div>
+              {userImage && <span onClick={() => { setUserImage(null);inputFileRef.current.value = null; }} className='mx-auto text-[10px] text-red-600 cursor-pointer'>click to reset</span>}
             </div>
           </div>
 

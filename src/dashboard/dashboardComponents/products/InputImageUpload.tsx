@@ -1,7 +1,7 @@
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { Tooltip, styled } from '@mui/joy';
-import { Dispatch, FormEvent, SetStateAction, useContext, useState } from 'react';
+import {  FormEvent, useContext,useState } from 'react';
 import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
@@ -55,6 +55,8 @@ export default function InputImageUpload({
             setIsLoading(false)
         }
     }
+    
+
     return (
         <form encType='multipart/form-data' className='flex flex-col gap-y-2'
             onSubmit={(e) => {
@@ -104,10 +106,10 @@ export default function InputImageUpload({
                     setInputValue(e?.target?.value); // name includes fakePath//imageName
                     setFileImage(e.target.files[0]);
 
-                    reader.addEventListener("loadend", (file) => {
+                    reader.onloadend = (file) => {
                         setPreviewImage(file?.target?.result);
 
-                    });
+                    };
                     reader.readAsDataURL(e.target.files[0]);
                 }}
                 />

@@ -15,7 +15,7 @@ function DashboardReviews() {
   const getAllReviews = async (page, limit) => {
 
     try {
-      const { data } = await GET(`/reviews?page=${page}&limit=${limit}`, userToken);
+      const { data } = await GET(`/dashboard/reviews?page=${page}&limit=${limit}`, userToken);
       console.log(data)
       setReviews(data.reviews);
       setCount(data.count);

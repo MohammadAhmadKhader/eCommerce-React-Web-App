@@ -14,7 +14,7 @@ function DashboardInvoices() {
 
   const getAllInvoices = async (page,limit) => {
     try {
-      const { data } = await GET(`/invoices?page=${page}&limit=${limit}`, userToken);
+      const { data } = await GET(`/dashboard/invoices?page=${page}&limit=${limit}`, userToken);
       
       setInvoices(data.invoices);
       setCount(data.count);

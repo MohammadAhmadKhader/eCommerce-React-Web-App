@@ -12,8 +12,8 @@ function InvoicesTable({ invoices, isLoading, count }: { invoices: any[]; isLoad
                     <tr>
                         <td style={{ width: "30px" }}></td>
                         <td style={{ ...commonStylesTableHeaders, width: "80px", textAlign: "center" }}>Number</td>
-                        <td style={{ ...commonStylesTableHeaders, width: "150px", textAlign: "center" }}>SubTotal</td>
-                        <td style={{ ...commonStylesTableHeaders, width: "150px", textAlign: "center" }}>GrandTotal</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "100px", textAlign: "center" }}>SubTotal</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "100px", textAlign: "center" }}>GrandTotal</td>
                         <td style={{ ...commonStylesTableHeaders, width: "240px", textAlign: "center" }}>OrderId</td>
                         <td style={{ ...commonStylesTableHeaders, width: "140px", textAlign: "center" }}>Initiated At</td>
                         <td style={{ ...commonStylesTableHeaders, width: "240px", textAlign: "center" }}>Actions</td>

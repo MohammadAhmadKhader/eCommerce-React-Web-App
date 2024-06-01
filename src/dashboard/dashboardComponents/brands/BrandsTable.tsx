@@ -14,18 +14,18 @@ function BrandsTable({ brands, isLoading, count }: { brands: any[]; isLoading: b
     const [itemsNumber, setItemsNumber] = useState<number>(0);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    
-    useEffect(() => {
-        setItemsNumber(getCorrectItemsNumber(searchParams.get("page"),searchParams.get("limit")))
 
-    }, [count, searchParams,brands]);
+    useEffect(() => {
+        setItemsNumber(getCorrectItemsNumber(searchParams.get("page"), searchParams.get("limit")))
+
+    }, [count, searchParams, brands]);
 
     return (
         <TableWidthScrolling >
             <CustomTable minWidth={1000}>
                 <thead>
                     <tr>
-                        <td style={{ ...commonStylesTableHeaders }}>Number</td>
+                        <td style={{ ...commonStylesTableHeaders, width: "90px" }}>Number</td>
                         <td style={{ ...commonStylesTableHeaders }}>Name</td>
                         <td style={{ ...commonStylesTableHeaders }}>Image</td>
                         <td style={{ ...commonStylesTableHeaders }}>Actions</td>
@@ -35,8 +35,8 @@ function BrandsTable({ brands, isLoading, count }: { brands: any[]; isLoading: b
                     {isLoading ? <TableLoading LoadingRows={15} LoadingCols={4} /> :
                         brands?.map((brand, index) => {
                             return (
-                               <BrandsTableData key={brand?._id} brand={brand}
-                                index={index} itemsNumber={itemsNumber}/>
+                                <BrandsTableData key={brand?._id} brand={brand}
+                                    index={index} itemsNumber={itemsNumber} />
                             )
                         })
                     }
