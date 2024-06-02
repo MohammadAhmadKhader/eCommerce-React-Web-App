@@ -26,7 +26,7 @@ function ProfileInformation() {
   });
   const [fileReader, setFileReader] = useState<FileReader | null>(null)
   const { errors, isValid, isDirty, isSubmitting } = formState;
-  const inputFileRef = useRef(null);
+  const inputFileRef = useRef<null | HTMLInputElement>(null);
   const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/upload/f_auto,q_auto/v1/eCommerce-React-app/UsersImages/rtnfqs2mx3rvvgleayna"
   const [userImage, setUserImage] = useState(null);
 
@@ -40,18 +40,19 @@ function ProfileInformation() {
   useEffect(() => {
     const subscription = watch((values) => {
       if (values?.birthDate as unknown as string == "" && values?.email == ""
-        && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" && values.userImg == null) {
+        && values?.firstName == "" && values?.lastName == "" && values?.mobileNumber == "" &&
+        (values?.userImg == userData?.userImg || values?.userImg === null)) {
+          
         setIsDefaultValues(true)
       } else {
         setIsDefaultValues(false)
       }
     })
+
     return () => subscription.unsubscribe()
-  }, [watch]);
+  }, [watch, inputFileRef.current?.value]);
 
   useEffect(() => {
-    setValue("userImg", userImage);
-
     if (userImage instanceof File) {
       fileReader.readAsDataURL(userImage);
 
@@ -80,6 +81,7 @@ function ProfileInformation() {
   }
   const changeUserInfo: SubmitHandler<UserData> = async (submittedData) => {
     try {
+
       const formData = new FormData()
       if (userImage != null) {
 
@@ -90,11 +92,10 @@ function ProfileInformation() {
           if (key !== "userImg") {
             formData.append(key, submittedData[key])
           } else {
-            formData.append("userImg", userImage)
+            formData.append("userImg", getValues("userImg"))
           }
         }
       }
-
       const { data } = await PUT(`/users/userInformation`, formData, userToken)
 
       if (data.message == "success") {
@@ -139,13 +140,16 @@ function ProfileInformation() {
                 <button className='px-10 py-1 border h-fit duration-300 rounded-md  font-semibold
                text-white border-color-accent hover:text-color-accent hover:bg-transparent bg-color-accent'
                   onClick={() => {
-                    inputFileRef.current.click()
+                    inputFileRef.current.click();
                   }} type='button'
                 >
                   Upload
                   <input {...register("userImg")} accept="image/*" ref={inputFileRef} type='file' className='hidden'
                     id="userImg" onChange={(event) => {
                       const file = event.target.files[0];
+                      setValue("userImg", file,{
+                        shouldDirty:true
+                      });
                       setUserImage(file);
                     }} />
                 </button>
@@ -156,13 +160,24 @@ function ProfileInformation() {
                   disabled={userImage === "deleteImg" ? true : false}
                   type='button' onClick={() => {
                     setUserImage("deleteImg");
-                    setValue<"userImg" | any>("userImg","deleteImg");
+                    setValue("userImg", "deleteImg",{
+                      shouldDirty:true
+                    });
                     inputFileRef.current.value = null;
                   }}
                 >
                   Delete
                 </button></div>
-              {userImage && <span onClick={() => { setUserImage(null);inputFileRef.current.value = null; }} className='mx-auto text-[10px] text-red-600 cursor-pointer'>click to reset</span>}
+              {userImage && <span onClick={() => {
+                setUserImage(null);
+                inputFileRef.current.value = null;
+                setValue("userImg", userData?.userImg,{
+                  shouldDirty:true
+                });
+              }}
+                className='mx-auto text-[10px] text-red-600 cursor-pointer'>
+                click to reset
+              </span>}
             </div>
           </div>
 

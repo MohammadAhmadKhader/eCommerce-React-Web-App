@@ -11,15 +11,15 @@ import useAxios from '../../../customHooks/useAxios';
 import useDebounce from '../../../customHooks/useDebounce';
 import { toast } from 'react-toastify';
 
-
+const fallBackImageUrl = "https://res.cloudinary.com/doxhxgz2g/image/upload/v1717370800/eCommerce-React-app/StaticAssets/vecteezy_icon-image-not-found-vector__fbmdiy.jpg"
 function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgRating, brand, ratingNumbers, _id }: IProductWithRatingsCardProps) {
     const navigate = useNavigate()
     const { theme } = useContext(ThemeContext);
     const { POST, setIsLoading } = useAxios();
     const { userData, userToken, getUserData } = useContext(UserContext)
     const { debounce } = useDebounce()
-    const [isItemOwned, setIsItemOwned] = useState(false);
-
+    const [isItemOwned, setIsItemOwned] = useState<boolean>(false);
+    const [productImage,setProductImage] = useState<string>(imageUrl);
     const addToWishList = async () => {
         try {
             const { data } = await POST(`/wishlists`, {
@@ -56,10 +56,14 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
             boxShadow: theme == "dark" ? "var(--dark--boxShadowCard)" : "var(--light--boxShadowCard)",
         }}>
             <Link to={`/products/${_id}?page=1&limit=9`} className={`border-b flex items-center rounded-t-md`}
+                style={{
+                    borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
+                    borderBottomWidth: theme == "dark" ? "2px" : "1px",
+                }}
 
             >
-                <img src={imageUrl}
-                    alt={name}
+                <img src={productImage} onError={() => {setProductImage(fallBackImageUrl)}}
+                    alt={productImage !== fallBackImageUrl ? name : `product image for product : ${name} not found`}
                     className={`rounded-t-md object-contain aspect-square bg-transparent`} />
             </Link>
             <div className='p-3'>

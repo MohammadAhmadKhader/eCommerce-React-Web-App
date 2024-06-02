@@ -317,17 +317,14 @@ export interface IReviewComponent {
     review:Review
 }
 
-
 export type UserData = {
     firstName: string;
     lastName: string;
     email: string;
     mobileNumber: string;
     birthDate: Date;
-    userImg:BinaryType
+    userImg:BinaryType | string | File
 }
-
-
 
 export type UserSignInDataType = {
     email?: string;
@@ -388,11 +385,7 @@ export type CreateCategoryDto = {
     name:string;
     image:any
 }
-export type UpdateCategoryDto = {
-    name?:string;
-    image?:any
-}
-
+export type UpdateCategoryDto = Partial<CreateCategoryDto>;
 export type CreateBrandDto = {
     brandName:string;
     brandLogo:any
@@ -436,17 +429,7 @@ export type CreateUserDto = {
     image:File;
 }
 
-export type UpdateUserDto = {
-    email?:string;
-    password?:string;
-    firstName?:string;
-    lastName?:string;
-    mobileNumber?:string;
-    userImg?:string;
-    birthdate?:Date;
-    role?:"user" | "admin";
-    image?:File;
-}
+export type UpdateUserDto = Partial<CreateUserDto>
 
 export interface IProduct {
     _id:string;
