@@ -6,14 +6,16 @@ import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
 import EditButton from '../dashboardShared/EditButton';
 import DeleteButton from '../dashboardShared/DeleteButton';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 function CategoriesTableData({ category, index, itemsNumber }) {
-    const [isEditModelOpen, setIsEditModelOpen] = useState<boolean>(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
     const { DELETE, PUT } = useAxios();
     const { userToken } = useContext(UserContext);
 
     const commonStylesTableData: { fontSize: string, fontWeight: number, textAlign: "center" }
         = { fontSize: "16px", fontWeight: 500, textAlign: "center" };
+    
 
 
     const deleteCategory = async (category: any, userToken: string) => {
@@ -30,10 +32,31 @@ function CategoriesTableData({ category, index, itemsNumber }) {
             console.log(error)
         }
     }
+    const menuList = [{
+        onClick:()=>{
+            setIsEditModalOpen(true)
+        },
+        text:"Edit",
+    },{
+        onClick:()=>{
+            deleteCategory(category, userToken)
+        },
+        text:"Delete",
+    }
+]
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
 
     return (
         <>
-            <tr>
+            <tr onContextMenu={(e) => {
+                e.preventDefault()
+                setXMenuPosition(e.clientX)
+                setYMenuPosition(e.clientY)
+                
+                setIsContextMenuOpen(e.currentTarget);
+            }}>
                 <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
                 <td style={{ ...commonStylesTableData }}>{category?.name}</td>
                 <td>
@@ -50,14 +73,17 @@ function CategoriesTableData({ category, index, itemsNumber }) {
                 </td>
                 <td>
                     <div className="flex justify-center items-center mx-auto gap-x-2">
-                        <EditButton className='w-full' mode="both" onClick={() => setIsEditModelOpen(true)} />
+                        <EditButton className='w-full' mode="both" onClick={() => setIsEditModalOpen(true)} />
                         <DeleteButton className='w-full' mode="both" onClick={() => { deleteCategory(category, userToken) }} />
                     </div>
                 </td>
             </tr>
-            <EditModal isOpen={isEditModelOpen} setIsOpen={setIsEditModelOpen} title="Edit Category" >
-                <EditCategory category={category} setIsEditModelOpen={setIsEditModelOpen} />
+            <EditModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} title="Edit Category" >
+                <EditCategory category={category} setIsEditModalOpen={setIsEditModalOpen} />
             </EditModal>
+
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{fieldName:"Name",fieldValue:category?.name}}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
         </>
     )
 }

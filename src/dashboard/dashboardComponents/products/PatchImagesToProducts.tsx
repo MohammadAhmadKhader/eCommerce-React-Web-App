@@ -12,11 +12,11 @@ export interface IPatchImagesToProduct {
 }
 
 export interface IPatchImagesToProductProps {
-    setIsPatchImagesModelOpen: Dispatch<SetStateAction<boolean>>;
+    setIsPatchImagesModalOpen: Dispatch<SetStateAction<boolean>>;
     product: IProduct;
 }
 
-function PatchImagesToProduct({ setIsPatchImagesModelOpen, product }: IPatchImagesToProductProps) {
+function PatchImagesToProduct({ setIsPatchImagesModalOpen, product }: IPatchImagesToProductProps) {
     const { handleSubmit, formState, reset, setValue } = useForm<IPatchImagesToProduct>({
         mode: "onChange",
     });
@@ -58,7 +58,7 @@ function PatchImagesToProduct({ setIsPatchImagesModelOpen, product }: IPatchImag
                 setFilesNames([]);
                 reset();
                 setValue("images", undefined);
-                setIsPatchImagesModelOpen(false)
+                setIsPatchImagesModalOpen(false)
             }
         } catch (error) {
             toast.error(error);

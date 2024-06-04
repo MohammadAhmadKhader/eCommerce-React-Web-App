@@ -12,10 +12,10 @@ import { updateBrandSchema } from '../../../schemas/brandSchema';
 
 export interface IEditBrand {
     brand:any;
-    setIsEditModelOpen:Dispatch<SetStateAction<boolean>>
+    setIsEditModalOpen:Dispatch<SetStateAction<boolean>>
 }
 
-function EditBrand({ brand,setIsEditModelOpen } : IEditBrand) {
+function EditBrand({ brand,setIsEditModalOpen } : IEditBrand) {
     const { register, handleSubmit, formState, reset, trigger, setValue, getValues } = useForm<UpdateBrandDto>({
         mode: "onChange",
         resolver: joiResolver(updateBrandSchema),
@@ -32,7 +32,7 @@ function EditBrand({ brand,setIsEditModelOpen } : IEditBrand) {
             if (response?.status === 200) {
                 toast.success("Brand was deleted");
                 reset();
-                setIsEditModelOpen(false);
+                setIsEditModalOpen(false);
             }
             return response?.status
         } catch (error) {

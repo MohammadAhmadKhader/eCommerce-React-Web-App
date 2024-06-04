@@ -12,10 +12,10 @@ import { UserContext } from '../../../components/features/UserFeature/UserProvid
 
 export interface IEditCategory {
     category:any;
-    setIsEditModelOpen:Dispatch<SetStateAction<boolean>>
+    setIsEditModalOpen:Dispatch<SetStateAction<boolean>>
 }
 
-function EditCategory({ category,setIsEditModelOpen } : IEditCategory) {
+function EditCategory({ category,setIsEditModalOpen } : IEditCategory) {
     const { register, handleSubmit, formState, reset, trigger, setValue, getValues } = useForm<UpdateCategoryDto>({
         mode: "onChange",
         resolver: joiResolver(updateCategorySchema),
@@ -32,7 +32,7 @@ function EditCategory({ category,setIsEditModelOpen } : IEditCategory) {
             if (response?.status === 200) {
                 toast.success("Category was edited");
                 reset();
-                setIsEditModelOpen(false);
+                setIsEditModalOpen(false);
             }
             return response?.status
         } catch (error) {

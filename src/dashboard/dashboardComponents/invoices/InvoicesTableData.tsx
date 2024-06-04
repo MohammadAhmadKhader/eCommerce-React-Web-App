@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaChevronUp } from 'react-icons/fa6';
 import { getCorrectDate } from '../dashboardShared/helperFunctions';
 import { LuDownload } from "react-icons/lu"
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 export interface IInvoiceTableData {
     invoice: any;
@@ -14,14 +15,40 @@ function InvoicesTableData({ invoice, count, index }: IInvoiceTableData) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [itemsNumber, setItemsNumber] = useState(0);
+    const downloadBtnRef = useRef<null | HTMLAnchorElement>(null);
 
     useEffect(() => {
         setItemsNumber((Number(searchParams.get("page") || 1) * Number(searchParams.get("limit") || 9) - Number(searchParams.get("limit") || 9)))
 
     }, [count, searchParams]);
+
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
+    const menuList = [{
+        onClick: () => {
+            if(downloadBtnRef.current){
+                downloadBtnRef.current.click();
+            }
+        },
+        text: "Download invoice",
+    }
+    ]
     return (
         <React.Fragment>
-            <tr key={invoice?._id}>
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList}
+                header={{ fieldName: "ID", fieldValue: `${invoice?._id}` }}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
+
+            <tr key={invoice?._id}
+                onContextMenu={(e) => {
+                    e.preventDefault()
+                    setXMenuPosition(e.clientX)
+                    setYMenuPosition(e.clientY)
+
+                    setIsContextMenuOpen(e.currentTarget);
+                }}
+            >
                 <td style={{ textAlign: "center" }}>
                     <button className='rounded-md flex justify-center items-center bg-color-accent duration-300 hover:bg-sky-800 p-1 text-white'
                         onClick={() => setIsOpen((prevState) => !prevState)}
@@ -44,7 +71,8 @@ function InvoicesTableData({ invoice, count, index }: IInvoiceTableData) {
                 </td>
                 <td className='text-[14px] tracking-wider font-semibold text-center'>
                     <div>
-                        <Link to={`${invoice.pdfLink}`} className='bg-color-accent px-3 py-1.5 flex items-center text-white rounded-md gap-x-2 justify-center hover:bg-sky-700 duration-300'>
+                        <Link to={`${invoice.pdfLink}`} ref={downloadBtnRef}
+                         className='bg-color-accent px-3 py-1.5 flex items-center text-white rounded-md gap-x-2 justify-center hover:bg-sky-700 duration-300'>
                             <LuDownload size={20} />
                             <span>Download invoice</span>
 

@@ -6,6 +6,7 @@ import DeleteButton from '../dashboardShared/DeleteButton';
 import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 export interface IInvoiceTableData {
     order: any;
@@ -36,10 +37,29 @@ function OrdersTableData({ order, index,itemsNumber }: IInvoiceTableData) {
             setIsCancellingOrder(false)
         }
     }
-    
+    const menuList = [{
+        onClick: () => {
+            cancelOrderByAdminPrivilege(order,userToken)
+        },
+        text: "Cancel Order",
+    }
+    ]
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
     return (
         <React.Fragment>
-            <tr key={order?._id}>
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{ fieldName: "ID", fieldValue: `#${order?._id}` }}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
+            <tr key={order?._id}
+            onContextMenu={(e) => {
+                e.preventDefault()
+                setXMenuPosition(e.clientX)
+                setYMenuPosition(e.clientY)
+
+                setIsContextMenuOpen(e.currentTarget);
+            }}
+            >
                 <td style={{ textAlign: "center" }}>
                     <button className='rounded-md flex justify-center items-center bg-color-accent duration-300 hover:bg-sky-800 p-1 text-white'
                         onClick={() => setIsOpen((prevState) => !prevState)}

@@ -10,6 +10,7 @@ import { ThemeContext } from "../../../features/ThemeFeature/ThemeProvider";
 const PriceRangeFilter = () => {
     const { windowWidth } = useContext(WindowWidthContext);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isMounted,setIsMounted] = useState<boolean>(false);
     const { debounce } = useDebounce();
     const { theme } = useContext(ThemeContext);
 
@@ -41,17 +42,19 @@ const PriceRangeFilter = () => {
     const handleChange = (event: Event, newValue: number | number[]) => {
         setValue(newValue as number[]);
     };
+    useEffect(()=>{
+        setIsMounted(true);
+    },[])
     useEffect(() => {
-
-        debounce(() => {
-            if (value[0] > 0 || value[1] < 300) {
-                searchParams.set("price_lte", value[1].toString())
-                searchParams.set("price_gte", value[0].toString())
-                setSearchParams(searchParams)
-            }
-        }, 200)
-
-
+        if(isMounted){
+            debounce(() => {
+                if (value[0] >= 0 || value[1] <= 300) {
+                    searchParams.set("price_lte", value[1].toString())
+                    searchParams.set("price_gte", value[0].toString())
+                    setSearchParams(searchParams)
+                }
+            }, 200)
+        }
     }, [value])
     return (
         <div className="flex flex-col gap-y-4 my-5">

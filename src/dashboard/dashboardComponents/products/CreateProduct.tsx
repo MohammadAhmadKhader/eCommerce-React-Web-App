@@ -35,7 +35,7 @@ function CreateProduct() {
 
                 formData.append(key, value);
             }
-
+            
             const { data } = await POST("/products", formData, userToken);
             if (data?.message === "success") {
                 toast.success("Product was created");
@@ -60,16 +60,16 @@ function CreateProduct() {
                         register={register} title='Product name :' type='text' errors={errors}
                         trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     />
-                    <Input name='price' placeholder='price...' id='price'
+                    <Input name='price' placeholder='price...' id='price' precision={0.01}
                         register={register} title='Price :' type='number' errors={errors}
                         trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     />
-                    <Input name='finalPrice' placeholder='Final price...' id='finalPrice'
+                    <Input name='finalPrice' placeholder='Final price...' id='finalPrice' precision={0.01}
                         register={register} title='Final price :' type='number' errors={errors}
                         trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     />
 
-                    <Input name='offer' placeholder='offer..' id='offer'
+                    <Input name='offer' placeholder='offer..' id='offer' precision={0.001}
                         register={register} title='Offer :' type='number' errors={errors}
                         trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     />
@@ -84,7 +84,7 @@ function CreateProduct() {
 
                     <SelectInput optionValue={"name"} optionName={"name"} optionsArray={brands} className='my-3'
                         placeholder='Select brand...'
-                        width={"100%"} handleChange={(e, value) => { setValue("brand", value) }} />
+                        width={"100%"} handleChange={(e, value) => { setValue("brand", "value") }} />
 
                     <div className='mb-5'>
                         <UploadImageInput reactFormHookSetValue={setValue} text='Upload product image'

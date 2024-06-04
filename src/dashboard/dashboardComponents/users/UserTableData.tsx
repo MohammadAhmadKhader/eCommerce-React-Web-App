@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import EditModal from '../dashboardShared/EditModal';
 import EditUser from './EditUser';
 import { useSearchParams } from 'react-router-dom';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 export interface IUserTableData {
   user: User;
@@ -44,13 +45,41 @@ function UserTableData({ user, itemsNumber, index, getAllUsers }: IUserTableData
       setIsDeleting(false)
     }
   }
-
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
+    const menuList = [
+      {
+        onClick: () => {
+          console.log("Edit User");
+        },
+        text: "Edit User",
+    }
+    ,{
+        onClick: () => {
+          deleteUser(user, userToken);
+        },
+        text: "Delete User",
+    }
+    ]
   return (
     <>
       <EditModal isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} title="Edit User">
         <EditUser />
       </EditModal>
-      <tr key={user?._id}>
+      <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList}
+       header={{ fieldName: "User", fieldValue: `${user?.email}` }}
+        isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
+      
+      <tr key={user?._id}
+      onContextMenu={(e) => {
+        e.preventDefault()
+        setXMenuPosition(e.clientX)
+        setYMenuPosition(e.clientY)
+
+        setIsContextMenuOpen(e.currentTarget);
+    }}
+      >
         <td style={{ ...commonTableDataStyles }}>
           <p>
             #{itemsNumber + index + 1}
