@@ -5,6 +5,7 @@ import { defaultUserImage, getCorrectDate } from '../dashboardShared/helperFunct
 import { toast } from 'react-toastify';
 import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 function ReviewsTableData({ review, itemsNumber, index }) {
     const commonStylesTableData: { fontSize: string, fontWeight: number, textAlign: "center" | "left" }
@@ -32,48 +33,68 @@ function ReviewsTableData({ review, itemsNumber, index }) {
             setIsReviewDeleteProcessing(false)
         }
     }
-
-
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
+    const menuList = [{
+        onClick: () => {
+            deleteUserReview(review, userToken)
+        },
+        text: "Delete comment",
+    }
+    ]
     return (
-        <tr key={review?._id}>
-            <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
-            <td style={{ ...commonStylesTableData, textAlign: "left" }}>{review?.comment}</td>
-            <td style={{ ...commonStylesTableHeaders }}>{review?.rating} / 5</td>
-            <td style={{ ...commonStylesTableHeaders }}>{getCorrectDate(review?.createdAt)}</td>
-            <td style={{ ...commonStylesTableHeaders, textAlign: "left" }}>
-                <div className="flex items-center gap-x-2 border rounded-lg p-2 overflow-auto">
-                    <div className="w-20 flex-shrink-0 my-2">
-                        <img className="rounded-full w-full aspect-square border" src={`${review?.user?.userImg ? review?.user?.userImg : defaultUserImage}`} alt={`${review?.user?.firstName + review?.user?.lastName}`} />
-                    </div>
-                    <div>
-                        <h5>
-                            <span>Name : </span>
-                            <Tooltip title={`${review?.user?.firstName + review?.user?.lastName}`}>
-                                <span className="text-sm" >{review?.user?.firstName + review?.user?.lastName}</span>
-                            </Tooltip>
-                        </h5>
-                        <h5>
-                            <span>Email : </span>
-                            <Tooltip title={`${review?.user?.email}`}>
-                                <span className="text-sm" >{review?.user?.email}</span>
-                            </Tooltip>
-                        </h5>
-                        <h5>
-                            <span>Role : </span>
-                            <span className="text-sm">{review?.user?.role}</span>
-                        </h5>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div className="flex justify-center items-center mx-auto gap-x-2">
-                    <DeleteButton customWord="Delete comment" className="font-semibold px-4" mode="both"
-                        onClick={() => { deleteUserReview(review, userToken) }}
-                        isLoading={isReviewDeleteProcessing} disabled={isReviewDeleteProcessing} />
+        <>
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{ fieldName: "Number", fieldValue: `${itemsNumber + index + 1}` }}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
 
-                </div>
-            </td>
-        </tr>
+            <tr key={review?._id}
+                onContextMenu={(e) => {
+                    e.preventDefault()
+                    setXMenuPosition(e.clientX)
+                    setYMenuPosition(e.clientY)
+
+                    setIsContextMenuOpen(e.currentTarget);
+                }}
+            >
+                <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
+                <td style={{ ...commonStylesTableData, textAlign: "left" }}>{review?.comment}</td>
+                <td style={{ ...commonStylesTableHeaders }}>{review?.rating} / 5</td>
+                <td style={{ ...commonStylesTableHeaders }}>{getCorrectDate(review?.createdAt)}</td>
+                <td style={{ ...commonStylesTableHeaders, textAlign: "left" }}>
+                    <div className="flex items-center gap-x-2 border rounded-lg p-2 overflow-auto">
+                        <div className="w-20 flex-shrink-0 my-2">
+                            <img className="rounded-full w-full aspect-square border" src={`${review?.user?.userImg ? review?.user?.userImg : defaultUserImage}`} alt={`${review?.user?.firstName + review?.user?.lastName}`} />
+                        </div>
+                        <div>
+                            <h5>
+                                <span>Name : </span>
+                                <Tooltip title={`${review?.user?.firstName + review?.user?.lastName}`}>
+                                    <span className="text-sm" >{review?.user?.firstName + review?.user?.lastName}</span>
+                                </Tooltip>
+                            </h5>
+                            <h5>
+                                <span>Email : </span>
+                                <Tooltip title={`${review?.user?.email}`}>
+                                    <span className="text-sm" >{review?.user?.email}</span>
+                                </Tooltip>
+                            </h5>
+                            <h5>
+                                <span>Role : </span>
+                                <span className="text-sm">{review?.user?.role}</span>
+                            </h5>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div className="flex justify-center items-center mx-auto gap-x-2">
+                        <DeleteButton customWord="Delete comment" className="font-semibold px-4" mode="both"
+                            onClick={() => { deleteUserReview(review, userToken) }}
+                            isLoading={isReviewDeleteProcessing} disabled={isReviewDeleteProcessing} />
+
+                    </div>
+                </td>
+            </tr></>
     )
 }
 

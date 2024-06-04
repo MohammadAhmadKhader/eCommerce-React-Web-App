@@ -8,7 +8,7 @@ export const createProductSchema = Joi.object({
     price:Joi.number().min(0).max(1000).required(),
     finalPrice:Joi.number().min(0).max(1000),
     quantity:Joi.number().integer().min(0),
-    brand:Joi.string().valid("Nike","Levi's","Calvin Klein","Casio","Adidas","Biba").required(),
+    brand:Joi.string().trim().required(),
     image:Joi.any().required(),
 }).when(
     Joi.object({ offer: Joi.number().valid(0) }), {
@@ -26,7 +26,7 @@ export const updateProductSchema = Joi.object({
     price:Joi.number().min(0).max(1000),
     finalPrice:Joi.number().min(0).max(1000),
     quantity:Joi.number().integer().min(0),
-    brand:Joi.string().trim().valid("Nike","Levi's","Calvin Klein","Casio","Adidas","Biba"),
+    brand:Joi.string().trim(),
     image:Joi.any(),
 }).when(
     Joi.object({ offer: Joi.number().valid(0) }), {

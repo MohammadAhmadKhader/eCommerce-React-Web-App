@@ -6,16 +6,23 @@ import EditBrand from './EditBrand';
 import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
+
+
+
 
 function BrandsTableData({ brand, index, itemsNumber }) {
 
     const commonStylesTableData: { fontSize: string, fontWeight: number, textAlign: "center" }
         = { fontSize: "16px", fontWeight: 500, textAlign: "center" };
 
-    const [isEditModelOpen, setIsEditModelOpen] = useState<boolean>(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [isDeleteProcessIsLoading, setIsDeleteProcessIsLoading] = useState<boolean>(false);
     const { DELETE } = useAxios();
     const { userToken } = useContext(UserContext);
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
 
     const deleteBrand = async (brand: any, userToken: string) => {
         try {
@@ -35,10 +42,28 @@ function BrandsTableData({ brand, index, itemsNumber }) {
             setIsDeleteProcessIsLoading(false);
         }
     }
+    const menuList = [{
+            onClick:()=>{
+                setIsEditModalOpen(true)
+            },
+            text:"Edit",
+        },{
+            onClick:()=>{
+                deleteBrand(brand, userToken)
+            },
+            text:"Delete",
+        }
+    ]
 
     return (
         <>
-            <tr>
+            <tr onContextMenu={(e) => {
+                e.preventDefault()
+                setXMenuPosition(e.clientX)
+                setYMenuPosition(e.clientY)
+                console.log(e.clientX, e.clientY)
+                setIsContextMenuOpen(e.currentTarget);
+            }}>
                 <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
                 <td style={{ ...commonStylesTableData }}>{brand?.name}</td>
                 <td>
@@ -55,16 +80,19 @@ function BrandsTableData({ brand, index, itemsNumber }) {
                 </td>
                 <td>
                     <div className="flex justify-center items-center mx-auto gap-x-2">
-                        <EditButton className='min-w-24 font-semibold' mode="both" onClick={() => { setIsEditModelOpen(true) }} />
+                        <EditButton className='min-w-24 font-semibold' mode="both" onClick={() => { setIsEditModalOpen(true) }} />
                         <DeleteButton className='font-semibold min-w-24' mode="both" onClick={() => { deleteBrand(brand, userToken) }}
                             isLoading={false} disabled={isDeleteProcessIsLoading} />
                     </div>
                 </td>
             </tr>
 
-            <EditModal title="Update brand" isOpen={isEditModelOpen} setIsOpen={setIsEditModelOpen} >
-                <EditBrand brand={brand} setIsEditModelOpen={setIsEditModelOpen} />
+            <EditModal title="Update brand" isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} >
+                <EditBrand brand={brand} setIsEditModalOpen={setIsEditModalOpen} />
             </EditModal>
+
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{fieldName:"Name",fieldValue:brand?.name}}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
         </>
     )
 }

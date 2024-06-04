@@ -259,6 +259,7 @@ export interface IInputProps {
     trigger?: UseFormTrigger<T>;
     className?:string;
     defaultValue?:any;
+    precision?:undefined | number | string;
     register: UseFormRegister<T>;
 }
 

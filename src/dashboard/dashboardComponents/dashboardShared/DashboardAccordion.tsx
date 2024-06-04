@@ -11,11 +11,11 @@ export interface IDashboardAccordion {
     Title: string;
     Icon: FC | typeof BiHome;
     IconSize?: number | string;
-    children:ReactNode;
+    children: ReactNode;
 }
 
-function DashboardAccordion({children, Title, Icon, IconSize = 22 }: IDashboardAccordion) {
-    const [index, setIndex] = useState<number | null>(0);
+function DashboardAccordion({ children, Title, Icon, IconSize = 22 }: IDashboardAccordion) {
+    const [index, setIndex] = useState<number | null>(null);
     const { theme } = useContext(ThemeContext);
 
     const MuiTheme = useTheme();

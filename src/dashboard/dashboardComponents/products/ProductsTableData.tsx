@@ -12,6 +12,7 @@ import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../components/features/UserFeature/UserProvider';
 import PatchImagesToProduct from './PatchImagesToProducts';
+import TableDataMenu from '../dashboardShared/TableDataMenu';
 
 export interface IProductTableData {
     product: IProduct;
@@ -52,16 +53,53 @@ function ProductsTableData({ product, index, itemsNumber, categoriesMapper, getA
         }
     }
 
+    const menuList = [{
+        onClick: () => {
+            navigate(`/products/${product?._id}?page=1&limit=9`)
+        },
+        text: "View",
+    }, {
+        onClick: () => {
+            setIsPatchImagesModalOpen(true)
+        },
+        text: "Add Images",
+    }, {
+        onClick: () => {
+            setIsEditModalOpen(true)
+        },
+        text: "Edit",
+    }, {
+        onClick: () => {
+            deleteProduct(product, userToken)
+        },
+        text: "Delete",
+    }
+    ]
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState<null | HTMLElement>(null);
+    const [xMenuPosition, setXMenuPosition] = useState<number>(0);
+    const [yMenuPosition, setYMenuPosition] = useState<number>(0);
+
     return (
         <>
             <EditModal title='Edit Product' isOpen={isEditModalOpen} setIsOpen={setIsEditModalOpen} DialogContentSx={{ paddingRight: "6px" }}>
-                <EditProduct product={product} setIsEditModelOpen={setIsEditModalOpen} />
+                <EditProduct product={product} setIsEditModalOpen={setIsEditModalOpen} />
             </EditModal>
 
             <EditModal title='Add images' isOpen={isPatchImagesModalOpen} setIsOpen={setIsPatchImagesModalOpen} >
-                <PatchImagesToProduct product={product} setIsPatchImagesModelOpen={setIsPatchImagesModalOpen} />
+                <PatchImagesToProduct product={product} setIsPatchImagesModalOpen={setIsPatchImagesModalOpen} />
             </EditModal>
-            <tr key={product?._id}>
+
+            <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{ fieldName: "Name", fieldValue: product?.name }}
+                isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
+            <tr key={product?._id}
+                onContextMenu={(e) => {
+                    e.preventDefault()
+                    setXMenuPosition(e.clientX)
+                    setYMenuPosition(e.clientY)
+
+                    setIsContextMenuOpen(e.currentTarget);
+                }}
+            >
                 <td style={{ textAlign: "center" }}>
                     <button className='rounded-md flex justify-center items-center bg-color-accent duration-300 hover:bg-sky-800 p-1 text-white'
                         onClick={() => setIsOpen((prevState) => !prevState)}

@@ -14,10 +14,10 @@ import { GlobalCachingContext } from '../../../components/features/GlobalCaching
 
 export interface IEditProduct {
     product: IProduct;
-    setIsEditModelOpen: Dispatch<SetStateAction<boolean>>
+    setIsEditModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-function EditProduct({ setIsEditModelOpen, product }: IEditProduct) {
+function EditProduct({ setIsEditModalOpen, product }: IEditProduct) {
     const { register, handleSubmit, formState, reset, trigger, setValue, watch, getValues } = useForm<UpdateProductDto>({
         mode: "onChange",
         resolver: joiResolver(updateProductSchema),
@@ -61,7 +61,7 @@ function EditProduct({ setIsEditModelOpen, product }: IEditProduct) {
             if (response?.status === 200) {
                 toast.success("Product was edited");
                 reset();
-                setIsEditModelOpen(false);
+                setIsEditModalOpen(false);
             }
             return response?.status
         } catch (error) {
@@ -94,18 +94,18 @@ function EditProduct({ setIsEditModelOpen, product }: IEditProduct) {
                     trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     defaultValue={product?.name}
                 />
-                <Input name='price' placeholder='price...' id='price'
+                <Input name='price' placeholder='price...' id='price' precision={0.01}
                     register={register} title='Price :' type='number' errors={errors}
                     trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     defaultValue={product?.price}
                 />
-                <Input name='finalPrice' placeholder='Final price...' id='finalPrice'
+                <Input name='finalPrice' placeholder='Final price...' id='finalPrice' precision={0.01}
                     register={register} title='Final price :' type='number' errors={errors}
                     trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     defaultValue={product?.finalPrice}
                 />
 
-                <Input name='offer' placeholder='offer..' id='offer'
+                <Input name='offer' placeholder='offer..' id='offer' precision={0.001}
                     register={register} title='Offer :' type='number' errors={errors}
                     trigger={trigger} parentCustomClass='h-20' className='mt-2'
                     defaultValue={product?.offer}
