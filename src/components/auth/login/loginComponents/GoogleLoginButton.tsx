@@ -1,4 +1,4 @@
-import { GoogleLogin } from "react-google-login"
+import { GoogleLogin } from "@leecheuk/react-google-login"
 import { FcGoogle } from "react-icons/fc";
 import useAxios from "../../../../customHooks/useAxios";
 import { useContext, useState } from "react";
