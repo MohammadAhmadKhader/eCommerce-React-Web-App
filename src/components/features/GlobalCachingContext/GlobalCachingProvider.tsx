@@ -37,6 +37,7 @@ export interface GlobalCachingContext {
     setRelatedProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
     setIsRelatedProductLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setInvoice: React.Dispatch<React.SetStateAction<any>>;
+    setIsSingleOrderDetailsLoading:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
@@ -122,7 +123,7 @@ function GlobalCachingProvider({ children }) {
         try {
             const { data } = await GET_TopRatedProducts("/products?page=1&limit=7&sort=ratings_desc")
             setTopRatedProducts(data.products)
-            console.log(data.products)
+            
         } catch (error) {
             console.log(error)
         } finally {
@@ -143,11 +144,7 @@ function GlobalCachingProvider({ children }) {
     }
     useEffect(() => {
         getCategories();
-
     }, [])
-
-
-
 
     return (
         <GlobalCachingContext.Provider value={{
@@ -156,7 +153,7 @@ function GlobalCachingProvider({ children }) {
             getProductData, setIsProductByIdLoading, getRelatedProducts, relatedProducts, setRelatedProducts,
             isRelatedProductLoading, setIsRelatedProductLoading, getTopRatedProducts, isTopRatedProductsLoading, setIsTopRatedProductsLoading,
             topRatedProducts, getCategories, isCategoriesLoading, orders, setOrders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,
-            loadingMessage, setLoadingMessage, invoice, setInvoice, isInvoiceByOrderIdLoading, getInvoiceByOrderId, isSingleOrderDetailsLoading
+            loadingMessage, setLoadingMessage, invoice, setInvoice, isInvoiceByOrderIdLoading, getInvoiceByOrderId, isSingleOrderDetailsLoading,setIsSingleOrderDetailsLoading
         }}>
             {children}
         </GlobalCachingContext.Provider>

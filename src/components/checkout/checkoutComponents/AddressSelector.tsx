@@ -40,7 +40,6 @@ export default function AddressSelector() {
                     }
                 }}
                 onChange={(event, newValue) => {
-                    console.log(newValue);
                     setAddress(userData.addresses[Number(newValue)]);
                 }}
             >

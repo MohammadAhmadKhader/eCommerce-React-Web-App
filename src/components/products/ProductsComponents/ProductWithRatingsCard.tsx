@@ -10,8 +10,8 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import useAxios from '../../../customHooks/useAxios';
 import useDebounce from '../../../customHooks/useDebounce';
 import { toast } from 'react-toastify';
+import { fallBackProductImageUrl } from '../../shared/sharedConstants';
 
-const fallBackImageUrl = "https://res.cloudinary.com/doxhxgz2g/image/upload/v1717370800/eCommerce-React-app/StaticAssets/vecteezy_icon-image-not-found-vector__fbmdiy.jpg"
 function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgRating, brand, ratingNumbers, _id }: IProductWithRatingsCardProps) {
     const navigate = useNavigate()
     const { theme } = useContext(ThemeContext);
@@ -62,8 +62,8 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
                 }}
 
             >
-                <img src={productImage} onError={() => {setProductImage(fallBackImageUrl)}}
-                    alt={productImage !== fallBackImageUrl ? name : `product image for product : ${name} not found`}
+                <img src={productImage || fallBackProductImageUrl} onError={() => {setProductImage(fallBackProductImageUrl)}}
+                    alt={productImage !== fallBackProductImageUrl ? name : `product image for product : ${name} not found`}
                     className={`rounded-t-md object-contain aspect-square bg-transparent`} />
             </Link>
             <div className='p-3'>

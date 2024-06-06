@@ -9,7 +9,6 @@ function PaginationComponent({ count, customClasses, siblingCount = 1 }: { count
     const [searchParams, setSearchParams] = useSearchParams();
     const { theme } = useContext(ThemeContext);
 
-
     const MuiTheme = createTheme({
 
         components: {
@@ -37,6 +36,7 @@ function PaginationComponent({ count, customClasses, siblingCount = 1 }: { count
             <ThemeProvider theme={MuiTheme}>
                 <Pagination count={Math.ceil(count / parseInt(searchParams.get("limit")))}
                     onChange={(event, value) => {
+                        
                         if (Number(searchParams.get("page")) <= Number(Math.ceil(count / parseInt(searchParams.get("limit"))))) {
                             searchParams.set("page", value.toString())
                             setSearchParams(searchParams);

@@ -1,7 +1,7 @@
 import { ISingleOrder } from "../../../../types/types"
 
 function SingleOrder({ imgUrl, name, price, quantity }: ISingleOrder) {
-    console.log(price, quantity)
+    
     return (
         <div className='grid grid-cols-10'>
             <div className='col-span-4'>

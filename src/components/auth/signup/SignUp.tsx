@@ -49,8 +49,6 @@ function SignUp() {
       console.error(error)
       toast.error("Something Went Wrong Please Try Again Later!")
     }
-
-
   }
 
   return (
@@ -58,7 +56,7 @@ function SignUp() {
       <div className='flex justify-center items-center' style={{ minHeight: "800px" }}>
 
         <form onSubmit={handleSubmit(onSubmit)}
-          className='-translate-y-16 border-solid border w-9/12 max-w-xl mx-auto p-4 rounded-2xl'
+          className='-translate-y-16 border-solid border w-11/12 md:w-9/12 max-w-xl mx-auto p-4 rounded-2xl'
           style={{
             borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
             boxShadow: theme == "dark" ? "var(--dark--boxShadow)" : "var(--light--boxShadow)"

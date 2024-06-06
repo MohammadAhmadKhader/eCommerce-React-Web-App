@@ -21,7 +21,6 @@ function Home() {
     const { data } = await getRequestNewArrivals("/products?page=1&limit=7&sort=newArrivals_desc")
     setNewArrivals(data.products)
     setIsNewArrivalsLoading(false)
-    console.log(data.products)
   }
   const { getBrands, getTopRatedProducts, topRatedProducts, isTopRatedProductsLoading, loadingMessage } = useContext(GlobalCachingContext)
 
@@ -30,17 +29,20 @@ function Home() {
     getBrands()
     getNewArrivals();
 
-
   }, [])
 
   useEffect(() => {
     if (loadingMessage) {
       initialLoader.current = toast.loading(`The project backend is deployed on render free service 
       therefore will take 50s - 2mins to boot the backend service on first request`, {
-        position: "top-center"
+        position: "top-center",
+        toastId: "loadingMessage",
       })
+
     } else {
-      toast.dismiss(initialLoader.current)
+      if (initialLoader.current === "loadingMessage") {
+        toast.dismiss(initialLoader.current)
+      }
     }
   }, [loadingMessage])
 

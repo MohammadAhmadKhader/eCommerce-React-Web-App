@@ -52,7 +52,7 @@ function ResetPassword() {
         <div className=''>
             <div className='flex justify-center items-center' style={{ minHeight: "800px" }}>
                 <form onSubmit={handleSubmit(onSubmit)}
-                    className='-translate-y-16 w-9/12 max-w-xl m-auto p-4 rounded-2xl border-solid border'
+                    className='-translate-y-16 w-11/12 md:w-9/12 max-w-xl m-auto p-4 rounded-2xl border-solid border'
                     style={{
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                         boxShadow: theme == "dark" ? "var(--dark--boxShadow)" : "var(--light--boxShadow)"

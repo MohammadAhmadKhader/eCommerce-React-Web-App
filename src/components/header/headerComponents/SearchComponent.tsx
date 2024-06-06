@@ -20,7 +20,7 @@ function SearchComponent() {
     const searchForProducts = async (textToSearch: string) => {
         try {
             const { data } = await GET(`/products?page=1&limit=12&search=${textToSearch}`);
-            console.log(data)
+            
             setSearchedProducts(data.products)
             return data;
         } catch (error) {

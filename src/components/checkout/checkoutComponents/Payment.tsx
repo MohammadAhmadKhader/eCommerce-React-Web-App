@@ -60,30 +60,18 @@ function Payment() {
     }
   }
 
-
   const OrderCheckingOut = async (orderId: string, address: any) => {
     try {
       const { data } = await POST_OrderCheckingOut("/orders/stripe/orderCheckingOut", {
         orderId,
         address
       }, userToken)
-      console.log(data);
+      
       return data;
     } catch (error) {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    const localStorageListener = () => {
-      const address = JSON.stringify(localStorage.getItem("address"));
-      console.log(address)
-
-    }
-
-    window.addEventListener("localStorageChange", localStorageListener);
-    return () => window.removeEventListener("localStorageChange", localStorageListener)
-  }, []);
 
   useEffect(() => {
     if (succeeded && !isSingleOrderDetailsLoading && singleOrderDetails) {

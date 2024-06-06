@@ -24,7 +24,7 @@ function ResetPasswordProtectingRoute({ children }: { children: ReactNode }) {
       verifyResetPasswordToken(params.token)
     }
   }, [])
-  console.log(params)
+  
   if (!params.token || params.token.length != 64) {
     return <Navigate to="/" />
   }

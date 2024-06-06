@@ -21,7 +21,7 @@ function SingleOrderDetails() {
             <div className='flex flex-col gap-y-2'>
                 {!isSingleOrderDetailsLoading && singleOrderDetails?.orderItems?.length > 0 ?
                     singleOrderDetails?.orderItems.map((orderItem) => {
-                        console.log(singleOrderDetails)
+                        
                         return (
                             <SingleOrder imgUrl={orderItem.thumbnailUrl} price={orderItem.price}
                                 name={orderItem.name} quantity={orderItem.quantity} key={orderItem._id} />

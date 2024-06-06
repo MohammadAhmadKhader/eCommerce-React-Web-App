@@ -1,10 +1,7 @@
 import Joi from 'joi';
 import { useSearchParams } from 'react-router-dom'
 
-
-
-
-function useEnsureCorrectPagination(minLimit: number = 9, maxLimit = 30) {
+function useEnsureCorrectPagination(minLimit = 9, maxLimit = 30) {
     const [searchParams, setSearchParams] = useSearchParams();
     const integerLimitSchema = Joi.number().min(minLimit).max(maxLimit).integer().required();
     const integerPageSchema = Joi.number().min(1).integer().required();

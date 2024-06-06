@@ -14,7 +14,7 @@ function MyWishList() {
     const getUserWishList = async () => {
         try {
             const { data } = await GET(`/wishlists/${userData._id}`, userToken);
-            console.log(data)
+            
             setWishList(data.wishList)
             setIsWishListLoading(false)
         } catch (error) {
