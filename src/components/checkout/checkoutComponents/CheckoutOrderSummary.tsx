@@ -6,7 +6,7 @@ import { GlobalCachingContext } from '../../features/GlobalCachingContext/Global
 function CheckoutOrderSummary() {
     const { theme } = useContext(ThemeContext)
     const { singleOrderDetails } = useContext(GlobalCachingContext)
-    console.log(singleOrderDetails)
+    
     return (
         <div>
             <h3 className='text-3xl border-b py-3' style={{

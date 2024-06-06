@@ -4,7 +4,7 @@ import { GlobalCachingContext } from "../features/GlobalCachingContext/GlobalCac
 
 function ResponsiveTopCategories() {
     const { categories } = useContext(GlobalCachingContext);
-    console.log(categories)
+    
     return (
         <section className='block md:hidden px-4 my-5'>
             <h2 className='text-xl font-semibold clear-start mb-5'>Top Categories</h2>

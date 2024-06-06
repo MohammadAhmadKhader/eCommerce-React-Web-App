@@ -38,7 +38,7 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
                 confirmNewPassword: submittedData.confirmNewPassword,
                 userId: userData._id
             }, userToken)
-            console.log(data)
+            
             if (data.message == "success") {
                 setUserToken(data.token);
                 localStorage.setItem("userTokenGeekOut", data.token)

@@ -91,7 +91,7 @@ function ProductsTableData({ product, index, itemsNumber, categoriesMapper, getA
 
             <TableDataMenu x={xMenuPosition} y={yMenuPosition} menuList={menuList} header={{ fieldName: "Name", fieldValue: product?.name }}
                 isContextMenuOpen={isContextMenuOpen} setIsContextMenuOpen={setIsContextMenuOpen} />
-            <tr key={product?._id}
+            <tr key={product?._id} data--num={itemsNumber + index + 1}
                 onContextMenu={(e) => {
                     e.preventDefault()
                     setXMenuPosition(e.clientX)

@@ -1,4 +1,4 @@
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, A11y, } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import "./CarouselSwiper.css"
 import ProductWithRatingsCard from '../../products/ProductsComponents/ProductWithRatingsCard';
+import { fallBackProductImageUrl } from '../../shared/sharedConstants';
 
 interface SwiperCarousel {
   Iterable: Array<any>;
@@ -19,6 +20,7 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
       spaceBetween={20}
       slidesPerView={4}
       navigation
+
       pagination={{ clickable: true }}
       breakpoints={{
         1284: {
@@ -39,12 +41,11 @@ function SwiperCarousel({ Iterable }: SwiperCarousel) {
         }
       }}
     >
-      {/* imageUrl={prod?.images[0]?.imageUrl} */}
       {
         Iterable?.map((prod) => {
           return (
             <SwiperSlide key={prod._id} className='pb-10'>
-              <ProductWithRatingsCard _id={prod._id} ratingNumbers={prod.ratingNumbers} name={prod.name}  price={prod.price} imageUrl={prod?.images?.length > 0 ? prod.images[0].imageUrl : ""}
+              <ProductWithRatingsCard _id={prod._id} ratingNumbers={prod.ratingNumbers} name={prod.name} price={prod.price} imageUrl={prod?.images?.length > 0 ? prod.images[0].imageUrl : fallBackProductImageUrl}
                 avgRating={prod.avgRating} finalPrice={prod.finalPrice} brand={prod.brand} quantity={prod.quantity} offer={prod.offer} />
             </SwiperSlide>
           )

@@ -16,7 +16,7 @@ function MyWishListItem({ imgUrl, name, productId, wishListId }) {
     const removeFromWishList = async () => {
         try {
             const response = await DELETE(`/wishlists/${wishListId}`, {}, userToken);
-            console.log(response)
+            
             if (response.status == 202) {
                 toast.success("Product was removed from wishlist");
                 getUserData();

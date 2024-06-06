@@ -4,13 +4,9 @@ import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import ReviewComponent from './ReviewComponent';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
-import Rating from '@mui/material/Rating';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import "./singleProductTabs.css"
-import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup';
 import RelatedProductsCarousel from './RelatedProductsCarousel';
 import { ISingleProductTabs, Review } from '../../../types/types';
 import LongTextSkeleton from '../../shared/LoadingSkeletons/LongTextSkeleton';
@@ -123,7 +119,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                         </div>
 
 
-                        <div className='flex justify-center'>
+                        {product?.reviews?.length > 0 ? <div className='flex justify-center'>
                             <Stack spacing={2} sx={{
                                 maxWidth: "fit-content",
                                 marginBlock: "10px",
@@ -141,7 +137,7 @@ export default function SingleProductTabs({ product, isProductByIdLoading, revie
                                     }}
                                 />
                             </Stack>
-                        </div>
+                        </div> : <h4 className='text-center w-full my-5 font-semibold tracking-wide'>Product was not reviewed yet..</h4>}
 
                     </div>
                 </div>

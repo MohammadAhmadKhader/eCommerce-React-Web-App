@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 import useAxios from '../../../customHooks/useAxios';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import { GlobalCachingContext } from '../../features/GlobalCachingContext/GlobalCachingProvider';
+import useEnsureCorrectPagination from '../../../customHooks/useEnsureCorrectPagination';
 
 function MyOrders() {
     const { theme } = useContext(ThemeContext);
@@ -18,6 +19,7 @@ function MyOrders() {
     const { userData, userToken } = useContext(UserContext);
     const { orders, setOrders } = useContext(GlobalCachingContext)
     const [count, setCount] = useState(0);
+    const {ensureCorrectPagination} = useEnsureCorrectPagination()
     const getOrders = async (status: string, page: string, limit: string) => {
         try {
             if (userData) {
@@ -43,17 +45,9 @@ function MyOrders() {
             setSearchParams(searchParams)
         }
     }
-    const ensureCorrectValueOfPagination = () => {
-        if (!searchParams.get("limit") || !searchParams.get("page") ||
-            Number(searchParams.get("limit")) > 30 || Number(searchParams.get("page")) > count) {
-            searchParams.set("limit", "9");
-            searchParams.set("page", "1");
-            setSearchParams(searchParams)
-        }
-    }
 
     useEffect(() => {
-        ensureCorrectValueOfPagination();
+        ensureCorrectPagination()
         ensureCorrectValueOfStatus();
     }, [])
 
@@ -62,7 +56,7 @@ function MyOrders() {
     }, [userData])
     useEffect(() => {
         ensureCorrectValueOfStatus();
-        ensureCorrectValueOfPagination();
+        ensureCorrectPagination()
     }, [searchParams])
 
     return (

@@ -63,7 +63,9 @@ function BrandsTableData({ brand, index, itemsNumber }) {
                 setYMenuPosition(e.clientY)
                 console.log(e.clientX, e.clientY)
                 setIsContextMenuOpen(e.currentTarget);
-            }}>
+            }}
+            
+            >
                 <td style={{ ...commonStylesTableData }}>#{itemsNumber + index + 1}</td>
                 <td style={{ ...commonStylesTableData }}>{brand?.name}</td>
                 <td>

@@ -13,8 +13,6 @@ import { UserContext } from '../../features/UserFeature/UserProvider';
 import { toast } from 'react-toastify';
 import { addressSchema } from '../../../schemas/addressSchema';
 
-
-
 function NewAddress() {
     const { theme } = useContext(ThemeContext)
     const { userToken } = useContext(UserContext)
@@ -23,7 +21,6 @@ function NewAddress() {
     const handleClick = () => {
         setOpen(!open);
     };
-
 
     const {
         register,
@@ -44,7 +41,7 @@ function NewAddress() {
                 pinCode: submittedData.pinCode,
                 state: submittedData.state,
             }, userToken)
-            console.log(data)
+            
             if (data.message == "success") {
                 toast.success("New address has been created");
             }

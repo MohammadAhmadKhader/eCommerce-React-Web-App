@@ -21,7 +21,7 @@ function MyReviews() {
   const getUserReviews = async () => {
     try {
       const { data } = await GET(`/reviews/${userData._id}?page=${searchParams.get("page") || "1"}&limit=${searchParams.get("limit") || "9"}`, userToken);
-      console.log(data);
+      
       setUserReviews(data.reviews);
       setCount(data.count);
       setMaxCount(Math.ceil(count / Number(searchParams.get("limit") || 9)))

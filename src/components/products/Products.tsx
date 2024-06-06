@@ -57,8 +57,8 @@ function Products() {
         try {
             setIsLoading(true)
             const { data } = await GET(`/products?${params}`)
-            setProducts(data.products)
-            console.log(data.products)
+            setProducts(data.products);
+            
             setCount(data.count);
 
         } catch (error) {
@@ -75,10 +75,10 @@ function Products() {
                 navigate("/")
             }
         }
-
+        
         ensureCorrectPagination()
     }, [])
-
+    
     useEffect(() => {
         if (loadingMessage) {
             initialLoader.current = toast.loading(`The project backend is deployed on render free service 
@@ -122,7 +122,7 @@ function Products() {
         if (!isCategoriesLoading) {
            setCategoryName(categories);
         }
-
+        
         debounce(() => { getData(linkPath) }, 500)
     }, [searchParams])
 
@@ -225,7 +225,7 @@ function Products() {
                         }
                     </div>
 
-                    <PaginationComponent count={count} />
+                    {products.length !== 0 && <PaginationComponent count={count} />}
                 </div>
             </div>
         </section>

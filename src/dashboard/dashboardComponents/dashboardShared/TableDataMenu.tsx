@@ -17,11 +17,12 @@ interface IContextMenu {
     header: {
         fieldName: string | number,
         fieldValue: string | number
-    }
+    };
 }
 
 export default function TableDataMenu({ isContextMenuOpen, setIsContextMenuOpen, x, y, menuList, width = "250px", header }: IContextMenu) {
     const { theme } = React.useContext(ThemeContext);
+
     return (
         <Menu
             id="table-data-options-menu"
@@ -33,6 +34,10 @@ export default function TableDataMenu({ isContextMenuOpen, setIsContextMenuOpen,
             anchorPosition={{
                 left: x,
                 top: y
+            }}
+            onContextMenu={(event) => {
+                event.preventDefault();
+                setIsContextMenuOpen(null);
             }}
             slotProps={{
                 paper: {
@@ -49,6 +54,9 @@ export default function TableDataMenu({ isContextMenuOpen, setIsContextMenuOpen,
 
         >
             <MenuItem disableRipple
+                onContextMenu={(event) => {
+                    event.stopPropagation()
+                }}
                 sx={{
                     minWidth: width,
                     '&:hover': {
@@ -69,6 +77,9 @@ export default function TableDataMenu({ isContextMenuOpen, setIsContextMenuOpen,
             {menuList.map(({ onClick, text }, index) => {
                 return (
                     <MenuItem
+                        onContextMenu={(event) => {
+                            event.stopPropagation()
+                        }}
                         sx={{
                             minWidth: width,
                             '&:hover': {

@@ -22,6 +22,8 @@ import { BsCart } from 'react-icons/bs';
 import { objectIdSchemaRequired } from '../../schemas/IdValidation';
 import { CartContext } from '../features/CartFeature/CartProvider';
 import useDebounce from '../../customHooks/useDebounce';
+import useEnsureCorrectPagination from '../../customHooks/useEnsureCorrectPagination';
+import { fallBackProductImageUrl } from '../shared/sharedConstants';
 
 
 function SingleProductPage() {
@@ -40,7 +42,7 @@ function SingleProductPage() {
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
     const { debounce } = useDebounce()
-
+    const { ensureCorrectPagination, maxLimit, minLimit } = useEnsureCorrectPagination();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function setCategoryNameAndId() {
@@ -53,8 +55,6 @@ function SingleProductPage() {
             })
         }
     }
-    const maxLimit = 30;
-    const minLimit = 9;
 
     const addToCart = async () => {
         try {
@@ -123,30 +123,17 @@ function SingleProductPage() {
         if (error) {
             navigate("/")
         }
-        if (!searchParams.get("page") || !searchParams.get("limit")) {
-            searchParams.set("page", "1");
-            searchParams.set("limit", "9");
-            console.log("Test 1")
-            setSearchParams(searchParams);
-        }
-
+        ensureCorrectPagination();
         setCategoryNameAndId();
     }, []);
 
     useEffect(() => {
-        if ((Number(searchParams.get("limit")) ? Number(searchParams.get("limit")) : 30) > maxLimit) {
-            searchParams.set("limit", maxLimit.toString())
-            setSearchParams(searchParams)
-        }
-
-        if ((Number(searchParams.get("limit")) ? Number(searchParams.get("limit")) : 9) < minLimit) {
-            searchParams.set("limit", minLimit.toString())
-            setSearchParams(searchParams)
-        }
+        ensureCorrectPagination();
         getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
 
         setCategoryNameAndId()
     }, [searchParams, params.productId]);
+
     return (
         <section className='px-3 md:px-5 single-product-page'>
             <div className='px-4 flex items-center gap-x-4 text-color-accent font-semibold my-5'>
@@ -174,9 +161,14 @@ function SingleProductPage() {
 
                     </div>
                 </div> :
-                <div className='grid grid-cols-12 p-0 sm:p-5 gap-x-3 gap-y-5'>
-                    <div className='col-span-12 md:col-span-6 me-10'>
-                        <ProductCarousel product={product as IProduct} />
+                <div className={`grid grid-cols-12 p-0 sm:p-5 gap-x-3 gap-y-5 ${((product as IProduct)?.images?.length === 1) ? "items-center" : ""}`}>
+                    <div className={'col-span-12 md:col-span-6 me-10'}>
+                        {(product as IProduct)?.images?.length > 1 && <ProductCarousel product={product as IProduct} />}
+                        {((product as IProduct)?.images?.length === 1 || (product as IProduct)?.images?.length === 0) &&
+                            <div className="mx-auto max-h-[1000px] max-w-[600px] outline-none" >
+                                <img src={(product as IProduct)?.images[0]?.imageUrl || fallBackProductImageUrl}
+                                    alt={`${(product as IProduct).name} image`} className="rounded-lg m-auto max-h-[500px]" />
+                            </div>}
                     </div>
 
                     <div className='col-span-12 md:col-span-6'>
@@ -207,7 +199,7 @@ function SingleProductPage() {
                                         },
                                         color: 'var(--stars--color)'
                                     }}
-                                    name="read-only" value={Number((product as IProduct)?.avgRating?.toFixed(2)) || 0} precision={0.01} readOnly />
+                                    name="read-only" value={Number((product as IProduct)?.avgRating?.toFixed(2)) || 0} precision={0.1} readOnly />
 
                             </div>
 

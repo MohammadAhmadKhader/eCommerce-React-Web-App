@@ -9,6 +9,7 @@ import useAxios from '../../../customHooks/useAxios'
 import { UserContext } from '../../features/UserFeature/UserProvider'
 import { toast } from 'react-toastify'
 import { userSignInSchema } from '../../../schemas/userSchemas'
+import GoogleLoginButton from './loginComponents/GoogleLoginButton'
 
 
 function Login() {
@@ -27,13 +28,12 @@ function Login() {
     });
 
     const onSubmit: SubmitHandler<UserSignInDataType> = async (submittedData) => {
-        console.log(submittedData)
         try {
             const { data } = await POST("/users/signin", {
                 email: submittedData.email,
                 password: submittedData.password
             })
-            console.log(submittedData)
+
             if (data["user"]) {
                 setUserToken(data.token);
                 setUserData(data.user);
@@ -52,7 +52,7 @@ function Login() {
         <div>
             <div className='flex justify-center items-center' style={{ minHeight: "800px" }}>
                 <form onSubmit={handleSubmit(onSubmit)}
-                    className='-translate-y-16 w-9/12 max-w-xl m-auto p-4 rounded-2xl border-solid border'
+                    className='-translate-y-16 w-11/12 md:w-9/12 max-w-xl m-auto p-4 rounded-2xl border-solid border'
                     style={{
                         borderColor: theme == "dark" ? "var(--dark--border--color)" : "var(--light--border--color)",
                         boxShadow: theme == "dark" ? "var(--dark--boxShadow)" : "var(--light--boxShadow)"
@@ -75,8 +75,12 @@ function Login() {
                     >
                         Login
                     </button>
+                    <div className='mt-3'>
+                        <GoogleLoginButton />
+                    </div>
                     <Link className='ms-auto mt-2 block text-blue-700 underline w-fit text-sm font-semibold' to="/signup">Sign Up?</Link>
-                </form></div>
+                </form>
+            </div>
         </div>
     )
 }

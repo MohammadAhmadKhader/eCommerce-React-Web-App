@@ -24,7 +24,10 @@
   --light--bgCard-color:rgb(240, 244, 248);
   --accent-color:rgb(29,155,240);
   --accent-text-color:white;
-  
+  --light--hover--tabs:rgba(0, 0, 0, 0.03);
+  --light--hover--selected--tabs:rgba(25, 118, 210, 0.12);
+  --light--selected--tabs:rgba(0, 0, 0, 0.05);
+
   --dark--bg--color:rgb(18,18,18);
   --dark--accent--color:rgb(255, 193, 7);
   --dark--text--color:rgb(255,255,255);
@@ -35,6 +38,9 @@
   --dark--outline--color:rgba(255,255,255,0.8);
   --dark--bgCard-color:rgb(22,22,22);
   --secondary--tabs--color:rgb(243,244,246);
+  --dark--selected--tabs:rgba(241,245,249,0.1);
+  --dark--hover--selected--tabs:rgba(241,245,249,0.3);
+  --dark--hover--tabs:rgba(25, 118, 210, 0.12);
 
   scrollbar-width: thin;
   scrollbar-color: rgba(74,131,246,0.65) #f1f1f1;

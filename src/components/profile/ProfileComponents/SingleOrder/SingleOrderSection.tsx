@@ -14,16 +14,18 @@ import CircularLoader from '../../../shared/CircularLoader';
 
 function SingleOrderSection() {
   const { theme } = useContext(ThemeContext);
-  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails, setOrders,isSingleOrderDetailsLoading } = useContext(GlobalCachingContext);
+  const { orders, singleOrderDetails, setSingleOrderDetails, getSingleOrderDetails,
+     isSingleOrderDetailsLoading,setIsSingleOrderDetailsLoading } = useContext(GlobalCachingContext);
   const params = useParams();
   useEffect(() => {
     if (orders && !localStorage.getItem("CheckedOut")) {
       const wantedOrder = orders.find((item) => {
-        return item._id === params.id
+        return item._id == params.id
       })
 
       if (wantedOrder) {
-        setSingleOrderDetails(wantedOrder)
+        setSingleOrderDetails(wantedOrder);
+        setIsSingleOrderDetailsLoading(false);
       } else {
         getSingleOrderDetails(params.id)
       }
@@ -34,10 +36,6 @@ function SingleOrderSection() {
     }
   }, [])
 
-  console.log(singleOrderDetails, "singleOrder")
-  useEffect(() => {
-    console.log(singleOrderDetails)
-  }, [singleOrderDetails])
   return (
     <div className='overflow-x-scroll md:overflow-auto MyOrdersContainer flex flex-col flex-wrap px-2'>
       <Tabs className='MyOrders Tabs rounded-lg min-w-[600px] min-h-[500px] max-h-[1200px]' aria-label="Basic tabs" defaultValue={0} style={{
@@ -85,7 +83,7 @@ function SingleOrderSection() {
                   color: theme === "dark" ? "var(--dark--text--color)" : "var(--light--text--color)",
                 }}>Payment Details</h5>
                 <div>
-                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails ? singleOrderDetails?.paymentDetails : "No Details" }</h6>
+                  <h6 className='text-sm font-semibold'>{singleOrderDetails?.paymentDetails ? singleOrderDetails?.paymentDetails : "No Details"}</h6>
                 </div>
               </div>
 
