@@ -11,7 +11,6 @@ import { toast } from 'react-toastify'
 import { userSignInSchema } from '../../../schemas/userSchemas'
 import GoogleLoginButton from './loginComponents/GoogleLoginButton'
 
-
 function Login() {
     const navigate = useNavigate()
     const { POST } = useAxios()
@@ -78,6 +77,7 @@ function Login() {
                     <div className='mt-3'>
                         <GoogleLoginButton />
                     </div>
+
                     <Link className='ms-auto mt-2 block text-blue-700 underline w-fit text-sm font-semibold' to="/signup">Sign Up?</Link>
                 </form>
             </div>
