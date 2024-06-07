@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import Input from '../../shared/Input'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ThemeContext } from '../../features/ThemeFeature/ThemeProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 import { UserSigUpDataType } from '../../../types/types';
 import useAxios from '../../../customHooks/useAxios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../features/UserFeature/UserProvider';
 import { userSignUpSchema } from '../../../schemas/userSchemas';
-
+import GoogleSignUpButton from './signupComponents/GoogleSignUpButton';
 
 function SignUp() {
   const { theme } = useContext(ThemeContext)
@@ -85,7 +84,9 @@ function SignUp() {
           >
             Sign Up
           </button>
-
+          <div className='mt-3'>
+              <GoogleSignUpButton />
+          </div>
           <Link className='ms-auto mt-2 block text-blue-700 underline w-fit' to="/login">Sign In?</Link>
         </form>
       </div>

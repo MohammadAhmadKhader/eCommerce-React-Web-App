@@ -19,7 +19,7 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
     const { userData, userToken, getUserData } = useContext(UserContext)
     const { debounce } = useDebounce()
     const [isItemOwned, setIsItemOwned] = useState<boolean>(false);
-    const [productImage,setProductImage] = useState<string>(imageUrl);
+    const [productImage, setProductImage] = useState<string>(imageUrl);
     const addToWishList = async () => {
         try {
             const { data } = await POST(`/wishlists`, {
@@ -62,10 +62,13 @@ function ProductWithRatingsCard({ name, finalPrice, price, offer, imageUrl, avgR
                 }}
 
             >
-                <img src={productImage || fallBackProductImageUrl} onError={() => {setProductImage(fallBackProductImageUrl)}}
+                <img src={productImage || fallBackProductImageUrl} onError={() => { setProductImage(fallBackProductImageUrl) }}
+
                     alt={productImage !== fallBackProductImageUrl ? name : `product image for product : ${name} not found`}
                     className={`rounded-t-md object-contain aspect-square bg-transparent`} />
+
             </Link>
+
             <div className='p-3'>
                 <div>
                     <h3 className='flex flex-nowrap justify-between items-center'>
