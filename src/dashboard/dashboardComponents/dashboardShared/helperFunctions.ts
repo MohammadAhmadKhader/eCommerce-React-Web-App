@@ -46,7 +46,7 @@ export function setCanvasPreview(image: HTMLImageElement, canvas: HTMLCanvasElem
 }
 
 export function convertBase64ToBlob(imageBase64: string, imageType: string) {
-    // removing "data:image/png;base64," from image as atob requires base64 without it
+    // removing example : "data:image/png;base64," (the base64 prefix) from image as atob requires base64 without it
     const byteCharacters = atob(imageBase64.split(",")[1]);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteNumbers.length; i++) {
