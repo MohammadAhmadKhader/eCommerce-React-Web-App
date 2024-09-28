@@ -33,12 +33,16 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
             if (response.status == 204) {
                 toast.loading("Updating cart items", {
                     position: "top-center",
+                    toastId:`loading cart items ${cartItemId}`
                 })
-                await getCartItems()
-                toast.dismiss()
+                await getCartItems();
+                await getUserData();
+                toast.dismiss();
             }
         } catch (error) {
-            toast.error("Something Went Wrong Please try again later")
+            toast.error("Something Went Wrong Please try again later",{
+                toastId:`delete cartItem error message ${cartItemId}`
+            })
             return error;
         }
     }
@@ -54,7 +58,9 @@ function CartTableItem({ imgUrl, name, price, quantity, productId, brand, cartIt
                 toast.success("Product added to your wishlist")
             }
         } catch (error) {
-            toast.error("Something Went Wrong Please Try Again Later")
+            toast.error("Something Went Wrong Please Try Again Later",{
+                toastId:`add wishlistItem error message ${productId}`
+            })
             return error
         }
     }

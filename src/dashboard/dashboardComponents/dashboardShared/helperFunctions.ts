@@ -14,10 +14,7 @@ export const defaultUserImage = "https://res.cloudinary.com/doxhxgz2g/image/uplo
 
 export function setCanvasPreview(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop) {
     const context = canvas.getContext("2d");
-    if (!context) {
-        throw new Error("canvas 2d context does not exist");
-    }
-
+    
     const pixelRatio = window.devicePixelRatio;
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
@@ -54,6 +51,6 @@ export function convertBase64ToBlob(imageBase64: string, imageType: string) {
     }
     const byteArray = new Uint8Array(byteNumbers)
     const blob = new Blob([byteArray], { type: imageType });
-    
+    console.log(blob)
     return blob;
 }

@@ -43,7 +43,7 @@ function UploadProductImageInput(
     const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [previewImage, setPreviewImage] = useState<null | string>(null);
     const [crop, setCrop] = useState<Crop>()
-    const [imageType, setImageType] = useState<null | string>(null);
+    const [croppedImage, setCroppedImage] = useState<null | string>(null);
 
     const fileReader = new FileReader();
 
@@ -51,12 +51,14 @@ function UploadProductImageInput(
         const imageElement = new Image();
         const imageBase64Url = file.target.result as string;
         imageElement.src = imageBase64Url;
+        //const test = URL.createObjectURL(file[0]);
 
         // Validate the image before showing it
         imageElement.onload = (e) => {
             if (errors[name]) {
                 clearErrors([name]);
             }
+
             const { naturalHeight, naturalWidth } = (e as unknown as SyntheticEvent<HTMLImageElement>).currentTarget;
             if (naturalHeight < minDimensions || naturalWidth < minDimensions) {
                 setError(name, { message: `Image must be at least ${minDimensions} x ${minDimensions} pixels.` });
@@ -70,13 +72,12 @@ function UploadProductImageInput(
 
     function onImageLoad(e: SyntheticEvent<HTMLImageElement, Event>) {
         const { width, height } = e.currentTarget;
-        const cropWidthInPercentage = (minDimensions / width) * 100;
+
         const crop = makeAspectCrop(
             {
                 unit: "%",
-                width: cropWidthInPercentage,
-            }, aspectRatio, width, height)
-
+                width: 100,
+            }, 1 / aspectRatio, width, height)
         const centeredCrop = centerCrop(crop, width, height)
         setCrop(centeredCrop);
     }
@@ -121,11 +122,14 @@ function UploadProductImageInput(
                 {text}
                 <VisuallyHiddenInput type="file"
                     onChange={(e) => {
-                        if (reactFormHookSetValue) {
-                            fileReader.readAsDataURL(e?.target?.files[0])
-                            reactFormHookSetValue(name, e?.target?.files[0]);
+                        const file = e?.target?.files[0];
+                        setCroppedImage(URL.createObjectURL(file))
+                        if (file) {
+                            if (reactFormHookSetValue) {
+                                fileReader.readAsDataURL(file);
+                                reactFormHookSetValue(name, file);
+                            }
                         }
-                        setImageType(e.target.files[0].type)
                     }}
                 />
 
@@ -136,6 +140,7 @@ function UploadProductImageInput(
                     <ReactCrop
                         crop={crop}
                         className='mx-auto'
+                        keepSelection
                         aspect={1 / aspectRatio}
                         maxHeight={maxUploadedImageHeight}
                         minWidth={minDimensions}
@@ -149,24 +154,23 @@ function UploadProductImageInput(
                         <img src={previewImage} alt='preview product'
                             className='object-contain'
                             onLoad={onImageLoad} ref={imgRef}
+
                         />
                     </ReactCrop>
                     <button
                         type='button'
                         className='bg-color-accent hover:bg-sky-600 text-white font-semibold text-xs px-4 py-2 rounded-2xl w-fit mx-auto my-2'
                         onClick={() => {
-                            if (imageType) {
-                                setCanvasPreview(
-                                    imgRef.current,
-                                    previewCanvasRef.current,
-                                    convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
-                                )
-                                const canvasImageUrl = previewCanvasRef.current?.toDataURL();
-                                const blob = convertBase64ToBlob(canvasImageUrl, imageType);
-                                reactFormHookSetValue(name, blob);
-                            } else {
-                                setError(name, { message: "image type is unknown" });
-                            }
+                            setCanvasPreview(
+                                imgRef.current,
+                                previewCanvasRef.current,
+                                convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
+                            )
+                            const BlobType = "image/webp";
+                            const canvasImageUrl = previewCanvasRef.current?.toDataURL(BlobType, 0.5);
+                            setCroppedImage(canvasImageUrl);
+                            const blob = convertBase64ToBlob(canvasImageUrl, BlobType);
+                            reactFormHookSetValue(name, blob);
                         }}
                     >
                         Crop Image
@@ -174,13 +178,18 @@ function UploadProductImageInput(
                     {crop &&
                         <canvas
                             ref={previewCanvasRef}
-                            className='mt-4 mx-auto'
+                            className='mt-4 mx-auto hidden'
                             style={{
                                 border: "1px solid white",
                                 width: maxCanvasWidth,
                                 height: maxCanvasWidth * aspectRatio
                             }}
                         />}
+                    {croppedImage &&
+                        <img className={`w-[${maxCanvasWidth}px] mx-auto h-[${maxCanvasWidth * aspectRatio}]`}
+                            src={croppedImage}
+                        />}
+
                 </div>
             }
 
