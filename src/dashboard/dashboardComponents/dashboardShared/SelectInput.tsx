@@ -77,8 +77,9 @@ function SelectInput({ handleChange, width = 220, optionsArray, optionValue, opt
         {disabledText}
       </Option>}
       {disabledOption && <Divider />}
-      {optionsArray.map((option: object) => {
+      {optionsArray.map((option: object,index) => {
         return <Option
+          key={index}
           color="primary"
           value={option[optionValue]}
           sx={{

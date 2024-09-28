@@ -21,7 +21,6 @@ import { GlobalCachingContext } from '../features/GlobalCachingContext/GlobalCac
 import { BsCart } from 'react-icons/bs';
 import { objectIdSchemaRequired } from '../../schemas/IdValidation';
 import { CartContext } from '../features/CartFeature/CartProvider';
-import useDebounce from '../../customHooks/useDebounce';
 import useEnsureCorrectPagination from '../../customHooks/useEnsureCorrectPagination';
 import { fallBackProductImageUrl } from '../shared/sharedConstants';
 
@@ -41,10 +40,8 @@ function SingleProductPage() {
     const { categories, isCategoriesLoading } = useContext(GlobalCachingContext)
     const [categoryName, setCategoryName] = useState("All Categories");
     const [categoryId, setCategoryId] = useState("");
-    const { debounce } = useDebounce()
-    const { ensureCorrectPagination, maxLimit, minLimit } = useEnsureCorrectPagination();
+    const { ensureCorrectPagination} = useEnsureCorrectPagination();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     function setCategoryNameAndId() {
         if (!isCategoriesLoading && !isProductByIdLoading) {
             categories.forEach((category) => {
@@ -63,16 +60,22 @@ function SingleProductPage() {
                 productId: (product as IProduct)._id
             }, userToken)
             if ((product as IProduct).quantity < quantity) {
-                toast.error("quantity is more than the available :(");
+                toast.error("quantity is more than the available :(",{
+                    toastId:"invalid quantity"
+                });
                 return;
             }
             if (data.message == "success") {
-                toast.success("Items has been added to cart")
+                toast.success("Items has been added to cart",{
+                    toastId:"success message cart"
+                })
                 getUserData();
                 getCartItems();
             }
         } catch (error) {
-            toast.error("Something Went Wrong Please Try Again later")
+            toast.error("Something Went Wrong Please Try Again later",{
+                toastId:"error message cart"
+            })
             console.log(error)
         }
     }
@@ -84,13 +87,17 @@ function SingleProductPage() {
             }, userToken);
 
             if (data.message == "success") {
-                toast.success("Product has been added to your wishlist");
+                toast.success("Product has been added to your wishlist",{
+                    toastId:"success message wishlist"
+                });
                 getUserData();
             }
 
             setIsProductByIdLoading(false)
         } catch (error) {
-            toast.error("Something Went Wrong Please Try Again Later")
+            toast.error("Something Went Wrong Please Try Again Later",{
+                toastId:"error message wishlist"
+            })
             console.log(error)
         }
     }
@@ -99,7 +106,6 @@ function SingleProductPage() {
         if (userData) {
             const isItFoundInCart = userData.cart.find((cartItem) => cartItem.productId == params.productId);
             if (!isItFoundInCart) {
-
                 setIsItemInCart(false)
             } else {
                 setIsItemInCart(true)
@@ -107,7 +113,7 @@ function SingleProductPage() {
         }
 
         if (userData) {
-            const isItFoundInWishList = userData.wishList.find((cartItem) => cartItem.productId == params.productId);
+            const isItFoundInWishList = userData.wishList.find((wishlistItem) => wishlistItem.productId == params.productId);
             if (!isItFoundInWishList) {
                 setIsItemInWishList(false)
             } else {
@@ -115,7 +121,7 @@ function SingleProductPage() {
             }
         }
         setCategoryNameAndId();
-    }, [userData, product, params.productId, setCategoryNameAndId])
+    }, [userData, product, params.productId])
 
 
     useEffect(() => {
@@ -129,7 +135,7 @@ function SingleProductPage() {
 
     useEffect(() => {
         ensureCorrectPagination();
-        getProductData(parseInt(searchParams.get("page")).toString() || "1", parseInt(searchParams.get("limit")).toString() || "9", params.productId);
+        getProductData(searchParams.get("page") || "1", searchParams.get("limit") || "9", params.productId);
 
         setCategoryNameAndId()
     }, [searchParams, params.productId]);
@@ -249,7 +255,9 @@ function SingleProductPage() {
                                                 if (!((product as IProduct).quantity <= quantity)) {
                                                     setQuantity(prev => prev + 1)
                                                 } else {
-                                                    toast.info("You have exceeded the limitation")
+                                                    toast.info("You have exceeded the limitation", {
+                                                        toastId: "exceeded limitation"
+                                                    })
                                                 }
 
                                             }}>

@@ -60,9 +60,9 @@ function RelatedProductsCarousel({ categoryId }: IRelatedProductsCarousel) {
             >
 
                 {isRelatedProductLoading ?
-                    loadingArr.map(() => {
+                    loadingArr.map((item,index) => {
                         return (
-                            <div className="px-2 my-5">
+                            <div className="px-2 my-5" key={index}>
                                 <SingleSkeleton />
                             </div>
                         )
