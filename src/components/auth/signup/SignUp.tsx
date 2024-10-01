@@ -39,7 +39,7 @@ function SignUp() {
       if (data["message"] == "success") {
         setUserToken(data.token);
         setUserData(data.user);
-        localStorage.setItem("userTokenGeekOut", data.token)
+        localStorage.setItem("userTokenGoStore", data.token)
         toast.success("You have created account successfully!")
         navigate("/")
       }

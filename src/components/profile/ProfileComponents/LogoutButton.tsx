@@ -19,7 +19,7 @@ function LogoutButton({ customClasses, isHidden = true, isCentered = false, size
       onClick={() => {
         setUserData(null);
         setUserToken(null);
-        localStorage.removeItem("userTokenGeekOut")
+        localStorage.removeItem("userTokenGoStore")
         logout()
         navigate("/")
       }}

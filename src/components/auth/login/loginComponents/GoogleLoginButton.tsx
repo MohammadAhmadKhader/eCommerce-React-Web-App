@@ -31,7 +31,7 @@ function GoogleLoginButton() {
                 setUserData(data.user);
                 setUserToken(data.token);
                 toast.success("You have sign in successfully!");
-                localStorage.setItem("userTokenGeekOut", data.token)
+                localStorage.setItem("userTokenGoStore", data.token)
                 navigate("/")
             }
             if (data["message"] && data.message === "User not found. Please sign up to create a new account.") {
