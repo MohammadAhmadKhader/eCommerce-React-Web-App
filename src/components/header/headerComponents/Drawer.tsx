@@ -145,7 +145,7 @@ export default function MenuDrawer({ isOpen, setIsOpen }) {
 
     return (
         <div className='flex items-center justify-center'>
-            <button className='mx-2' onClick={toggleDrawer(true)}>
+            <button className='ms-2' onClick={toggleDrawer(true)}>
                 <BiDotsVerticalRounded size={30} className='-ms-2.5 duration-[400ms] hover:scale-125 hover:text-color-accent' />
             </button>
             <Drawer open={isOpen} onClose={toggleDrawer(false)}>

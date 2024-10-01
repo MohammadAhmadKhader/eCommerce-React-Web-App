@@ -41,7 +41,7 @@ function Header() {
             }} />
             <Drawer isOpen={isOpen} setIsOpen={setIsOpen} />
             <h1 className="overflow-hidden flex">
-              <Link className="h-12 mr-4" to="/">
+              <Link className="h-12 mr-2" to="/">
                 {windowWidth > 768 ? <WebsiteLogo /> : <ShortWebSiteLogo />}
               </Link>
             </h1>

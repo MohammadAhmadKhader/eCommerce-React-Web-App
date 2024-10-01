@@ -36,7 +36,7 @@ function Login() {
             if (data["user"]) {
                 setUserToken(data.token);
                 setUserData(data.user);
-                localStorage.setItem("userTokenGeekOut", data.token)
+                localStorage.setItem("userTokenGoStore", data.token)
                 toast.success("You have sign in successfully!")
                 navigate("/")
             }

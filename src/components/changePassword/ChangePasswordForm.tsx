@@ -41,7 +41,7 @@ function ChangePasswordForm({ ReBuildFormClasses, UseTitle = true }: IChangePass
             
             if (data.message == "success") {
                 setUserToken(data.token);
-                localStorage.setItem("userTokenGeekOut", data.token)
+                localStorage.setItem("userTokenGoStore", data.token)
                 toast.success("Your password has been changed successfully!");
                 reset()
             }

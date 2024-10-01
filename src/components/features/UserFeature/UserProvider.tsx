@@ -14,7 +14,7 @@ export const UserContext = createContext<UserContext>(null)
 
 function UserProvider({ children }) {
 
-  const [userToken, setUserToken] = useState<string | null>(localStorage.getItem("userTokenGeekOut") || null)
+  const [userToken, setUserToken] = useState<string | null>(localStorage.getItem("userTokenGoStore") || null)
   const [userData, setUserData] = useState(null);
   const [isUserFetchDataLoading, setIsUserFetchDataLoading] = useState(true)
   const { GET } = useAxios()
@@ -28,7 +28,7 @@ function UserProvider({ children }) {
     } catch (error) {
       console.log(error);
       setUserToken(null);
-      localStorage.removeItem("userTokenGeekOut")
+      localStorage.removeItem("userTokenGoStore")
     } finally {
       setIsUserFetchDataLoading(false)
     }
